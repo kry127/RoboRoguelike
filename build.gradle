@@ -7,7 +7,6 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.github.jengelman.gradle.plugins:shadow:$shadow_version"
     }
 }
 
@@ -19,7 +18,6 @@ repositories {
 }
 
 apply plugin: 'kotlin'
-apply plugin: "com.github.johnrengelman.shadow"
 
 configurations {
     shadow
@@ -27,23 +25,12 @@ configurations {
     provided.extendsFrom shadow
 }
 
-shadowJar {
-    classifier = null
-    version = null
-}
-
-artifacts {
-    archives shadowJar
-}
-
 jar {
     manifest {
-        attributes 'Main-Class': "org.hexworks.cavesofzircon.MainKt"
+        attributes 'Main-Class': "ru.spb.mit.roboroguelike.MainKt"
     }
     from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
-
-build.dependsOn(shadowJar)
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

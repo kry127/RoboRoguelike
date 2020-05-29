@@ -1,4 +1,4 @@
-package org.hexworks.cavesofzircon
+package ru.spb.mit.roboroguelike
 
 import org.hexworks.zircon.api.ColorThemes
 import org.hexworks.zircon.api.Components
