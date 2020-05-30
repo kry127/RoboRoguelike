@@ -13,6 +13,8 @@ import kotlin.random.Random
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
 import ru.spb.mit.roboroguelike.objects.GameConfig
+import java.io.ObjectOutputStream
+import java.nio.file.Paths
 
 class World(startingBlocks: Map<Position3D, GameBlock>,
             visibleSize: Size3D,
@@ -106,5 +108,17 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     fun moveIsPossible(oldBlock: Maybe<GameBlock>,
                        newBlock: Maybe<GameBlock>): Boolean {
         return oldBlock.isPresent && newBlock.isPresent && !newBlock.get().isOccupied
+    }
+
+
+    fun serializeBlocks(outputStream : ObjectOutputStream) {
+        for (block in fetchBlocks()) {
+            block.component1().serialize(outputStream) // extension function at PositionExtension.kt
+            block.component2().serialize(outputStream)
+        }
+    }
+
+    fun defaultSerializeBlocks() {
+        serializeBlocks(ObjectOutputStream(Paths.get("RoboRoguelike.dat").toFile().outputStream()))
     }
 }
