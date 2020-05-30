@@ -12,6 +12,9 @@ import org.hexworks.zircon.api.data.impl.Size3D
 import org.hexworks.zircon.api.game.GameArea
 import ru.spb.mit.roboroguelike.*
 import kotlin.random.Random
+import org.hexworks.zircon.api.screen.Screen
+import org.hexworks.zircon.api.uievent.UIEvent
+import kotlin.time.measureTimedValue
 
 class World(startingBlocks: Map<Position3D, GameBlock>, // 1
             visibleSize: Size3D,
@@ -34,6 +37,14 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
         private val DEFAULT_BLOCK = BlockTypes.floor()
     }
 
+    fun update(screen: Screen, uiEvent: UIEvent, game: Game) { // 1
+        engine.update(GameContext( // 2
+                world = this,
+                screen = screen, // 3
+                uiEvent = uiEvent,
+                player = game.player)) // 5
+    }
+
     fun addEntity(entity: AnyGameEntity, position: Position3D) {
         engine.addEntity(entity)
         entity.position = position
@@ -42,8 +53,8 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
         }
     }
 
-
-/*    fun addAtEmptyPosition(entity: GameEntity<EntityType>, // 5
+/*
+    fun addAtEmptyPosition(entity: GameEntity<EntityType>, // 5
                            offset: Position3D = Positions.default3DPosition(),
                            size: Size3D = actualSize()): Boolean {
         return findEmptyLocationWithin(offset, size).fold(
@@ -108,5 +119,22 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
             j++
         }
         return result
+    }
+
+    fun moveEntity(entity: AnyGameEntity, newPosition3D: Position3D): Boolean {
+        val oldBlock = fetchBlockAt(entity.position)
+        val newBlock = fetchBlockAt(newPosition3D)
+        if (!moveIsPossible(oldBlock, newBlock)) {
+            return false;
+        }
+        oldBlock.get().removeEntity(entity)
+        newBlock.get().addEntity(entity)
+        entity.position = newPosition3D
+        return true
+    }
+
+    fun moveIsPossible(oldBlock: Maybe<GameBlock>,
+                       newBlock: Maybe<GameBlock>): Boolean {
+        return oldBlock.isPresent && newBlock.isPresent// && !newBlock.get().isOccupied
     }
 }
