@@ -10,24 +10,28 @@ import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.MoveCamera
 import ru.spb.mit.roboroguelike.position
 
-enum class CameraMovementDirection {
-    FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, STEADY
-}
 
 class CameraMover: BaseFacet<GameContext>() {
+
+    enum class CameraMovementDirection {
+        FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, STEADY
+    }
+
     override fun executeCommand(command: Command<out EntityType, GameContext>): Response {
         return command.responseWhenCommandIs(MoveCamera::class) {(context, entity, prevPos) ->
             val world = context.world
+/*
             world.centerCameraAtPosition(entity.position)
-/*           when(getCameraMovementDirection(prevPos,
-                    entity.position)) {
-               CameraMovementDirection.FORWARD -> world.scrollOneForward()
-               CameraMovementDirection.BACKWARD -> world.scrollOneBackward()
-               CameraMovementDirection.LEFT -> world.scrollOneLeft()
-               CameraMovementDirection.RIGHT -> world.scrollOneRight()
-               CameraMovementDirection.UP -> world.scrollOneUp()
-               CameraMovementDirection.DOWN -> world.scrollOneDown()
-            }*/
+*/
+            when(getCameraMovementDirection(prevPos,
+                                            entity.position)) {
+                CameraMovementDirection.FORWARD -> world.scrollOneForward()
+                CameraMovementDirection.BACKWARD -> world.scrollOneBackward()
+                CameraMovementDirection.LEFT -> world.scrollOneLeft()
+                CameraMovementDirection.RIGHT -> world.scrollOneRight()
+                CameraMovementDirection.UP -> world.scrollOneUp()
+                CameraMovementDirection.DOWN -> world.scrollOneDown()
+            }
             Consumed
         }
     }

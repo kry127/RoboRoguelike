@@ -50,9 +50,11 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     fun centerCameraAtPosition(cameraPosition: Position3D) {
         val (xLength, yLength, _) = visibleSize()
         val (xCurr, yCurr, _) = cameraPosition
-        scrollTo3DPosition(cameraPosition
+/*        scrollTo3DPosition(cameraPosition
                 .withX(xCurr - xLength / 2)
-                .withY(yCurr - yLength / 2))
+                .withY(yCurr - yLength / 2))*/
+        scrollRightBy(xCurr - xLength / 2)
+        scrollForwardBy(yCurr - yLength / 2)
     }
 
     fun getCameraCenter(): Position3D {
