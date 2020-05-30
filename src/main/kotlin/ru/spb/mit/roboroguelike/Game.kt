@@ -11,9 +11,7 @@ class Game(var world: World,
 
     companion object {
 
-        fun create(player: GameEntity<Player>, world: World): Game {
-            world.addEntity(player, Position3D.create(20, 20, 1))
-            return Game(world, player)
-        }
+        fun create(world: World, player: GameEntity<Player>): Game =
+                Game(world, player)
     }
 }

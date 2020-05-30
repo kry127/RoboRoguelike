@@ -24,8 +24,8 @@ class GameBuilder(val worldSize: Size3D) {
         val player = addPlayer()
 
         return Game.create(
-                player = player,
-                world = world)
+                world = world,
+                player = player)
     }
 
     private fun prepareWorld() = also {

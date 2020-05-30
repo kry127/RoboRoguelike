@@ -1,7 +1,5 @@
 
-import org.hexworks.amethyst.api.Engine
 import org.hexworks.amethyst.api.Engines
-import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.cobalt.datatypes.extensions.map
 import org.hexworks.zircon.api.Positions
@@ -14,7 +12,7 @@ import ru.spb.mit.roboroguelike.*
 import kotlin.random.Random
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
-import kotlin.time.measureTimedValue
+import ru.spb.mit.roboroguelike.objects.GameConfig.DUNGEON_LEVELS
 
 class World(startingBlocks: Map<Position3D, GameBlock>, // 1
             visibleSize: Size3D,
@@ -37,12 +35,12 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
         private val DEFAULT_BLOCK = BlockTypes.floor()
     }
 
-    fun update(screen: Screen, uiEvent: UIEvent, game: Game) { // 1
-        engine.update(GameContext( // 2
+    fun update(screen: Screen, uiEvent: UIEvent, game: Game) {
+        engine.update(GameContext(
                 world = this,
-                screen = screen, // 3
+                screen = screen,
                 uiEvent = uiEvent,
-                player = game.player)) // 5
+                player = game.player))
     }
 
     fun addEntity(entity: AnyGameEntity, position: Position3D) {
@@ -59,24 +57,22 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
         if (pos.isEmpty()) {
             return false
         }
-        fetchBlockAt(pos.get()).map {
-            it.addEntity(entity)
-        }
+        addEntity(entity, pos.get())
         return true
     }
 
-    fun searchForEmptyRandomPosition(level: Int = 0,
+    fun searchForEmptyRandomPosition(level: Int = DUNGEON_LEVELS - 1,
                                      offset: Position3D = Positions.default3DPosition(),
-                                     searchScope: Size3D = actualSize(),
+                                     searchScope: Size3D = visibleSize(),
                                      n_tries: Int = 20): Maybe<Position3D> {
-        val xCoord = searchScope.xLength;
-        val yCoord = searchScope.yLength;
+        val xLength = searchScope.xLength;
+        val yLength = searchScope.yLength;
         var result = Maybe.empty<Position3D>()
         var j = 0
         while (result.isEmpty() && j < n_tries) {
             val currPos = Positions.create3DPosition(
-                Random.nextInt(offset.x, offset.x + xCoord),
-                Random.nextInt(offset.y, offset.y + yCoord),
+                Random.nextInt(offset.x, offset.x + xLength),
+                Random.nextInt(offset.y, offset.y + yLength),
                 level)
             fetchBlockAt(currPos).map {
                 if (!it.isOccupied) {
