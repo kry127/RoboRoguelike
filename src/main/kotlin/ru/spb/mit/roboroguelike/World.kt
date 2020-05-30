@@ -106,6 +106,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
 
     fun serializeBlocks(outputStream : ObjectOutputStream) {
+        outputStream.writeInt(fetchBlocks().count())
         for (block in fetchBlocks()) {
             block.component1().serialize(outputStream) // extension function at PositionExtension.kt
             block.component2().serialize(outputStream)
