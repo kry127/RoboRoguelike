@@ -6,8 +6,8 @@ import org.hexworks.cobalt.datatypes.extensions.orElseThrow
 import org.hexworks.zircon.api.data.Tile
 import kotlin.reflect.KClass
 
-var AnyGameEntity.position // 1
-    get() = tryToFindAttribute(EntityPosition::class).position // 2
+var AnyGameEntity.position
+    get() = tryToFindAttribute(EntityPosition::class).position
     set(value) {
         findAttribute(EntityPosition::class).map {
             it.position = value

@@ -10,6 +10,7 @@ import ru.spb.mit.roboroguelike.commands.MoveTo
 import ru.spb.mit.roboroguelike.position
 
 class InputReceiver: BaseBehavior<GameContext>() {
+
     override fun update(entity: GameEntity<out EntityType>, context: GameContext): Boolean {
         val (_, _, uiEvent, player) = context
         val currentPos = player.position
