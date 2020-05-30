@@ -55,6 +55,15 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
                 .withY(yCurr - yLength / 2))
     }
 
+    fun getCameraCenter(): Position3D {
+        val (xLength, yLength, _) = visibleSize()
+        val (xOffset, yOffset, zOffset) = visibleOffset()
+        return Position3D.create(
+                x= xOffset + xLength / 2,
+                y = yOffset + yLength / 2,
+                z = zOffset)
+    }
+
     fun addEntity(entity: AnyGameEntity, position: Position3D) {
         engine.addEntity(entity)
         entity.position = position

@@ -17,6 +17,6 @@ object EntityFactory {
     fun makePlayer() = newGameEntityOfType(Player) {
         attributes(EntityPosition(), EntityTile(TileTypes.PLAYER))
         behaviors(InputReceiver())
-        facets(Movable())
+        facets(Movable(), CameraMover())
     }
 }
