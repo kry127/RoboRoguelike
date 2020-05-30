@@ -1,19 +1,19 @@
 package ru.spb.mit.roboroguelike.map.generator
 
-import org.hexworks.zircon.internal.util.DefaultThreadSafeQueue
 import ru.spb.mit.roboroguelike.map.BooleanMap
-import ru.spb.mit.roboroguelike.map.Map
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
+/**
+ * Класс позволяет порождать карты, которые состоят из комнат, в котором просверлены
+ * все четыре стены. Используйте Builder для удобной генерации объекта этого класса.
+ */
 class SimpleRoomGenerator(
         val height : Int,
         val width : Int,
         val room_min_size: Int,
         val room_max_size: Int,
-        val number_of_splits : Int,
-        val extra_hordes_count : Int) {
+        val number_of_splits : Int) {
 
     private var rooms : MutableList<Room> = ArrayList<Room>()
 
@@ -25,16 +25,14 @@ class SimpleRoomGenerator(
             private var width : Int = 20,
             private var room_min_size : Int = 5,
             private var room_max_size : Int = 30,
-            private var number_of_splits : Int = 10,
-            private var extra_hordes_count : Int = 0) {
+            private var number_of_splits : Int = 10) {
 
         fun height(value: Int) = apply { this.height = value }
         fun width(value: Int) = apply { this.width = value }
         fun room_min_size(value: Int) = apply { this.room_min_size = value }
         fun room_max_size(value: Int) = apply { this.room_max_size = value }
         fun number_of_splits(value: Int) = apply { this.number_of_splits = value }
-        fun extra_hordes_count(value: Int) = apply { this.extra_hordes_count = value }
-        fun build() = SimpleRoomGenerator(height, width, room_min_size, room_max_size, number_of_splits, extra_hordes_count)
+        fun build() = SimpleRoomGenerator(height, width, room_min_size, room_max_size, number_of_splits)
     }
 
     private inner class Room(
@@ -218,13 +216,13 @@ class SimpleRoomGenerator(
         }
     }
 
-    private fun print_rooms() {
+    private fun debug_print_rooms() {
         for (r in rooms) {
             println(r)
         }
     }
 
-    private fun draw_rooms() {
+    private fun debug_draw_rooms() {
         var arr : Array<Array<Boolean>> = Array(width) {
             Array<Boolean>(height) {false}
         }
@@ -241,9 +239,9 @@ class SimpleRoomGenerator(
             val r = rooms.find { r -> r.canSplit()} ?: break
             rooms.remove(r)
             rooms.addAll(r.randomSplit())
-            print_rooms();
-            draw_rooms();
-            println("===============================")
+//            debug_print_rooms();
+//            debug_draw_rooms();
+//            println("===============================")
         }
         while(true) {
             val r = rooms.find { r -> r.shouldSplit()} ?: break
@@ -262,15 +260,14 @@ class SimpleRoomGenerator(
         }
         for (r in rooms) {
             r.draw(arr)
-//            BooleanMap(arr).print();
             r.perforateHole(arr)
+//            BooleanMap(arr).print();
         }
         return BooleanMap(arr)
     }
 
     fun nextMap() : BooleanMap {
         build_room_graph()
-//        bfs_spanning_tree()
         return makeMapWithConfig()
     }
 }
