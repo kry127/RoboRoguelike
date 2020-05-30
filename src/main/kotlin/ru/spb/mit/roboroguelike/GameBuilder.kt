@@ -1,6 +1,7 @@
 
 package ru.spb.mit.roboroguelike
 
+import World
 import org.hexworks.cobalt.datatypes.extensions.orElseGet
 import org.hexworks.zircon.api.Sizes
 import org.hexworks.zircon.api.data.impl.Position3D
@@ -15,9 +16,22 @@ class GameBuilder(val worldSize: Size3D) {
             yLength = GameConfig.WINDOW_HEIGHT - GameConfig.LOG_AREA_HEIGHT,
             zLength = 1)
 
-    val world = WorldBuilder(worldSize)
-            .makeRooms()
-            .build(visibleSize = visibleSize)
+    lateinit var world : World
+
+    fun buildGeneratedGame() : Game {
+        world = WorldBuilder(worldSize)
+                .makeRooms()
+                .build(visibleSize = visibleSize)
+
+        return buildGame()
+    }
+
+    fun buildSavedGame(): Game {
+        world = WorldBuilder.deserializeDefault()
+
+        // TODO find player on the map instead (build game inits new player!)
+        return buildGame()
+    }
 
     fun buildGame(): Game {
 
@@ -47,6 +61,8 @@ class GameBuilder(val worldSize: Size3D) {
     companion object {
 
         fun defaultGame() = GameBuilder(
-                worldSize = GameConfig.WORLD_SIZE).buildGame()
+                worldSize = GameConfig.WORLD_SIZE).buildGeneratedGame()
+
+        fun loadGame() = GameBuilder(GameConfig.WORLD_SIZE).buildSavedGame()
     }
 }
