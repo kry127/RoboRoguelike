@@ -20,6 +20,7 @@ fun main(args: Array<String>) {
         // coords of walls
         println("Wall at: ($i, $j)")
     }
+    map.print()
 
     screen.addComponent(Components.header()
             .withText("Hello, from RoboRoguelike!")

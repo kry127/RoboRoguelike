@@ -250,7 +250,7 @@ class SimpleRoomGenerator(
     }
 
 
-    private fun makeMapWithConfig(wall_coords_observer : (Int, Int) -> Unit) {
+    private fun makeMapWithConfig(wall_coords_observer : (Int, Int) -> Unit) : BooleanWorldMap {
         var arr : Array<Array<Boolean>> = Array(width) {
             Array<Boolean>(height) {false}
         }
@@ -267,10 +267,11 @@ class SimpleRoomGenerator(
                 }
             }
         }
+        return BooleanWorldMap(arr)
     }
 
-    fun nextMap(wall_coords_observer : (Int, Int) -> Unit) {
+    fun nextMap(wall_coords_observer : (Int, Int) -> Unit) : BooleanWorldMap {
         build_room_graph()
-        makeMapWithConfig(wall_coords_observer)
+        return makeMapWithConfig(wall_coords_observer)
     }
 }
