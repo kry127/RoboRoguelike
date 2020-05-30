@@ -7,3 +7,11 @@ object Player : BaseEntityType(
 
 object Wall : BaseEntityType(
         name = "wall")
+
+object LadderUp: BaseEntityType(
+        name = "LadderUp"
+)
+
+object LadderDown: BaseEntityType(
+        name = "LadderDown"
+)
