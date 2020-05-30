@@ -1,9 +1,9 @@
 package ru.spb.mit.roboroguelike.map
 
-open class Map<T> (open val container: Array<Array<T>>) {
+internal open class WorldMap<T> (open val container: Array<Array<T>>) {
 }
 
-class BooleanMap(override val container: Array<Array<Boolean>>) : Map<Boolean>(container) {
+internal class BooleanWorldMap(override val container: Array<Array<Boolean>>) : WorldMap<Boolean>(container) {
     fun print() {
         for (row in container) {
             for (v in row) {

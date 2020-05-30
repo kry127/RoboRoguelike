@@ -5,6 +5,7 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.Screens
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.component.ComponentAlignment
+import ru.spb.mit.roboroguelike.map.BooleanWorldMap
 import ru.spb.mit.roboroguelike.map.generator.SimpleRoomGenerator
 
 @Suppress("ConstantConditionIf")
@@ -15,8 +16,10 @@ fun main(args: Array<String>) {
 
     val builder = SimpleRoomGenerator.Builder()
     val roomGenerator = builder.height(50).width(50).room_min_size(7).build()
-    val map = roomGenerator.nextMap()
-    map.print()
+    val map = roomGenerator.nextMap { i: Int, j: Int ->
+        // coords of walls
+        println("Wall at: ($i, $j)")
+    }
 
     screen.addComponent(Components.header()
             .withText("Hello, from RoboRoguelike!")

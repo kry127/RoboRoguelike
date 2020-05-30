@@ -1,6 +1,6 @@
 package ru.spb.mit.roboroguelike.map.generator
 
-import ru.spb.mit.roboroguelike.map.BooleanMap
+import ru.spb.mit.roboroguelike.map.BooleanWorldMap
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
@@ -25,14 +25,16 @@ class SimpleRoomGenerator(
             private var width : Int = 20,
             private var room_min_size : Int = 5,
             private var room_max_size : Int = 30,
-            private var number_of_splits : Int = 10) {
+            private var number_of_splits : Int = 10
+    ) {
 
         fun height(value: Int) = apply { this.height = value }
         fun width(value: Int) = apply { this.width = value }
         fun room_min_size(value: Int) = apply { this.room_min_size = value }
         fun room_max_size(value: Int) = apply { this.room_max_size = value }
         fun number_of_splits(value: Int) = apply { this.number_of_splits = value }
-        fun build() = SimpleRoomGenerator(height, width, room_min_size, room_max_size, number_of_splits)
+        fun build() = SimpleRoomGenerator(height, width, room_min_size, room_max_size,
+                number_of_splits)
     }
 
     private inner class Room(
@@ -41,9 +43,6 @@ class SimpleRoomGenerator(
             private val x1 : Int,
             private val y1 : Int
     ) {
-        var visited: Boolean = false
-            get() = field
-            set(value) { field = value}
 
 
         override fun toString(): String {
@@ -229,7 +228,7 @@ class SimpleRoomGenerator(
         for (r in rooms) {
             r.draw(arr)
         }
-        BooleanMap(arr).print();
+        BooleanWorldMap(arr).print();
     }
 
     private fun build_room_graph() {
@@ -251,23 +250,27 @@ class SimpleRoomGenerator(
     }
 
 
-    private fun makeMapWithConfig() : BooleanMap {
+    private fun makeMapWithConfig(wall_coords_observer : (Int, Int) -> Unit) {
         var arr : Array<Array<Boolean>> = Array(width) {
             Array<Boolean>(height) {false}
         }
         for (r in rooms) {
-            r.visited = false
-        }
-        for (r in rooms) {
             r.draw(arr)
             r.perforateHole(arr)
-//            BooleanMap(arr).print();
+//            BooleanWorldMap(arr).print();
         }
-        return BooleanMap(arr)
+        // call observer
+        for (i in arr.indices) {
+            for (j in arr[i].indices) {
+                if (arr[i][j]) {
+                    wall_coords_observer(i, j)
+                }
+            }
+        }
     }
 
-    fun nextMap() : BooleanMap {
+    fun nextMap(wall_coords_observer : (Int, Int) -> Unit) {
         build_room_graph()
-        return makeMapWithConfig()
+        makeMapWithConfig(wall_coords_observer)
     }
 }
