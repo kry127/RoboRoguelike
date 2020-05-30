@@ -5,6 +5,8 @@ import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import ru.spb.mit.roboroguelike.map.generator.SimpleRoomGenerator
 import ru.spb.mit.roboroguelike.objects.GameConfig
+import java.io.ObjectInputStream
+import java.nio.file.Paths
 
 class WorldBuilder(private val worldSize: Size3D) {
 
@@ -12,6 +14,31 @@ class WorldBuilder(private val worldSize: Size3D) {
     private val height = worldSize.yLength
     private val depth = worldSize.zLength
     private var blocks: MutableMap<Position3D, GameBlock> = mutableMapOf()
+
+    companion object {
+        fun deserializeDefault() : World {
+            return deserializeBlocks(ObjectInputStream(Paths.get(GameConfig.SAVE_FILE_PATH).toFile().inputStream()))
+        }
+
+        fun deserializeBlocks(inputStream: ObjectInputStream) : World {
+            val worldSize = Size3D.deserialize(inputStream)
+            return WorldBuilder(worldSize).deserializeBlocks(inputStream)
+        }
+    }
+
+
+
+    fun deserializeBlocks(inputStream: ObjectInputStream) : World {
+        val count = inputStream.readInt()
+        for (k in 0 until count) {
+//            println("Loaded ${k + 1} out of $count")
+            val pos = Position3D.deserialize(inputStream)
+            val gameBlock = GameBlock.deserialize(inputStream)
+            blocks[pos] = gameBlock
+        }
+        inputStream.close()
+        return World(blocks, GameConfig.VISIBLE_SIZE, worldSize)
+    }
 
     fun makeRooms(): WorldBuilder {
         return generateRooms()
@@ -45,8 +72,4 @@ class WorldBuilder(private val worldSize: Size3D) {
     private fun MutableMap<Position3D, GameBlock>.whenPresent(pos: Position3D, fn: (GameBlock) -> Unit) {
         this[pos]?.let(fn)
     }
-
-//    fun deserialize() : World {
-//
-//    }
 }

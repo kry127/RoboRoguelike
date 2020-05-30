@@ -5,6 +5,7 @@ import org.hexworks.zircon.api.data.BlockSide
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.base.BlockBase
 import ru.spb.mit.roboroguelike.objects.TileTypes
+import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
@@ -27,9 +28,18 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
     fun serialize(outputStream : ObjectOutputStream) {
         outputStream.writeBoolean(isFloor)
         outputStream.writeBoolean(isWall)
-        outputStream.writeInt(entities.size)
-        for (entity in entities) {
-            entity.serialize(outputStream)
+    }
+
+    companion object {
+        fun deserialize(inputStream: ObjectInputStream) : GameBlock {
+            val isFloor = inputStream.readBoolean()
+            val isWall = inputStream.readBoolean()
+            if (isFloor) {
+                return GameBlock()
+            } else if (isWall) {
+                return GameBlock(TileTypes.WALL)
+            }
+            return GameBlock(TileTypes.EMPTY)
         }
     }
 

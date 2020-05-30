@@ -18,6 +18,9 @@ object GameConfig {
     const val WINDOW_WIDTH = 80
     const val WINDOW_HEIGHT = 50
 
+    // save file
+    const val SAVE_FILE_PATH = "RoboRoguelike.dat"
+
     val WORLD_SIZE = Sizes.create3DSize(600, 800, DUNGEON_LEVELS)
 //    val WORLD_SIZE = Sizes.create3DSize(WINDOW_WIDTH, WINDOW_HEIGHT, DUNGEON_LEVELS)
     //val VISIBLE_SIZE = Sizes.create3DSize(600, 800, DUNGEON_LEVELS)
