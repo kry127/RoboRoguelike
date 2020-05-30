@@ -24,4 +24,16 @@ object TileTypes {
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.ACCENT_COLOR)
             .buildCharacterTile()
+
+    val LADDER_UP = Tiles.newBuilder()
+            .withCharacter('U')
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.LADDER_COLOR)
+            .buildGraphicTile()
+
+    val LADDER_DOWN = Tiles.newBuilder()
+            .withCharacter('U')
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.LADDER_COLOR)
+            .buildGraphicTile()
 }

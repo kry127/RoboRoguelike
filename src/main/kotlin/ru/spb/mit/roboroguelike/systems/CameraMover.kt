@@ -20,9 +20,8 @@ class CameraMover: BaseFacet<GameContext>() {
     override fun executeCommand(command: Command<out EntityType, GameContext>): Response {
         return command.responseWhenCommandIs(MoveCamera::class) {(context, entity, prevPos) ->
             val world = context.world
-/*
-            world.centerCameraAtPosition(entity.position)
-*/
+            // Alternative:
+            // world.centerCameraAtPosition(entity.position)
             when(getCameraMovementDirection(prevPos,
                                             entity.position)) {
                 CameraMovementDirection.FORWARD -> world.scrollOneForward()
