@@ -16,4 +16,15 @@ class BooleanWorldMap(override val container: Array<Array<Boolean>>) : WorldMap<
             println()
         }
     }
+
+    fun foreach(wall_coords_observer : (Int, Int) -> Unit) {
+        // call observer
+        for (i in container.indices) {
+            for (j in container[i].indices) {
+                if (container[i][j]) {
+                    wall_coords_observer(i, j)
+                }
+            }
+        }
+    }
 }

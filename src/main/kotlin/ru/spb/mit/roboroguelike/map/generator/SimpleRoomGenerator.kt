@@ -250,7 +250,7 @@ class SimpleRoomGenerator(
     }
 
 
-    private fun makeMapWithConfig(wall_coords_observer : (Int, Int) -> Unit) : BooleanWorldMap {
+    private fun makeMapWithConfig() : BooleanWorldMap {
         var arr : Array<Array<Boolean>> = Array(width) {
             Array<Boolean>(height) {false}
         }
@@ -259,19 +259,11 @@ class SimpleRoomGenerator(
             r.perforateHole(arr)
 //            BooleanWorldMap(arr).print();
         }
-        // call observer
-        for (i in arr.indices) {
-            for (j in arr[i].indices) {
-                if (arr[i][j]) {
-                    wall_coords_observer(i, j)
-                }
-            }
-        }
         return BooleanWorldMap(arr)
     }
 
-    fun nextMap(wall_coords_observer : (Int, Int) -> Unit) : BooleanWorldMap {
+    fun nextMap() : BooleanWorldMap {
         build_room_graph()
-        return makeMapWithConfig(wall_coords_observer)
+        return makeMapWithConfig()
     }
 }
