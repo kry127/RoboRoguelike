@@ -5,6 +5,7 @@ import org.hexworks.zircon.api.data.BlockSide
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.base.BlockBase
 import ru.spb.mit.roboroguelike.objects.TileTypes
+import java.io.ObjectOutputStream
 
 class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
                 private val currentEntities: MutableList<GameEntity<EntityType>>
@@ -20,8 +21,17 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
     val isOccupied: Boolean
         get() = !isFloor || currentEntities.size > 0
 
-    val entities: Iterable<GameEntity<EntityType>>
+    val entities: List<GameEntity<EntityType>>
         get() = currentEntities.toList()
+
+    fun serialize(outputStream : ObjectOutputStream) {
+        outputStream.writeBoolean(isFloor)
+        outputStream.writeBoolean(isWall)
+        outputStream.writeInt(entities.size)
+        for (entity in entities) {
+            entity.serialize(outputStream)
+        }
+    }
 
     override val layers: MutableList<Tile>
         get() {

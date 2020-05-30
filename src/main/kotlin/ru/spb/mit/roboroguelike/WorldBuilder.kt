@@ -40,4 +40,8 @@ class WorldBuilder(private val worldSize: Size3D) { // 1
     private fun MutableMap<Position3D, GameBlock>.whenPresent(pos: Position3D, fn: (GameBlock) -> Unit) { // 12
         this[pos]?.let(fn)
     }
+
+    fun deserialize() : World {
+
+    }
 }
