@@ -1,8 +1,9 @@
 package ru.spb.mit.roboroguelike
 
-import org.hexworks.zircon.api.Positions
+import World
 import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
+import ru.spb.mit.roboroguelike.map.generator.SimpleRoomGenerator
 
 class WorldBuilder(private val worldSize: Size3D) { // 1
 
@@ -10,39 +11,24 @@ class WorldBuilder(private val worldSize: Size3D) { // 1
     private val height = worldSize.zLength
     private var blocks: MutableMap<Position3D, GameBlock> = mutableMapOf() // 2
 
-    fun makeCaves(): WorldBuilder { // 3
-        return randomizeTiles()
-                .smooth(8)
+    fun makeRooms(): WorldBuilder { // 3
+        return generateRooms()
     }
 
     fun build(visibleSize: Size3D): World = World(blocks, visibleSize, worldSize) // 4
 
-    private fun randomizeTiles(): WorldBuilder {
-        forAllPositions { pos ->
-            blocks[pos] = if (Math.random() < 0.5) { // 5
-                BlockTypes.floor()
-            } else BlockTypes.wall()
+    private fun generateRooms(): WorldBuilder {
+        val builder = SimpleRoomGenerator.Builder()
+        val roomGenerator = builder.height(worldSize.yLength).width(worldSize.xLength)
+                .room_min_size(7).build()
+        val maps : ArrayList<Array<Array<Boolean>>> = arrayListOf();
+        for (i in 1..height) {
+            maps.add(roomGenerator.nextMap().container)
         }
-        return this
-    }
-
-    private fun smooth(iterations: Int): WorldBuilder {
-        val newBlocks = mutableMapOf<Position3D, GameBlock>() // 6
-        repeat(iterations) {
-            forAllPositions { pos ->
-                val (x, y, z) = pos // 7
-                var floors = 0
-                var rocks = 0
-                pos.sameLevelNeighborsShuffled().plus(pos).forEach { neighbor -> // 8
-                    blocks.whenPresent(neighbor) { block -> // 9
-                        if (block.isFloor) {
-                            floors++
-                        } else rocks++
-                    }
-                }
-                newBlocks[Positions.create3DPosition(x, y, z)] = if (floors >= rocks) BlockTypes.floor() else BlockTypes.wall()
-            }
-            blocks = newBlocks // 10
+        forAllPositions { pos ->
+            blocks[pos] = if (maps[pos.z][pos.x][pos.y]) { // 5
+                BlockTypes.wall()
+            } else BlockTypes.floor()
         }
         return this
     }

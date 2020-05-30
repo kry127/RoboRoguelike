@@ -7,27 +7,30 @@ import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.component.ComponentAlignment
 import ru.spb.mit.roboroguelike.map.BooleanWorldMap
 import ru.spb.mit.roboroguelike.map.generator.SimpleRoomGenerator
+import ru.spb.mit.roboroguelike.objects.GameConfig
+import ru.spb.mit.roboroguelike.view.StartView
 
 @Suppress("ConstantConditionIf")
 fun main(args: Array<String>) {
-
-    val grid = SwingApplications.startTileGrid()
-    val screen = Screens.createScreenFor(grid)
-
-    val builder = SimpleRoomGenerator.Builder()
-    val roomGenerator = builder.height(50).width(50).room_min_size(7).build()
-    val map = roomGenerator.nextMap()
-    map.print()
-    map.foreach { i: Int, j: Int ->
-        // coords of walls
-        println("Wall at: ($i, $j)")
-    }
-
-    screen.addComponent(Components.header()
-            .withText("Hello, from RoboRoguelike!")
-            .withAlignmentWithin(screen, ComponentAlignment.CENTER))
-
-    screen.applyColorTheme(ColorThemes.arc())
-    screen.display()
+    val application = SwingApplications.startApplication(GameConfig.buildAppConfig())
+    application.dock(StartView())
+//    val grid = SwingApplications.startTileGrid()
+//    val screen = Screens.createScreenFor(grid)
+//
+//    val builder = SimpleRoomGenerator.Builder()
+//    val roomGenerator = builder.height(50).width(50).room_min_size(7).build()
+//    val map = roomGenerator.nextMap()
+//    map.print()
+//    map.foreach { i: Int, j: Int ->
+//        // coords of walls
+//        println("Wall at: ($i, $j)")
+//    }
+//
+//    screen.addComponent(Components.header()
+//            .withText("Hello, from RoboRoguelike!")
+//            .withAlignmentWithin(screen, ComponentAlignment.CENTER))
+//
+//    screen.applyColorTheme(ColorThemes.arc())
+//    screen.display()
 
 }

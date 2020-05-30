@@ -37,8 +37,8 @@ class PlayView(private val game: Game = Game.create()) : BaseView() {
                 .withAlignmentWithin(screen, ComponentAlignment.TOP_RIGHT)
                 .build()
 
-        screen.addComponent(sidebar)
+//        screen.addComponent(sidebar)
         screen.addComponent(gameComponent)
-        screen.addComponent(logArea)
+//        screen.addComponent(logArea)
     }
 }

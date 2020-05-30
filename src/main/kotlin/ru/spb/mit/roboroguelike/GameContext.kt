@@ -1,5 +1,6 @@
 package ru.spb.mit.roboroguelike
 
+import World
 import org.hexworks.amethyst.api.Context
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
