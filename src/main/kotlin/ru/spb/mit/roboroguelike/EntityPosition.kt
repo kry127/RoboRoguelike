@@ -8,8 +8,6 @@ import org.hexworks.zircon.api.data.impl.Position3D
 
 data class EntityTile(val tile: Tile = Tiles.empty()) : Attribute
 
-class EntityPosition(initialPosition: Position3D = Position3D.unknown()) : Attribute { // 1
-    private val positionProperty = createPropertyFrom(initialPosition) // 2
-
-    var position: Position3D by positionProperty.asDelegate() // 3
+class EntityPosition(initialPosition: Position3D = Position3D.unknown()) : Attribute {
+    var position: Position3D = initialPosition;
 }
