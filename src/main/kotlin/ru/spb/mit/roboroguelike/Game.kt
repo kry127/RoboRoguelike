@@ -9,7 +9,7 @@ class Game(val world: World) {
     companion object {
 
         fun create(worldSize: Size3D = GameConfig.WORLD_SIZE,
-                   visibleSize: Size3D = GameConfig.WORLD_SIZE) = Game(WorldBuilder(worldSize)
+                   visibleSize: Size3D = GameConfig.VISIBLE_SIZE) = Game(WorldBuilder(worldSize)
                 .makeRooms()
                 .build(visibleSize))
     }
