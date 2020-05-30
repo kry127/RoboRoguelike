@@ -5,6 +5,7 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.Screens
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.component.ComponentAlignment
+import ru.spb.mit.roboroguelike.map.generator.SimpleRoomGenerator
 
 @Suppress("ConstantConditionIf")
 fun main(args: Array<String>) {
@@ -12,8 +13,12 @@ fun main(args: Array<String>) {
     val grid = SwingApplications.startTileGrid()
     val screen = Screens.createScreenFor(grid)
 
+    val builder = SimpleRoomGenerator.Builder()
+    val roomGenerator = builder.height(50).width(50).room_min_size(7).build()
+    val map = roomGenerator.nextMap()
+
     screen.addComponent(Components.header()
-            .withText("Hello, from Caves of Zircon!")
+            .withText("Hello, from RoboRoguelike!")
             .withAlignmentWithin(screen, ComponentAlignment.CENTER))
 
     screen.applyColorTheme(ColorThemes.arc())
