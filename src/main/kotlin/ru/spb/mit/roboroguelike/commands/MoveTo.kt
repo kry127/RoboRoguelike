@@ -7,5 +7,5 @@ import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.GameEntity
 
 data class MoveTo(override val context: GameContext,
-                      override val source: GameEntity<EntityType>,
-                      val position: Position3D) : GameCommand<EntityType>
+                  override val source: GameEntity<EntityType>,
+                  val position: Position3D) : GameCommand<EntityType>

@@ -68,7 +68,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
     fun searchForEmptyRandomPosition(level: Int = 0,
                                      offset: Position3D = Positions.default3DPosition(),
                                      searchScope: Size3D = actualSize(),
-                                     n_tries: Int = 10): Maybe<Position3D> {
+                                     n_tries: Int = 20): Maybe<Position3D> {
         val xCoord = searchScope.xLength;
         val yCoord = searchScope.yLength;
         var result = Maybe.empty<Position3D>()

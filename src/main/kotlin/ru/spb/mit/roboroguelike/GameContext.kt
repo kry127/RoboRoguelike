@@ -7,7 +7,7 @@ import org.hexworks.zircon.api.uievent.UIEvent
 import ru.spb.mit.roboroguelike.objects.Player
 
 
-data class GameContext(val world: World, // 1
-                       val screen: Screen,  // 2
-                       val uiEvent: UIEvent, // 3
-                       val player: GameEntity<Player>) : Context //
+data class GameContext(val world: World,
+                       val screen: Screen,
+                       val uiEvent: UIEvent,
+                       val player: GameEntity<Player>) : Context

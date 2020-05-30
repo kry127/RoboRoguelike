@@ -13,12 +13,12 @@ import org.hexworks.zircon.api.uievent.Processed
 class LoseView : BaseView() {
 
     override val theme = ColorThemes.arc()
+    private val deathMsg = "You died"
 
     override fun onDock() {
-        val msg = "Game Over"
         val header = Components.textBox()
                 .withContentWidth(30)
-                .addHeader(msg)
+                .addHeader(deathMsg)
                 .withAlignmentWithin(screen, ComponentAlignment.CENTER)
                 .build()
         val restartButton = Components.button()

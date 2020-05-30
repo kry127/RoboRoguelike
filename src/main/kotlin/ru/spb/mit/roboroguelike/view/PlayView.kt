@@ -27,11 +27,11 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .build()
 
         val logArea = Components.logArea()
-                .withTitle("Log") // 1
-                .wrapWithBox()  // 2
+                .withTitle("Log")
+                .wrapWithBox()
 //                .withSize(GameConfig.WINDOW_WIDTH - GameConfig.SIDEBAR_WIDTH, GameConfig.LOG_AREA_HEIGHT)
                 .withSize(GameConfig.WINDOW_WIDTH, GameConfig.LOG_AREA_HEIGHT)
-                .withAlignmentWithin(screen, ComponentAlignment.BOTTOM_CENTER)  // 3
+                .withAlignmentWithin(screen, ComponentAlignment.BOTTOM_CENTER)
                 .build()
 
 
@@ -41,10 +41,11 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .withProjectionMode(ProjectionMode.TOP_DOWN)
                 .withAlignmentWithin(screen, ComponentAlignment.TOP_RIGHT)
                 .build()
-//        screen.addComponent(sidebar)
+
         screen.addComponent(gameComponent)
+        screen.addComponent(sidebar)
         screen.addComponent(logArea)
-//        screen.addComponent(logArea)
+
         screen.onKeyboardEvent(KeyboardEventType.KEY_PRESSED) { event, _ ->
             game.world.update(screen, event, game)
             Processed

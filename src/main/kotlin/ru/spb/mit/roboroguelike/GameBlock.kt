@@ -12,7 +12,7 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
     : BlockBase<Tile>() {
 
     val isFloor: Boolean
-        get() = defaultTile == TileTypes.FLOOR // 3
+        get() = defaultTile == TileTypes.FLOOR
 
     val isWall: Boolean
         get() = defaultTile == TileTypes.WALL
@@ -20,10 +20,10 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
     val isOccupied: Boolean
         get() = !isFloor || currentEntities.size > 0
 
-    val entities: Iterable<GameEntity<EntityType>> // 3
+    val entities: Iterable<GameEntity<EntityType>>
         get() = currentEntities.toList()
 
-    override val layers: MutableList<Tile> // 4
+    override val layers: MutableList<Tile>
         get() {
             val entityTiles = currentEntities.map { it.tile }
             val tile = when {
@@ -35,7 +35,7 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
         }
 
     override fun fetchSide(side: BlockSide): Tile {
-        return TileTypes.EMPTY // 5
+        return TileTypes.EMPTY
     }
 
     fun addEntity(entity: AnyGameEntity) {

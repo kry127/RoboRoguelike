@@ -33,6 +33,7 @@ class GameBuilder(val worldSize: Size3D) {
     }
 
     private fun addPlayer(): GameEntity<Player> {
+        // add scrolling logic
         val player = EntityFactory.makePlayer()
         world.addAtEmptyRandomPosition(player)
         return player
