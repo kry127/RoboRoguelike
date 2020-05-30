@@ -12,13 +12,15 @@ import ru.spb.mit.roboroguelike.*
 import kotlin.random.Random
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
-import ru.spb.mit.roboroguelike.objects.GameConfig.DUNGEON_LEVELS
+import ru.spb.mit.roboroguelike.objects.GameConfig
 import java.io.ObjectOutputStream
 import java.nio.file.Paths
 
-class World(startingBlocks: Map<Position3D, GameBlock>, // 1
+class World(startingBlocks: Map<Position3D, GameBlock>,
             visibleSize: Size3D,
-            actualSize: Size3D) : GameArea<Tile, GameBlock> by GameAreaBuilder.newBuilder<Tile, GameBlock>() // 2
+            actualSize: Size3D,
+            currentLevel: Int = GameConfig.DUNGEON_LEVELS - 1)
+    : GameArea<Tile, GameBlock> by GameAreaBuilder.newBuilder<Tile, GameBlock>()
         .withVisibleSize(visibleSize) // 3
         .withActualSize(actualSize) // 4
         .withDefaultBlock(DEFAULT_BLOCK) // 5
@@ -53,29 +55,19 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
         }
     }
 
-
-    fun addAtEmptyRandomPosition(entity: AnyGameEntity): Boolean {
-        val pos = searchForEmptyRandomPosition()
-        if (pos.isEmpty()) {
-            return false
-        }
-        addEntity(entity, pos.get())
-        return true
-    }
-
-    fun searchForEmptyRandomPosition(level: Int = DUNGEON_LEVELS - 1,
-                                     offset: Position3D = Positions.default3DPosition(),
-                                     searchScope: Size3D = visibleSize(),
+    fun searchForEmptyRandomPosition(offset: Position3D = Positions.default3DPosition(),
+                                     searchSpace: Size3D = actualSize(),
                                      n_tries: Int = 20): Maybe<Position3D> {
-        val xLength = searchScope.xLength;
-        val yLength = searchScope.yLength;
+        val xLength = searchSpace.xLength;
+        val yLength = searchSpace.yLength;
+        val zLength = searchSpace.zLength
         var result = Maybe.empty<Position3D>()
         var j = 0
         while (result.isEmpty() && j < n_tries) {
             val currPos = Positions.create3DPosition(
                 Random.nextInt(offset.x, offset.x + xLength),
                 Random.nextInt(offset.y, offset.y + yLength),
-                level)
+                Random.nextInt(offset.z, offset.z + zLength))
             fetchBlockAt(currPos).map {
                 if (!it.isOccupied) {
                     result = Maybe.of(currPos)
@@ -84,6 +76,15 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
             j++
         }
         return result
+    }
+
+    fun addAtEmptyRandomPosition(entity: AnyGameEntity): Boolean {
+        val pos = searchForEmptyRandomPosition()
+        if (pos.isEmpty()) {
+            return false
+        }
+        addEntity(entity, pos.get())
+        return true
     }
 
     fun moveEntity(entity: AnyGameEntity, newPosition3D: Position3D): Boolean {

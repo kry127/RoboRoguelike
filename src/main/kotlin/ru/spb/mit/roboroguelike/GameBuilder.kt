@@ -1,7 +1,9 @@
 
 package ru.spb.mit.roboroguelike
 
+import org.hexworks.cobalt.datatypes.extensions.orElseGet
 import org.hexworks.zircon.api.Sizes
+import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import ru.spb.mit.roboroguelike.objects.GameConfig
 import ru.spb.mit.roboroguelike.objects.Player
@@ -33,10 +35,19 @@ class GameBuilder(val worldSize: Size3D) {
     }
 
     private fun addPlayer(): GameEntity<Player> {
-        // add scrolling logic
+ /*       val position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition()
+        }*/
+        val position = Position3D.create(20, 20, 1)
+        position.withZ(GameConfig.DUNGEON_LEVELS - 1) // HARDCODE
         val player = EntityFactory.makePlayer()
-        world.addAtEmptyRandomPosition(player)
+        world.addEntity(player, position)
+        centerCameraAtPosition(position)
         return player
+    }
+
+    private fun centerCameraAtPosition(cameraPosition: Position3D) {
+        // Scrolling logic
     }
 
     companion object {

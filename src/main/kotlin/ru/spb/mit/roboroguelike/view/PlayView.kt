@@ -48,10 +48,10 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .build()
 
 
-        loadGameButton.onComponentEvent(ComponentEventType.ACTIVATED) {
-            game.world = WorldBuilder(game.world.actualSize()).deserialize()
-            Processed
-        }
+//        loadGameButton.onComponentEvent(ComponentEventType.ACTIVATED) {
+//            game.world = WorldBuilder(game.world.actualSize()).deserialize()
+//            Processed
+//        }
 
         saveGameButton.onComponentEvent(ComponentEventType.ACTIVATED) {
             game.world.defaultSerializeBlocks()
