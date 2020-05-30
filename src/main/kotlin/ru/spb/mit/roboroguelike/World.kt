@@ -19,7 +19,7 @@ import java.nio.file.Paths
 class World(startingBlocks: Map<Position3D, GameBlock>,
             visibleSize: Size3D,
             actualSize: Size3D,
-            currentLevel: Int = GameConfig.DUNGEON_LEVELS - 1)
+            var currentLevel: Int = GameConfig.DUNGEON_LEVELS - 1)
     : GameArea<Tile, GameBlock> by GameAreaBuilder.newBuilder<Tile, GameBlock>()
         .withVisibleSize(visibleSize) // 3
         .withActualSize(actualSize) // 4
@@ -47,6 +47,14 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
                 player = game.player))
     }
 
+    fun centerCameraAtPosition(cameraPosition: Position3D) {
+        val (xLength, yLength, _) = visibleSize()
+        val (xCurr, yCurr, _) = cameraPosition
+        scrollTo3DPosition(cameraPosition
+                .withX(xCurr - xLength / 2)
+                .withY(yCurr - yLength / 2))
+    }
+
     fun addEntity(entity: AnyGameEntity, position: Position3D) {
         engine.addEntity(entity)
         entity.position = position
@@ -58,9 +66,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     fun searchForEmptyRandomPosition(offset: Position3D = Positions.default3DPosition(),
                                      searchSpace: Size3D = actualSize(),
                                      n_tries: Int = 20): Maybe<Position3D> {
-        val xLength = searchSpace.xLength;
-        val yLength = searchSpace.yLength;
-        val zLength = searchSpace.zLength
+        val (xLength, yLength, zLength) = searchSpace
         var result = Maybe.empty<Position3D>()
         var j = 0
         while (result.isEmpty() && j < n_tries) {

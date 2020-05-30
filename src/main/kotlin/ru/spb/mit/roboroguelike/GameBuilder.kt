@@ -35,19 +35,13 @@ class GameBuilder(val worldSize: Size3D) {
     }
 
     private fun addPlayer(): GameEntity<Player> {
- /*       val position = world.searchForEmptyRandomPosition().orElseGet {
-            Position3D.defaultPosition()
-        }*/
-        val position = Position3D.create(20, 20, 1)
-        position.withZ(GameConfig.DUNGEON_LEVELS - 1) // HARDCODE
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
         val player = EntityFactory.makePlayer()
         world.addEntity(player, position)
-        centerCameraAtPosition(position)
+        world.centerCameraAtPosition(position)
         return player
-    }
-
-    private fun centerCameraAtPosition(cameraPosition: Position3D) {
-        // Scrolling logic
     }
 
     companion object {
