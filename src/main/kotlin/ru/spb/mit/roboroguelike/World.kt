@@ -1,6 +1,7 @@
 
 import org.hexworks.amethyst.api.Engine
 import org.hexworks.amethyst.api.Engines
+import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.cobalt.datatypes.extensions.map
 import org.hexworks.zircon.api.Positions
@@ -9,10 +10,7 @@ import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import org.hexworks.zircon.api.game.GameArea
-import ru.spb.mit.roboroguelike.AnyGameEntity
-import ru.spb.mit.roboroguelike.GameBlock
-import ru.spb.mit.roboroguelike.GameContext
-import ru.spb.mit.roboroguelike.position
+import ru.spb.mit.roboroguelike.*
 import kotlin.random.Random
 
 class World(startingBlocks: Map<Position3D, GameBlock>, // 1
@@ -44,6 +42,21 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
         }
     }
 
+
+/*    fun addAtEmptyPosition(entity: GameEntity<EntityType>, // 5
+                           offset: Position3D = Positions.default3DPosition(),
+                           size: Size3D = actualSize()): Boolean {
+        return findEmptyLocationWithin(offset, size).fold(
+                whenEmpty = { // 6
+                    false
+                },
+                whenPresent = { location ->  // 7
+                    addEntity(entity, location)
+                    true
+                })
+
+    }*/
+
     fun addAtEmptyRandomPosition(entity: AnyGameEntity): Boolean {
         val pos = searchForEmptyRandomPosition()
         if (pos.isEmpty()) {
@@ -54,6 +67,25 @@ class World(startingBlocks: Map<Position3D, GameBlock>, // 1
         }
         return true
     }
+/*
+    fun findEmptyLocationWithin(offset: Position3D, size: Size3D): Maybe<Position3D> { // 8
+        var position = Maybe.empty<Position3D>()
+        val maxTries = 10
+        var currentTry = 0
+        while (position.isPresent.not() && currentTry < maxTries) {
+            val pos = Positions.create3DPosition(
+                    x = (Math.random() * size.xLength).toInt() + offset.x,
+                    y = (Math.random() * size.yLength).toInt() + offset.y,
+                    z = (Math.random() * size.zLength).toInt() + offset.z)
+            fetchBlockAt(pos).map {
+                if (!it.isOccupied) {
+                    position = Maybe.of(pos)
+                }
+            }
+            currentTry++
+        }
+        return position
+    }*/
 
     fun searchForEmptyRandomPosition(level: Int = 0,
                                      offset: Position3D = Positions.default3DPosition(),
