@@ -1,6 +1,7 @@
 package ru.spb.mit.roboroguelike.map.generator
 
 import org.hexworks.zircon.internal.util.DefaultThreadSafeQueue
+import ru.spb.mit.roboroguelike.map.BooleanMap
 import ru.spb.mit.roboroguelike.map.Map
 import java.util.*
 import kotlin.collections.ArrayList
@@ -37,10 +38,6 @@ class SimpleRoomGenerator(
     }
 
     private inner class Room(
-            var left : Room?,
-            var right: Room?,
-            var top: Room?,
-            var bottom: Room?,
             private val x0 : Int,
             private val y0 : Int,
             private val x1 : Int,
@@ -50,26 +47,22 @@ class SimpleRoomGenerator(
             get() = field
             set(value) { field = value}
 
-        var leftConnected : Room? = null
-        var rightConnected: Room? = null
-        var topConnected: Room? = null
-        var bottomConnected: Room? = null
+
+        override fun toString(): String {
+            return "[$x0 $x1] x [$y0 $y1]"
+        }
 
         private fun splitVertically(value : Int) : List<Room> {
             require(value in y0..y1)
-            val r1 = Room(left, right, top, null, x0, y0, x1, value)
-            val r2 = Room(left, right, null, bottom, x0, value, x1, y1)
-            r1.bottom = r2
-            r2.top = r1
+            val r1 = Room(x0, y0, x1, value)
+            val r2 = Room(x0, value, x1, y1)
             return listOf(r1, r2)
         }
 
         private fun splitHorizontally(value : Int) : List<Room>  {
-            require(value in y0..y1)
-            val r1 = Room(left, null, top, bottom, x0, y0, value, y1)
-            val r2 = Room(null, right, top, bottom, value, y0, x1, y1)
-            r1.right = r2
-            r2.left = r1
+            require(value in x0..x1)
+            val r1 = Room(x0, y0, value, y1)
+            val r2 = Room(value, y0, x1, y1)
             return listOf(r1, r2)
         }
 
@@ -87,99 +80,170 @@ class SimpleRoomGenerator(
                 val ysplit = rand.nextInt(y0 + room_min_size, y1 - room_min_size)
                 return splitVertically(ysplit)
             } else {
-                val xsplit = rand.nextInt(y0 + room_min_size, y1 - room_min_size)
+                val xsplit = rand.nextInt(x0 + room_min_size, x1 - room_min_size)
                 return splitHorizontally(xsplit)
             }
         }
 
+        // returns "already perforated" and "perforation successfull" statuses
+        private fun perforateHoleLeft(arr : Array<Array<Boolean>>) : Pair<Boolean, Boolean> {
+            if (x0 == 0) return Pair(false, false);
+
+            var blocked = true
+            var perfCenter = -1
+            for (k in y0+1..y1-1) {
+                if (!arr[x0][k]) {
+                    blocked = false
+                } else {
+                    if (k > 2 && !arr[x0 - 1][k] && !arr[x0 - 1][k - 1] && !arr[x0 - 1][k - 2]) {
+                        perfCenter = k - 1
+                    }
+                }
+            }
+            if (!blocked) {
+                return Pair(true, false)
+            }
+            if (blocked && perfCenter != -1) {
+                for (k in perfCenter - 1..perfCenter + 1) {
+                    arr[x0][k] = false
+                }
+                return Pair(false, true)
+            }
+            return Pair(false, false)
+        }
+
+        private fun perforateHoleRight(arr : Array<Array<Boolean>>) : Pair<Boolean, Boolean> {
+            if (x1 == width - 1) return Pair(false, false);
+
+            var blocked = true
+            var perfCenter = -1
+            for (k in y0+1..y1-1) {
+                if (!arr[x1][k]) {
+                    blocked = false
+                } else {
+                    if (k > 2 && !arr[x1 + 1][k] && !arr[x1 + 1][k - 1] && !arr[x1 + 1][k - 2]) {
+                        perfCenter = k - 1
+                    }
+                }
+            }
+            if (!blocked) {
+                return Pair(true, false)
+            }
+            if (blocked && perfCenter != -1) {
+                for (k in perfCenter - 1..perfCenter + 1) {
+                    arr[x1][k] = false
+                }
+                return Pair(false, true)
+            }
+            return Pair(false, false)
+        }
+
+        private fun perforateHoleTop(arr : Array<Array<Boolean>>) : Pair<Boolean, Boolean> {
+            if (y1 == height - 1) return Pair(false, false);
+
+            var blocked = true
+            var perfCenter = -1
+            for (k in x0+1..x1-1) {
+                if (!arr[k][y1]) {
+                    blocked = false
+                } else {
+                    if (k > 2 && !arr[k][y1 + 1] && !arr[k - 1][y1 + 1] && !arr[k - 2][y1 + 1]) {
+                        perfCenter = k - 1
+                    }
+                }
+            }
+            if (!blocked) {
+                return Pair(true, false)
+            }
+            if (blocked && perfCenter != -1) {
+                for (k in perfCenter - 1..perfCenter + 1) {
+                    arr[k][y1] = false
+                }
+                return Pair(false, true)
+            }
+            return Pair(false, false)
+        }
+
+        private fun perforateHoleBottom(arr : Array<Array<Boolean>>) : Pair<Boolean, Boolean> {
+            if (y0 == 0) return Pair(false, false);
+
+            var blocked = true
+            var perfCenter = -1
+            for (k in x0+1..x1-1) {
+                if (!arr[k][y0]) {
+                    blocked = false
+                } else {
+                    if (k > 2 && !arr[k][y0 - 1] && !arr[k - 1][y0 - 1] && !arr[k - 2][y0 - 1]) {
+                        perfCenter = k - 1
+                    }
+                }
+            }
+            if (!blocked) {
+                return Pair(true, false)
+            }
+            if (blocked && perfCenter != -1) {
+                for (k in perfCenter - 1..perfCenter + 1) {
+                    arr[k][y0] = false
+                }
+                return Pair(false, true)
+            }
+            return Pair(false, false)
+        }
+
+        fun perforateHole(arr : Array<Array<Boolean>>) {
+            val (perforated1, successfull1) = perforateHoleLeft(arr)
+//            if (successfull1) return
+            val (perforated2, successfull2) = perforateHoleRight(arr)
+//            if (successfull2) return
+            val (perforated3, successfull3) = perforateHoleTop(arr)
+//            if (successfull3) return
+            val (perforated4, successfull4) = perforateHoleBottom(arr)
+//            if (successfull4) return
+        }
+
         fun draw(arr : Array<Array<Boolean>>) {
             val rand : Random = Random.Default
-            if (leftConnected == null) {
-                for (k in y0..y1) {
-                    arr[x0][k] = true
-                }
-            } else {
-                if (visited) {
-                    for (k in y0..y1) {
-                        arr[x0][k] = arr[x0 - 1][k]
-                    }
-                } else {
-                    val y_gap = rand.nextInt(y0+3, y1 - 3)
-                    for (k in y0..y_gap - 2) {
-                        arr[x0][k] = true
-                    }
-                    for (k in y_gap + 2..y1) {
-                        arr[x0][k] = true
-                    }
-                }
+            for (k in y0..y1) {
+                arr[x0][k] = true
             }
-            if (rightConnected == null) {
-                for (k in y0..y1) {
-                    arr[x1][k] = true
-                }
-            } else {
-                if (visited) {
-                    for (k in y0..y1) {
-                        arr[x1][k] = arr[x1 + 1][k]
-                    }
-                } else {
-                    val y_gap = rand.nextInt(y0+3, y1 - 3)
-                    for (k in y0..y_gap - 2) {
-                        arr[x1][k] = true
-                    }
-                    for (k in y_gap + 2..y1) {
-                        arr[x1][k] = true
-                    }
-                }
+            for (k in y0..y1) {
+                arr[x1][k] = true
             }
-            if (topConnected == null) {
-                for (k in x0..x1) {
-                    arr[k][y1] = true
-                }
-            } else {
-                if (visited) {
-                    for (k in x0..x1) {
-                        arr[k][y1] = arr[k][y1 + 1]
-                    }
-                } else {
-                    val x_gap = rand.nextInt(x0+3, x1 - 3)
-                    for (k in x0..x_gap - 2) {
-                        arr[k][y1] = true
-                    }
-                    for (k in x_gap + 2..x1) {
-                        arr[k][y1] = true
-                    }
-                }
+            for (k in x0..x1) {
+                arr[k][y0] = true
             }
-            if (bottomConnected == null) {
-                for (k in x0..x1) {
-                    arr[k][y0] = true
-                }
-            } else {
-                if (visited) {
-                    for (k in x0..x1) {
-                        arr[k][y0] = arr[k][y0 - 1]
-                    }
-                } else {
-                    val x_gap = rand.nextInt(x0+3, x1 - 3)
-                    for (k in x0..x_gap - 2) {
-                        arr[k][y0] = true
-                    }
-                    for (k in x_gap + 2..x1) {
-                        arr[k][y0] = true
-                    }
-                }
+            for (k in x0..x1) {
+                arr[k][y1] = true
             }
         }
     }
 
+    private fun print_rooms() {
+        for (r in rooms) {
+            println(r)
+        }
+    }
+
+    private fun draw_rooms() {
+        var arr : Array<Array<Boolean>> = Array(width) {
+            Array<Boolean>(height) {false}
+        }
+        for (r in rooms) {
+            r.draw(arr)
+        }
+        BooleanMap(arr).print();
+    }
+
     private fun build_room_graph() {
         rooms.clear()
-        rooms.add(Room(null, null, null, null, 0, 0, width, height))
+        rooms.add(Room(0, 0, width - 1, height - 1))
         for (i in 1..number_of_splits) {
             val r = rooms.find { r -> r.canSplit()} ?: break
             rooms.remove(r)
             rooms.addAll(r.randomSplit())
+            print_rooms();
+            draw_rooms();
+            println("===============================")
         }
         while(true) {
             val r = rooms.find { r -> r.shouldSplit()} ?: break
@@ -188,43 +252,8 @@ class SimpleRoomGenerator(
         }
     }
 
-    private fun bfs_spanning_tree() {
-        var front : DefaultThreadSafeQueue<Room> = DefaultThreadSafeQueue<Room>()
-        var room = rooms.random()
-        front.add(room)
-        room.visited = true
 
-        while (front.size > 0) {
-            room = front.first()
-            if (room.left != null && !room.left!!.visited) {
-                front.add(room.left!!)
-                room.left!!.visited = true
-                room.leftConnected = room.left
-                room.left!!.rightConnected = room
-            }
-            if (room.right != null && !room.right!!.visited) {
-                front.add(room.right!!)
-                room.right!!.visited = true
-                room.rightConnected = room.right
-                room.right!!.leftConnected = room
-            }
-            if (room.top != null && !room.top!!.visited) {
-                front.add(room.top!!)
-                room.top!!.visited = true
-                room.topConnected = room.top
-                room.top!!.bottomConnected = room
-            }
-            if (room.bottom != null && !room.bottom!!.visited) {
-                front.add(room.bottom!!)
-                room.bottom!!.visited = true
-                room.bottomConnected = room.bottom
-                room.bottom!!.topConnected = room
-            }
-        }
-    }
-
-
-    private fun makeMapWithConfig() : Map<Boolean> {
+    private fun makeMapWithConfig() : BooleanMap {
         var arr : Array<Array<Boolean>> = Array(width) {
             Array<Boolean>(height) {false}
         }
@@ -233,14 +262,15 @@ class SimpleRoomGenerator(
         }
         for (r in rooms) {
             r.draw(arr)
-            r.visited = true
+//            BooleanMap(arr).print();
+            r.perforateHole(arr)
         }
-        return Map<Boolean>(arr)
+        return BooleanMap(arr)
     }
 
-    fun nextMap() : Map<Boolean> {
+    fun nextMap() : BooleanMap {
         build_room_graph()
-        bfs_spanning_tree()
+//        bfs_spanning_tree()
         return makeMapWithConfig()
     }
 }
