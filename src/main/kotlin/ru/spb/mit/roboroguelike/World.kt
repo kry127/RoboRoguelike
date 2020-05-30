@@ -123,13 +123,19 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
 
     fun serializeBlocks(outputStream : ObjectOutputStream) {
+        val worldSize = actualSize()
+        worldSize.serialize(outputStream)
+
+        val count = fetchBlocks().count()
+        outputStream.writeInt(count)
         for (block in fetchBlocks()) {
-            block.component1().serialize(outputStream) // extension function at PositionExtension.kt
+            block.component1().serialize(outputStream) // extension function at SerializationExtensions.kt
             block.component2().serialize(outputStream)
         }
+        outputStream.close()
     }
 
     fun defaultSerializeBlocks() {
-        serializeBlocks(ObjectOutputStream(Paths.get("RoboRoguelike.dat").toFile().outputStream()))
+        serializeBlocks(ObjectOutputStream(Paths.get(GameConfig.SAVE_FILE_PATH).toFile().outputStream()))
     }
 }
