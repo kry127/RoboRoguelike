@@ -27,7 +27,7 @@ class CameraMover: BaseFacet<GameContext>() {
                CameraMovementDirection.RIGHT -> world.scrollOneRight()
                CameraMovementDirection.UP -> world.scrollOneUp()
                CameraMovementDirection.DOWN -> world.scrollOneDown()
-           }*/
+            }*/
             Consumed
         }
     }
