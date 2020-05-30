@@ -9,9 +9,10 @@ import org.hexworks.zircon.api.game.ProjectionMode
 import org.hexworks.zircon.api.mvc.base.BaseView
 import ru.spb.mit.roboroguelike.Game
 import ru.spb.mit.roboroguelike.GameBlock
+import ru.spb.mit.roboroguelike.GameBuilder
 import ru.spb.mit.roboroguelike.objects.GameConfig
 
-class PlayView(private val game: Game = Game.create()) : BaseView() {
+class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() {
 
     override val theme = ColorThemes.arc()
 
@@ -25,8 +26,9 @@ class PlayView(private val game: Game = Game.create()) : BaseView() {
         val logArea = Components.logArea()
                 .withTitle("Log") // 1
                 .wrapWithBox()  // 2
-                .withSize(GameConfig.WINDOW_WIDTH - GameConfig.SIDEBAR_WIDTH, GameConfig.LOG_AREA_HEIGHT)
-                .withAlignmentWithin(screen, ComponentAlignment.BOTTOM_RIGHT)  // 3
+//                .withSize(GameConfig.WINDOW_WIDTH - GameConfig.SIDEBAR_WIDTH, GameConfig.LOG_AREA_HEIGHT)
+                .withSize(GameConfig.WINDOW_WIDTH, GameConfig.LOG_AREA_HEIGHT)
+                .withAlignmentWithin(screen, ComponentAlignment.BOTTOM_CENTER)  // 3
                 .build()
 
 
@@ -39,6 +41,6 @@ class PlayView(private val game: Game = Game.create()) : BaseView() {
 
 //        screen.addComponent(sidebar)
         screen.addComponent(gameComponent)
-//        screen.addComponent(logArea)
+        screen.addComponent(logArea)
     }
 }

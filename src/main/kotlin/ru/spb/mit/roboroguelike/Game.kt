@@ -4,15 +4,14 @@ import World
 import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import ru.spb.mit.roboroguelike.objects.GameConfig
+import ru.spb.mit.roboroguelike.objects.Player
 
-class Game(val world: World) {
+class Game(var world: World) {
 
     companion object {
 
-        fun create(worldSize: Size3D = GameConfig.WORLD_SIZE,
-                   visibleSize: Size3D = GameConfig.VISIBLE_SIZE): Game {
-            val world = WorldBuilder(worldSize).makeRooms().build(worldSize)
-            world.addEntity(EntityFactory.makePlayer(), Position3D.create(20, 20, 1))
+        fun create(player: GameEntity<Player>, world: World): Game {
+            world.addEntity(player, Position3D.create(20, 20, 1))
             return Game(world)
         }
     }
