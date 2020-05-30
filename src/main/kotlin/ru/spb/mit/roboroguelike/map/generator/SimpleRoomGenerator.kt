@@ -87,20 +87,21 @@ class SimpleRoomGenerator(
             if (x0 == 0) return Pair(false, false);
 
             var blocked = true
-            var perfCenter = -1
+            var availablePerfCenters = mutableListOf<Int>()
             for (k in y0+1..y1-1) {
                 if (!arr[x0][k]) {
                     blocked = false
                 } else {
                     if (k > 2 && !arr[x0 - 1][k] && !arr[x0 - 1][k - 1] && !arr[x0 - 1][k - 2]) {
-                        perfCenter = k - 1
+                        availablePerfCenters.add(k - 1)
                     }
                 }
             }
             if (!blocked) {
                 return Pair(true, false)
             }
-            if (blocked && perfCenter != -1) {
+            if (blocked && availablePerfCenters.size > 0) {
+                val perfCenter = availablePerfCenters.random()
                 for (k in perfCenter - 1..perfCenter + 1) {
                     arr[x0][k] = false
                 }
@@ -113,20 +114,21 @@ class SimpleRoomGenerator(
             if (x1 == width - 1) return Pair(false, false);
 
             var blocked = true
-            var perfCenter = -1
+            var availablePerfCenters = mutableListOf<Int>()
             for (k in y0+1..y1-1) {
                 if (!arr[x1][k]) {
                     blocked = false
                 } else {
                     if (k > 2 && !arr[x1 + 1][k] && !arr[x1 + 1][k - 1] && !arr[x1 + 1][k - 2]) {
-                        perfCenter = k - 1
+                        availablePerfCenters.add(k - 1)
                     }
                 }
             }
             if (!blocked) {
                 return Pair(true, false)
             }
-            if (blocked && perfCenter != -1) {
+            if (blocked && availablePerfCenters.size > 0) {
+                val perfCenter = availablePerfCenters.random()
                 for (k in perfCenter - 1..perfCenter + 1) {
                     arr[x1][k] = false
                 }
@@ -139,20 +141,21 @@ class SimpleRoomGenerator(
             if (y1 == height - 1) return Pair(false, false);
 
             var blocked = true
-            var perfCenter = -1
+            var availablePerfCenters = mutableListOf<Int>()
             for (k in x0+1..x1-1) {
                 if (!arr[k][y1]) {
                     blocked = false
                 } else {
                     if (k > 2 && !arr[k][y1 + 1] && !arr[k - 1][y1 + 1] && !arr[k - 2][y1 + 1]) {
-                        perfCenter = k - 1
+                        availablePerfCenters.add(k - 1)
                     }
                 }
             }
             if (!blocked) {
                 return Pair(true, false)
             }
-            if (blocked && perfCenter != -1) {
+            if (blocked && availablePerfCenters.size > 0) {
+                val perfCenter = availablePerfCenters.random()
                 for (k in perfCenter - 1..perfCenter + 1) {
                     arr[k][y1] = false
                 }
@@ -165,20 +168,21 @@ class SimpleRoomGenerator(
             if (y0 == 0) return Pair(false, false);
 
             var blocked = true
-            var perfCenter = -1
+            var availablePerfCenters = mutableListOf<Int>()
             for (k in x0+1..x1-1) {
                 if (!arr[k][y0]) {
                     blocked = false
                 } else {
                     if (k > 2 && !arr[k][y0 - 1] && !arr[k - 1][y0 - 1] && !arr[k - 2][y0 - 1]) {
-                        perfCenter = k - 1
+                        availablePerfCenters.add(k - 1)
                     }
                 }
             }
             if (!blocked) {
                 return Pair(true, false)
             }
-            if (blocked && perfCenter != -1) {
+            if (blocked && availablePerfCenters.size > 0) {
+                val perfCenter = availablePerfCenters.random()
                 for (k in perfCenter - 1..perfCenter + 1) {
                     arr[k][y0] = false
                 }
