@@ -23,8 +23,16 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
     val entities: Iterable<GameEntity<EntityType>> // 3
         get() = currentEntities.toList()
 
-    override val layers
-        get() = mutableListOf(defaultTile) // 4
+    override val layers: MutableList<Tile> // 4
+        get() {
+            val entityTiles = currentEntities.map { it.tile }
+            val tile = when {
+                entityTiles.contains(TileTypes.PLAYER) -> TileTypes.PLAYER
+                entityTiles.isNotEmpty() -> entityTiles.first()
+                else -> defaultTile
+            }
+            return mutableListOf(tile)
+        }
 
     override fun fetchSide(side: BlockSide): Tile {
         return TileTypes.EMPTY // 5

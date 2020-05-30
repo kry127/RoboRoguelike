@@ -12,7 +12,7 @@ class Game(val world: World) {
         fun create(worldSize: Size3D = GameConfig.WORLD_SIZE,
                    visibleSize: Size3D = GameConfig.VISIBLE_SIZE): Game {
             val world = WorldBuilder(worldSize).makeRooms().build(worldSize)
-            world.addEntity(EntityFactory.makePlayer(), Position3D.create(20, 20, 2))
+            world.addEntity(EntityFactory.makePlayer(), Position3D.create(20, 20, 1))
             return Game(world)
         }
     }
