@@ -12,7 +12,6 @@ import ru.spb.mit.roboroguelike.objects.GameConfig
 import ru.spb.mit.roboroguelike.entities.Player
 import ru.spb.mit.roboroguelike.entities.position
 import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 import java.nio.file.Paths
 
 class GameBuilder(val worldSize: Size3D) {
@@ -31,8 +30,11 @@ class GameBuilder(val worldSize: Size3D) {
 
         prepareWorld()
 
-        val player = addPlayer()
 
+        val player = addPlayer()
+        (1..200).forEach({
+            addMob()
+        })
         return Game.create(
                 world = world,
                 player = player)
@@ -60,6 +62,15 @@ class GameBuilder(val worldSize: Size3D) {
         world.addEntity(player, position)
         world.centerCameraAtPosition(position)
         return player
+    }
+
+    private fun addMob(): GameEntity<Player> {
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
+        val mob = EntityFactory.makeAggressiveMob()
+        world.addEntity(mob, position)
+        return mob
     }
 
     companion object {

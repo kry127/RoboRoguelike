@@ -25,6 +25,18 @@ object TileTypes {
             .withForegroundColor(GameColors.ACCENT_COLOR)
             .buildCharacterTile()
 
+    val AGGRESSIVE_MOB = Tiles.newBuilder()
+            .withCharacter('x')
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.RED)
+            .buildCharacterTile()
+
+    val COWARDLY_MOB = Tiles.newBuilder()
+            .withCharacter('x')
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.GREEN)
+            .buildCharacterTile()
+
     val LADDER_UP = Tiles.newBuilder()
             .withCharacter('U')
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
