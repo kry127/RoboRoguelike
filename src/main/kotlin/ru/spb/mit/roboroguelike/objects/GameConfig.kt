@@ -18,6 +18,10 @@ object GameConfig {
     const val WINDOW_WIDTH = 80
     const val WINDOW_HEIGHT = 50
 
+    // tracking box
+    const val HORIZONTAL_LUFT = 30
+    const val VERTICAL_LUFT = 20
+
     // save file
     const val SAVE_FILE_PATH = "RoboRoguelike.dat"
 

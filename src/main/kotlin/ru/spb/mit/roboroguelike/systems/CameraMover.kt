@@ -9,6 +9,7 @@ import org.hexworks.zircon.api.data.impl.Position3D
 import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.MoveCamera
 import ru.spb.mit.roboroguelike.entities.position
+import ru.spb.mit.roboroguelike.objects.GameConfig
 
 
 class CameraMover : BaseFacet<GameContext>() {
@@ -25,16 +26,16 @@ class CameraMover : BaseFacet<GameContext>() {
             when (getCameraMovementDirection(prevPos,
                     entity.position)) {
                 CameraMovementDirection.FORWARD -> world.scrollForwardBy(
-                        if (entity.position.y > 15) 1 else 0
+                        if (entity.position.y > GameConfig.VERTICAL_LUFT) 1 else 0
                 )
                 CameraMovementDirection.BACKWARD -> world.scrollBackwardBy(
-                        if (entity.position.y < world.actualSize().yLength - 15) 1 else 0
+                        if (entity.position.y < world.actualSize().yLength - GameConfig.VERTICAL_LUFT) 1 else 0
                 )
                 CameraMovementDirection.LEFT -> world.scrollLeftBy(
-                        if (entity.position.x < world.actualSize().xLength - 15) 1 else 0
+                        if (entity.position.x < world.actualSize().xLength - GameConfig.HORIZONTAL_LUFT) 1 else 0
                 )
                 CameraMovementDirection.RIGHT -> world.scrollRightBy(
-                        if (entity.position.x > 30) 1 else 0
+                        if (entity.position.x > GameConfig.HORIZONTAL_LUFT) 1 else 0
                 )
                 CameraMovementDirection.UP -> world.scrollOneUp()
                 CameraMovementDirection.DOWN -> world.scrollOneDown()
