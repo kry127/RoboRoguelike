@@ -27,4 +27,13 @@ object EntityFactory {
         behaviors(InputReceiver())
         facets(Movable(), CameraMover())
     }
+
+
+    fun makeLadderUp() = newEntityOfType<LadderUp, GameContext>(LadderUp) {
+        attributes(EntityPosition(), EntityTile(TileTypes.LADDER_UP))
+    }
+
+    fun makeLadderDown() = newEntityOfType<LadderDown, GameContext>(LadderDown) {
+        attributes(EntityPosition(), EntityTile(TileTypes.LADDER_DOWN))
+    }
 }
