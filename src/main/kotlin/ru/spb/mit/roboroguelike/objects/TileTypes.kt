@@ -50,11 +50,11 @@ object TileTypes {
             .withCharacter(Symbols.ARROW_UP)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
-            .buildGraphicTile()
+            .buildCharacterTile()
 
     val LADDER_DOWN = Tiles.newBuilder()
             .withCharacter(Symbols.ARROW_DOWN)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
-            .buildGraphicTile()
+            .buildCharacterTile()
 }

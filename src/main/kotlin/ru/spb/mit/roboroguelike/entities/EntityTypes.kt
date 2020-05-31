@@ -11,10 +11,10 @@ object Mob : BaseEntityType(
 object Wall : BaseEntityType(
         name = "wall")
 
-object LadderUp: BaseEntityType(
+object LadderUp: BaseEntityType (
         name = "LadderUp"
-)
+), Teleport
 
 object LadderDown: BaseEntityType(
         name = "LadderDown"
-)
+), Teleport

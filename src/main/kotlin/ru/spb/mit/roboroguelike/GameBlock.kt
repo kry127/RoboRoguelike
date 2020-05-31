@@ -1,12 +1,12 @@
 package ru.spb.mit.roboroguelike
 
 import org.hexworks.amethyst.api.entity.EntityType
+import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.zircon.api.data.BlockSide
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.base.BlockBase
-import ru.spb.mit.roboroguelike.entities.AnyGameEntity
-import ru.spb.mit.roboroguelike.entities.GameEntity
-import ru.spb.mit.roboroguelike.entities.tile
+import org.hexworks.zircon.api.data.impl.Position3D
+import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.TileTypes
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -23,7 +23,7 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
         get() = defaultTile == TileTypes.WALL
 
     val isOccupied: Boolean
-        get() = !isFloor || currentEntities.size > 0
+        get() = !isFloor //|| currentEntities.size > 0
 
    // val isMob: Boolean
    //     get() = defaultTile == TileTypes.MOB
@@ -70,5 +70,17 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
 
     fun removeEntity(entity: AnyGameEntity) {
         currentEntities.remove(entity)
+    }
+
+    fun getTeleportPosition(): Maybe<Position3D> {
+        var result: Position3D? = null
+        for (entity in currentEntities) {
+            val tmp = entity.findAttribute(TeleportPosition::class)
+            if (tmp.isPresent) {
+                result = tmp.get().teleportPosition
+                break
+            }
+        }
+        return Maybe.ofNullable(result)
     }
 }
