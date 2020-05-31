@@ -14,4 +14,5 @@ object GameColors {
 
     val RED = TileColors.fromString("#FF0000")
     val GREEN = TileColors.fromString("#71FF33")
+    val YELLOW =TileColors.fromString("#fff70a")
 }

@@ -6,14 +6,14 @@ import org.hexworks.amethyst.api.Pass
 import org.hexworks.amethyst.api.Response
 import org.hexworks.amethyst.api.base.BaseFacet
 import org.hexworks.amethyst.api.entity.EntityType
-import ru.spb.mit.roboroguelike.entities.GameCommand
 import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.MoveCamera
 import ru.spb.mit.roboroguelike.commands.MoveTo
+import ru.spb.mit.roboroguelike.entities.GameCommand
 import ru.spb.mit.roboroguelike.entities.Player
 import ru.spb.mit.roboroguelike.entities.position
 
-class Movable: BaseFacet<GameContext>() {
+class Movable : BaseFacet<GameContext>() {
     override fun executeCommand(command: GameCommand<out EntityType>): Response {
         return command.responseWhenCommandIs(MoveTo::class) { (context, entity, position) ->
             val world = context.world

@@ -37,6 +37,12 @@ object TileTypes {
             .withForegroundColor(GameColors.GREEN)
             .buildCharacterTile()
 
+    val STATIC_MOB = Tiles.newBuilder()
+            .withCharacter('x')
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.YELLOW)
+            .buildCharacterTile()
+
     val LADDER_UP = Tiles.newBuilder()
             .withCharacter('U')
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)

@@ -35,6 +35,7 @@ class GameBuilder(val worldSize: Size3D) {
         (1..200).forEach({
             addAggressiveMob()
             addCowardlyMob()
+            addStaticMob()
         })
         return Game.create(
                 world = world,
@@ -82,6 +83,16 @@ class GameBuilder(val worldSize: Size3D) {
         world.addEntity(mob, position)
         return mob
     }
+
+    private fun addStaticMob(): GameEntity<Player> {
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
+        val mob = EntityFactory.makeStaticMob()
+        world.addEntity(mob, position)
+        return mob
+    }
+
 
     companion object {
 

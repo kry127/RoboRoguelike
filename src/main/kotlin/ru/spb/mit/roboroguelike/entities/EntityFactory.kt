@@ -31,6 +31,12 @@ object EntityFactory {
         facets(Movable(), Attackable())
     }
 
+    fun makeStaticMob() = newEntityOfType<Player, GameContext>(Player) {
+        attributes(EntityPosition(), EntityTile(TileTypes.STATIC_MOB))
+        behaviors(Static())
+        facets(Attackable())
+    }
+
     fun deserializePlayer(inputStream : ObjectInputStream) = newEntityOfType<Player, GameContext>(Player) {
         val position = Position3D.deserialize(inputStream)
         attributes(EntityPosition(position), EntityTile(TileTypes.PLAYER))
