@@ -1,8 +1,10 @@
 package ru.spb.mit.roboroguelike.objects
 
+import org.hexworks.zircon.api.CP437TilesetResources
 import org.hexworks.zircon.api.Tiles
 import org.hexworks.zircon.api.data.CharacterTile
 import org.hexworks.zircon.api.graphics.Symbols
+import org.hexworks.zircon.api.resource.TilesetResource
 
 object TileTypes {
     val EMPTY: CharacterTile = Tiles.empty()
@@ -38,19 +40,20 @@ object TileTypes {
             .buildCharacterTile()
 
     val STATIC_MOB = Tiles.newBuilder()
-            .withCharacter('x')
+            .withTileset(CP437TilesetResources.bisasam16x16())
+            .withCharacter(Symbols.OMEGA)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.YELLOW)
             .buildCharacterTile()
 
     val LADDER_UP = Tiles.newBuilder()
-            .withCharacter('U')
+            .withCharacter(Symbols.ARROW_UP)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
             .buildGraphicTile()
 
     val LADDER_DOWN = Tiles.newBuilder()
-            .withCharacter('D')
+            .withCharacter(Symbols.ARROW_DOWN)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
             .buildGraphicTile()
