@@ -12,6 +12,7 @@ import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.mvc.base.BaseView
 import org.hexworks.zircon.api.uievent.ComponentEventType
 import org.hexworks.zircon.api.uievent.KeyboardEventType
+import org.hexworks.zircon.api.uievent.MouseEventType
 import org.hexworks.zircon.api.uievent.Processed
 import ru.spb.mit.roboroguelike.Game
 import ru.spb.mit.roboroguelike.GameBlock
@@ -21,7 +22,7 @@ import ru.spb.mit.roboroguelike.objects.GameConfig
 
 class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() {
 
-    override val theme = ColorThemes.arc()
+    override val theme = ColorThemes.afterglow()
 
     override fun onDock() {
 
@@ -32,6 +33,7 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
 
 
         val saveGameButton = Components.button()
+                .withAlignmentWithin(sidebar, ComponentAlignment.TOP_CENTER)
                 .withText("Save")
                 .wrapSides(false)
                 .withBoxType(BoxType.SINGLE)
@@ -39,12 +41,18 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .wrapWithBox()
                 .build()
 
-        saveGameButton.onComponentEvent(ComponentEventType.ACTIVATED) {
-            game.defaultSerialize()
-            Processed
-        }
+
+        val mainMenuButton = Components.button()
+                .withAlignmentAround(saveGameButton, ComponentAlignment.BOTTOM_CENTER)
+                .withText("Main menu")
+                .wrapSides(false)
+                .withBoxType(BoxType.SINGLE)
+                .wrapWithShadow()
+                .wrapWithBox()
+                .build()
 
         sidebar.addComponent(saveGameButton)
+        sidebar.addComponent(mainMenuButton)
 
         val logArea = Components.logArea()
                 .withTitle("Log")
@@ -65,6 +73,17 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
         screen.addComponent(gameComponent)
         screen.addComponent(logArea)
         screen.addComponent(sidebar)
+
+        saveGameButton.onComponentEvent(ComponentEventType.ACTIVATED) {
+            game.defaultSerialize()
+            Processed
+        }
+
+        mainMenuButton.onComponentEvent(ComponentEventType.ACTIVATED) {
+            replaceWith(StartView())
+            close()
+            Processed
+        }
 
         screen.onKeyboardEvent(KeyboardEventType.KEY_PRESSED) { event, _ ->
             game.world.update(screen, event, game)

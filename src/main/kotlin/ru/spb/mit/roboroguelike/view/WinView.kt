@@ -12,7 +12,7 @@ import org.hexworks.zircon.api.uievent.Processed
 
 class WinView : BaseView() {
 
-    override val theme = ColorThemes.arc()
+    override val theme = ColorThemes.afterglow()
 
     override fun onDock() {
         val msg = "You won!"
