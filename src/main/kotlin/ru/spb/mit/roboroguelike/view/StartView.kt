@@ -16,7 +16,7 @@ class StartView : BaseView() {
     override val theme = ColorThemes.afterglow()
 
     override fun onDock() {
-        val msg = "RogoRoguelike"
+        val msg = "RevoRoguelike"
         val header = Components.textBox()
                 .withContentWidth(msg.length)
                 .addHeader(msg)

@@ -17,7 +17,7 @@ import java.nio.file.Paths
 class GameBuilder(val worldSize: Size3D) {
 
     private val visibleSize = Sizes.create3DSize(
-            xLength = GameConfig.WINDOW_WIDTH,
+            xLength = GameConfig.WINDOW_WIDTH - GameConfig.SIDEBAR_WIDTH,
             yLength = GameConfig.WINDOW_HEIGHT - GameConfig.LOG_AREA_HEIGHT,
             zLength = 1)
 
@@ -32,11 +32,11 @@ class GameBuilder(val worldSize: Size3D) {
 
 
         val player = addPlayer()
-        (1..200).forEach({
+        (1..200).forEach { _ ->
             addAggressiveMob()
             addCowardlyMob()
             addStaticMob()
-        })
+        }
         return Game.create(
                 world = world,
                 player = player)

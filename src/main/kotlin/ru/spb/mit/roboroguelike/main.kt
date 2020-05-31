@@ -14,23 +14,4 @@ import ru.spb.mit.roboroguelike.view.StartView
 fun main(args: Array<String>) {
     val application = SwingApplications.startApplication(GameConfig.buildAppConfig())
     application.dock(StartView())
-//    val grid = SwingApplications.startTileGrid()
-//    val screen = Screens.createScreenFor(grid)
-//
-//    val builder = SimpleRoomGenerator.Builder()
-//    val roomGenerator = builder.height(50).width(50).room_min_size(7).build()
-//    val map = roomGenerator.nextMap()
-//    map.print()
-//    map.foreach { i: Int, j: Int ->
-//        // coords of walls
-//        println("Wall at: ($i, $j)")
-//    }
-//
-//    screen.addComponent(Components.header()
-//            .withText("Hello, from RoboRoguelike!")
-//            .withAlignmentWithin(screen, ComponentAlignment.CENTER))
-//
-//    screen.applyColorTheme(ColorThemes.arc())
-//    screen.display()
-
 }

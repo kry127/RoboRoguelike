@@ -28,6 +28,7 @@ object GameConfig {
 
     fun buildAppConfig() = AppConfigs.newConfig() // 5
             .enableBetaFeatures()
+            .withTitle("RevoRoguelike [free license]")
             .withDefaultTileset(TILESET)
             .withSize(Sizes.create(WINDOW_WIDTH, WINDOW_HEIGHT))
             .build()
