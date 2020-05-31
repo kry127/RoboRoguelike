@@ -64,7 +64,7 @@ class GameBuilder(val worldSize: Size3D) {
         position = position.withZ(world.currentLevel)
         val player = EntityFactory.makePlayer()
         world.addEntity(player, position)
-//        world.centerCameraAtPosition(position)
+        world.centerCameraAtPosition(position)
         return player
     }
 
