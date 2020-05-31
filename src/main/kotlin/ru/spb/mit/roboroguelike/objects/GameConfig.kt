@@ -23,9 +23,9 @@ object GameConfig {
     const val VERTICAL_LUFT = 20
 
     // save file
-    const val SAVE_FILE_PATH = "RoboRoguelike.dat"
+    const val SAVE_FILE_PATH = "RevoRoguelike.dat"
 
-    //val WORLD_SIZE = Sizes.create3DSize(200, 200, DUNGEON_LEVELS)
+//    val WORLD_SIZE = Sizes.create3DSize(200, 200, DUNGEON_LEVELS)
     val WORLD_SIZE = Sizes.create3DSize(600, 800, DUNGEON_LEVELS)
     //val VISIBLE_SIZE = Sizes.create3DSize(600, 800, DUNGEON_LEVELS)
     val VISIBLE_SIZE = Sizes.create3DSize(WINDOW_WIDTH, WINDOW_HEIGHT, DUNGEON_LEVELS)

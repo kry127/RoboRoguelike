@@ -47,13 +47,13 @@ object TileTypes {
             .buildCharacterTile()
 
     val LADDER_UP = Tiles.newBuilder()
-            .withCharacter(Symbols.ARROW_UP)
+            .withCharacter(Symbols.TRIANGLE_UP_POINTING_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
             .buildCharacterTile()
 
     val LADDER_DOWN = Tiles.newBuilder()
-            .withCharacter(Symbols.ARROW_DOWN)
+            .withCharacter(Symbols.TRIANGLE_DOWN_POINTING_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
             .buildCharacterTile()
