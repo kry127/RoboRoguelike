@@ -1,4 +1,4 @@
-# Caves of Zircon Tutorial
+# RoboRoguelike
 
-This project is part of the [How to Make a Roguelike](https://hexworks.org/posts/tutorials/2018/11/04/how-to-make-a-roguelike.html)
-tutorial. Check out the article series if you want to make the most ouf of this project.
+Сражение Буржуя с революцианерами, пролетариями и поклонниками Карла Маркса в стенах заброшенного завода. 
+ [Диздок](https://docs.google.com/document/d/1ACdFFMaVGJy6wIBjT9ubwqKRwYm6MjlGTTvBnOob6Os/edit#heading=h.85k20s71nm8n).
