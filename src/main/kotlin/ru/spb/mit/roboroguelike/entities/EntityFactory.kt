@@ -6,9 +6,7 @@ import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.deserialize
 import ru.spb.mit.roboroguelike.objects.TileTypes
 import ru.spb.mit.roboroguelike.serialize
-import ru.spb.mit.roboroguelike.systems.CameraMover
-import ru.spb.mit.roboroguelike.systems.InputReceiver
-import ru.spb.mit.roboroguelike.systems.Movable
+import ru.spb.mit.roboroguelike.systems.*
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
@@ -19,6 +17,24 @@ object EntityFactory {
         attributes(EntityPosition(), EntityTile(TileTypes.PLAYER))
         behaviors(InputReceiver())
         facets(Movable(), CameraMover())
+    }
+
+    fun makeAggressiveMob() = newEntityOfType<Player, GameContext>(Player) {
+        attributes(EntityPosition(), EntityTile(TileTypes.AGGRESSIVE_MOB))
+        behaviors(Aggressive())
+        facets(Movable(), Attackable())
+    }
+
+    fun makeCowardlyMob() = newEntityOfType<Player, GameContext>(Player) {
+        attributes(EntityPosition(), EntityTile(TileTypes.COWARDLY_MOB))
+        behaviors(Cowardly())
+        facets(Movable(), Attackable())
+    }
+
+    fun makeStaticMob() = newEntityOfType<Player, GameContext>(Player) {
+        attributes(EntityPosition(), EntityTile(TileTypes.STATIC_MOB))
+        behaviors(Static())
+        facets(Attackable())
     }
 
     fun deserializePlayer(inputStream : ObjectInputStream) = newEntityOfType<Player, GameContext>(Player) {

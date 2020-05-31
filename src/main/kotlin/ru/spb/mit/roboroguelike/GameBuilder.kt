@@ -12,7 +12,6 @@ import ru.spb.mit.roboroguelike.objects.GameConfig
 import ru.spb.mit.roboroguelike.entities.Player
 import ru.spb.mit.roboroguelike.entities.position
 import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 import java.nio.file.Paths
 
 class GameBuilder(val worldSize: Size3D) {
@@ -31,8 +30,13 @@ class GameBuilder(val worldSize: Size3D) {
 
         prepareWorld()
 
-        val player = addPlayer()
 
+        val player = addPlayer()
+        (1..200).forEach({
+            addAggressiveMob()
+            addCowardlyMob()
+            addStaticMob()
+        })
         return Game.create(
                 world = world,
                 player = player)
@@ -61,6 +65,34 @@ class GameBuilder(val worldSize: Size3D) {
         world.centerCameraAtPosition(position)
         return player
     }
+
+    private fun addAggressiveMob(): GameEntity<Player> {
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
+        val mob = EntityFactory.makeAggressiveMob()
+        world.addEntity(mob, position)
+        return mob
+    }
+
+    private fun addCowardlyMob(): GameEntity<Player> {
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
+        val mob = EntityFactory.makeCowardlyMob()
+        world.addEntity(mob, position)
+        return mob
+    }
+
+    private fun addStaticMob(): GameEntity<Player> {
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
+        val mob = EntityFactory.makeStaticMob()
+        world.addEntity(mob, position)
+        return mob
+    }
+
 
     companion object {
 

@@ -11,19 +11,19 @@ import ru.spb.mit.roboroguelike.commands.MoveCamera
 import ru.spb.mit.roboroguelike.entities.position
 
 
-class CameraMover: BaseFacet<GameContext>() {
+class CameraMover : BaseFacet<GameContext>() {
 
     enum class CameraMovementDirection {
         FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, STEADY
     }
 
     override fun executeCommand(command: Command<out EntityType, GameContext>): Response {
-        return command.responseWhenCommandIs(MoveCamera::class) {(context, entity, prevPos) ->
+        return command.responseWhenCommandIs(MoveCamera::class) { (context, entity, prevPos) ->
             val world = context.world
             // Alternative:
             // world.centerCameraAtPosition(entity.position)
-            when(getCameraMovementDirection(prevPos,
-                                            entity.position)) {
+            when (getCameraMovementDirection(prevPos,
+                    entity.position)) {
                 CameraMovementDirection.FORWARD -> world.scrollForwardBy(
                         if (entity.position.y > 15) 1 else 0
                 )

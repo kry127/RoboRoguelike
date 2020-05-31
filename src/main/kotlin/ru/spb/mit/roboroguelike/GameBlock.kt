@@ -25,6 +25,9 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
     val isOccupied: Boolean
         get() = !isFloor || currentEntities.size > 0
 
+   // val isMob: Boolean
+   //     get() = defaultTile == TileTypes.MOB
+
     val entities: List<GameEntity<EntityType>>
         get() = currentEntities.toList()
 

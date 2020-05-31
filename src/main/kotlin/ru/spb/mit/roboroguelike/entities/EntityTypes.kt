@@ -5,6 +5,9 @@ import org.hexworks.amethyst.api.base.BaseEntityType
 object Player : BaseEntityType(
         name = "player")
 
+object Mob : BaseEntityType(
+        name = "mob")
+
 object Wall : BaseEntityType(
         name = "wall")
 
