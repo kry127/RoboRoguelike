@@ -13,7 +13,7 @@ import ru.spb.mit.roboroguelike.WorldBuilder
 
 class StartView : BaseView() {
 
-    override val theme = ColorThemes.arc()
+    override val theme = ColorThemes.afterglow()
 
     override fun onDock() {
         val msg = "RogoRoguelike"
@@ -41,7 +41,7 @@ class StartView : BaseView() {
 
         val loadGameButton = Components.button()
                 .withAlignmentAround(startButton, ComponentAlignment.BOTTOM_CENTER)
-                .withText("Load game")
+                .withText("Load")
                 .wrapSides(false)
                 .withBoxType(BoxType.SINGLE)
                 .wrapWithShadow()

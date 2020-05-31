@@ -12,7 +12,7 @@ import org.hexworks.zircon.api.uievent.Processed
 
 class LoseView : BaseView() {
 
-    override val theme = ColorThemes.arc()
+    override val theme = ColorThemes.afterglow()
     private val deathMsg = "You died"
 
     override fun onDock() {
