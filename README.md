@@ -4,3 +4,9 @@
  [Диздок](https://docs.google.com/document/d/1ACdFFMaVGJy6wIBjT9ubwqKRwYm6MjlGTTvBnOob6Os/edit#heading=h.85k20s71nm8n).
  
  *Ссылка на диаграммы может потребовать доступ*
+ 
+ Команда:  
+ Мартын Евгений  
+ Орехов Дмитрий  
+ Крыштапович Виктор  
+ Карпенко Мария
