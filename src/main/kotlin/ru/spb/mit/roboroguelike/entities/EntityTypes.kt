@@ -1,4 +1,4 @@
-package ru.spb.mit.roboroguelike.objects
+package ru.spb.mit.roboroguelike.entities
 
 import org.hexworks.amethyst.api.base.BaseEntityType
 

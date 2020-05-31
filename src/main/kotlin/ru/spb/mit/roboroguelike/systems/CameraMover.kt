@@ -8,7 +8,7 @@ import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.zircon.api.data.impl.Position3D
 import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.MoveCamera
-import ru.spb.mit.roboroguelike.position
+import ru.spb.mit.roboroguelike.entities.position
 
 
 class CameraMover: BaseFacet<GameContext>() {

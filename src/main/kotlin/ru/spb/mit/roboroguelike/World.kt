@@ -12,6 +12,8 @@ import ru.spb.mit.roboroguelike.*
 import kotlin.random.Random
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
+import ru.spb.mit.roboroguelike.entities.AnyGameEntity
+import ru.spb.mit.roboroguelike.entities.position
 import ru.spb.mit.roboroguelike.objects.GameConfig
 import java.io.ObjectOutputStream
 import java.nio.file.Paths
@@ -130,8 +132,11 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
 
     fun serializeBlocks(outputStream : ObjectOutputStream) {
+        // this serialization is the first because of the architecture:
         val worldSize = actualSize()
         worldSize.serialize(outputStream)
+
+        outputStream.writeInt(currentLevel)
 
         val count = fetchBlocks().count()
         outputStream.writeInt(count)
@@ -139,10 +144,5 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
             block.component1().serialize(outputStream) // extension function at SerializationExtensions.kt
             block.component2().serialize(outputStream)
         }
-        outputStream.close()
-    }
-
-    fun defaultSerializeBlocks() {
-        serializeBlocks(ObjectOutputStream(Paths.get(GameConfig.SAVE_FILE_PATH).toFile().outputStream()))
     }
 }

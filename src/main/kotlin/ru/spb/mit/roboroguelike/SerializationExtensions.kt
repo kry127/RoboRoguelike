@@ -2,6 +2,11 @@ package ru.spb.mit.roboroguelike
 
 import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
+import org.hexworks.zircon.api.extensions.abbreviate
+import ru.spb.mit.roboroguelike.entities.GameEntity
+import ru.spb.mit.roboroguelike.entities.Player
+import ru.spb.mit.roboroguelike.entities.position
+import ru.spb.mit.roboroguelike.objects.TileTypes
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
@@ -35,4 +40,9 @@ fun Size3D.Companion.deserialize(inputStream: ObjectInputStream) : Size3D {
     val y = inputStream.readInt()
     val z = inputStream.readInt()
     return Size3D.create(x, y, z)
+}
+
+// player serialization
+fun GameEntity<Player>.serialize(outputStream : ObjectOutputStream) {
+    this.position.serialize(outputStream)
 }

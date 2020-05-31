@@ -5,9 +5,9 @@ import org.hexworks.amethyst.api.entity.EntityType
 import ru.spb.mit.roboroguelike.GameContext
 import org.hexworks.zircon.api.uievent.KeyCode
 import org.hexworks.zircon.api.uievent.KeyboardEvent
-import ru.spb.mit.roboroguelike.GameEntity
+import ru.spb.mit.roboroguelike.entities.GameEntity
 import ru.spb.mit.roboroguelike.commands.MoveTo
-import ru.spb.mit.roboroguelike.position
+import ru.spb.mit.roboroguelike.entities.position
 
 class InputReceiver: BaseBehavior<GameContext>() {
 
