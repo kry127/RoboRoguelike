@@ -13,6 +13,7 @@ import kotlin.random.Random
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
 import ru.spb.mit.roboroguelike.entities.AnyGameEntity
+import ru.spb.mit.roboroguelike.entities.EntityFactory
 import ru.spb.mit.roboroguelike.entities.position
 import ru.spb.mit.roboroguelike.objects.GameConfig
 import java.io.ObjectOutputStream
@@ -56,7 +57,13 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 /*      scrollTo3DPosition(cameraPosition
                 .withX(xCurr - xLength / 2)
                 .withY(yCurr - yLength / 2))*/
-        scrollRightBy(xCamera - xLength / 2)
+        val xOffset = xCamera - xLength / 2
+        if (xOffset > 0) {
+            scrollRightBy(xOffset)
+        }
+        else {
+            scrollLeftBy(xOffset)
+        }
         scrollForwardBy(yCamera - yLength / 2)
         if (currZ < zCamera) {
             scrollUpBy(zCamera - currZ)
@@ -85,15 +92,19 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
     fun searchForEmptyRandomPosition(offset: Position3D = Positions.default3DPosition(),
                                      searchSpace: Size3D = actualSize(),
-                                     n_tries: Int = 20): Maybe<Position3D> {
+                                     n_tries: Int = 20,
+                                     fixedX: Maybe<Int> = Maybe.empty<Int>(),
+                                     fixedY: Maybe<Int> = Maybe.empty<Int>(),
+                                     fixedZ: Maybe<Int> = Maybe.empty<Int>()): Maybe<Position3D> {
         val (xLength, yLength, zLength) = searchSpace
         var result = Maybe.empty<Position3D>()
         var j = 0
         while (result.isEmpty() && j < n_tries) {
             val currPos = Positions.create3DPosition(
-                Random.nextInt(offset.x, offset.x + xLength),
-                Random.nextInt(offset.y, offset.y + yLength),
-                Random.nextInt(offset.z, offset.z + zLength))
+                x = fixedX.orElse(Random.nextInt(offset.x, offset.x + xLength)),
+                y = fixedY.orElse(Random.nextInt(offset.y, offset.y + yLength)),
+                z = fixedZ.orElse(Random.nextInt(offset.z, offset.z + zLength))
+            )
             fetchBlockAt(currPos).map {
                 if (!it.isOccupied) {
                     result = Maybe.of(currPos)
@@ -130,6 +141,14 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         return oldBlock.isPresent && newBlock.isPresent && !newBlock.get().isOccupied
     }
 
+    fun addLadderConnection(upperFloorIdx: Int, lowerFlorIdx: Int) {
+        val ladderDownPos = searchForEmptyRandomPosition(fixedZ = Maybe.of(upperFloorIdx))
+        val ladderUpPos = searchForEmptyRandomPosition(fixedZ = Maybe.of(lowerFlorIdx))
+        if (ladderUpPos.isPresent && ladderDownPos.isPresent) {
+            addEntity(EntityFactory.makeLadderDown(ladderUpPos.get()), ladderDownPos.get())
+            addEntity(EntityFactory.makeLadderUp(ladderDownPos.get()), ladderUpPos.get())
+        }
+    }
 
     fun serializeBlocks(outputStream : ObjectOutputStream) {
         // this serialization is the first because of the architecture:

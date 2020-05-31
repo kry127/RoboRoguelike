@@ -2,6 +2,7 @@
 package ru.spb.mit.roboroguelike
 
 import World
+import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.cobalt.datatypes.extensions.orElseGet
 import org.hexworks.zircon.api.Sizes
 import org.hexworks.zircon.api.data.impl.Position3D
@@ -30,9 +31,8 @@ class GameBuilder(val worldSize: Size3D) {
                 .build(visibleSize = visibleSize)
 
         prepareWorld()
-
+        buildLadders()
         val player = addPlayer()
-
         return Game.create(
                 world = world,
                 player = player)
@@ -53,13 +53,21 @@ class GameBuilder(val worldSize: Size3D) {
     }
 
     private fun addPlayer(): GameEntity<Player> {
-        var position = world.searchForEmptyRandomPosition().orElseGet {
+        var position = world.searchForEmptyRandomPosition(
+                fixedZ = Maybe.of(world.currentLevel)
+        ).orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)
         val player = EntityFactory.makePlayer()
         world.addEntity(player, position)
-        world.centerCameraAtPosition(position)
+        //world.centerCameraAtPosition(position)
         return player
+    }
+
+    private fun buildLadders() {
+        for (levelIdx in GameConfig.DUNGEON_LEVELS - 1 downTo 1) {
+            world.addLadderConnection(levelIdx, levelIdx - 1)
+        }
     }
 
     companion object {

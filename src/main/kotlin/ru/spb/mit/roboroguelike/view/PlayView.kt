@@ -71,8 +71,8 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .build()
 
         screen.addComponent(gameComponent)
-        screen.addComponent(logArea)
-        screen.addComponent(sidebar)
+/*        screen.addComponent(logArea)
+        screen.addComponent(sidebar)*/
 
         saveGameButton.onComponentEvent(ComponentEventType.ACTIVATED) {
             game.defaultSerialize()

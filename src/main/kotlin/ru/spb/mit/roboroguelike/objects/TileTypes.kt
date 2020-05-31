@@ -29,11 +29,11 @@ object TileTypes {
             .withCharacter('U')
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
-            .buildGraphicTile()
+            .buildCharacterTile()
 
     val LADDER_DOWN = Tiles.newBuilder()
             .withCharacter('D')
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
-            .buildGraphicTile()
+            .buildCharacterTile()
 }

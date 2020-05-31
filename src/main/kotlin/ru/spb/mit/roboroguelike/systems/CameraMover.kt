@@ -14,16 +14,16 @@ import ru.spb.mit.roboroguelike.entities.position
 class CameraMover: BaseFacet<GameContext>() {
 
     enum class CameraMovementDirection {
-        FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, STEADY
+        FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, JUMP, STEADY
     }
 
     override fun executeCommand(command: Command<out EntityType, GameContext>): Response {
         return command.responseWhenCommandIs(MoveCamera::class) {(context, entity, prevPos) ->
             val world = context.world
             // Alternative:
-            // world.centerCameraAtPosition(entity.position)
             when(getCameraMovementDirection(prevPos,
                                             entity.position)) {
+                CameraMovementDirection.JUMP ->  world.centerCameraAtPosition(entity.position)
                 CameraMovementDirection.FORWARD -> world.scrollOneForward()
                 CameraMovementDirection.BACKWARD -> world.scrollOneBackward()
                 CameraMovementDirection.LEFT -> world.scrollOneLeft()
@@ -40,13 +40,14 @@ class CameraMover: BaseFacet<GameContext>() {
         val (xPrev, yPrev, zPrev) = prevPos
         val (xNew, yNew, zNew) = newPos
         return when {
-            yPrev < yNew -> CameraMovementDirection.FORWARD
-            yPrev > yNew -> CameraMovementDirection.BACKWARD
-            xPrev < xNew -> CameraMovementDirection.RIGHT
-            xPrev > xNew -> CameraMovementDirection.LEFT
-            zPrev < zNew -> CameraMovementDirection.UP
-            zPrev > zNew -> CameraMovementDirection.DOWN
-            else -> CameraMovementDirection.STEADY
+            yPrev - yNew == -1 -> CameraMovementDirection.FORWARD
+            yPrev - yNew == 1  -> CameraMovementDirection.BACKWARD
+            xPrev - xNew == -1 -> CameraMovementDirection.RIGHT
+            xPrev - xNew == 1  -> CameraMovementDirection.LEFT
+            zPrev - zNew == -1 -> CameraMovementDirection.UP
+            zPrev - zNew == 1 -> CameraMovementDirection.DOWN
+            prevPos == newPos -> CameraMovementDirection.STEADY
+            else -> CameraMovementDirection.JUMP
         }
     }
 }
