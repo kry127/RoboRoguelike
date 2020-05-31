@@ -29,6 +29,7 @@ class WorldBuilder(private val worldSize: Size3D) {
 
 
     fun deserializeBlocks(inputStream: ObjectInputStream) : World {
+        val currentLevel = inputStream.readInt()
         val count = inputStream.readInt()
         for (k in 0 until count) {
 //            println("Loaded ${k + 1} out of $count")
@@ -36,8 +37,7 @@ class WorldBuilder(private val worldSize: Size3D) {
             val gameBlock = GameBlock.deserialize(inputStream)
             blocks[pos] = gameBlock
         }
-        inputStream.close()
-        return World(blocks, GameConfig.VISIBLE_SIZE, worldSize)
+        return World(blocks, GameConfig.VISIBLE_SIZE, worldSize, currentLevel)
     }
 
     fun makeRooms(): WorldBuilder {

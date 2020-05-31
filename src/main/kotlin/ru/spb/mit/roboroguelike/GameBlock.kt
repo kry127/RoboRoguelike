@@ -4,6 +4,9 @@ import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.zircon.api.data.BlockSide
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.base.BlockBase
+import ru.spb.mit.roboroguelike.entities.AnyGameEntity
+import ru.spb.mit.roboroguelike.entities.GameEntity
+import ru.spb.mit.roboroguelike.entities.tile
 import ru.spb.mit.roboroguelike.objects.TileTypes
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream

@@ -4,7 +4,8 @@ import World
 import org.hexworks.amethyst.api.Context
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
-import ru.spb.mit.roboroguelike.objects.Player
+import ru.spb.mit.roboroguelike.entities.GameEntity
+import ru.spb.mit.roboroguelike.entities.Player
 
 
 data class GameContext(val world: World,

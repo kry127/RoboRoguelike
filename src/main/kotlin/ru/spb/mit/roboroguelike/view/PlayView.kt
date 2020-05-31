@@ -40,7 +40,7 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .build()
 
         saveGameButton.onComponentEvent(ComponentEventType.ACTIVATED) {
-            game.world.defaultSerializeBlocks()
+            game.defaultSerialize()
             Processed
         }
 
