@@ -21,22 +21,28 @@ class Cowardly: BaseBehavior<GameContext>() {
     }
 
     override fun update(entity: GameEntity<out EntityType>, context: GameContext): Boolean {
-        val (world, screen, uiEvent, player) = context
+        val (world, _, uiEvent, player) = context
         val currentPos = entity.position
         val playerPos = player.position
 
 
         if (uiEvent is KeyboardEvent && currentPos != playerPos && isWithinRangeOf(playerPos, currentPos, 30)) {
             fun handle(): Position3D{
-                val res = world.findPathBetween(currentPos, playerPos)
-                println(res)
-                return res.first()
+                val x = currentPos.x - playerPos.x
+                val y = currentPos.y - playerPos.y
+                val l = Math.sqrt(x.toDouble() * x.toDouble() + y.toDouble() * y.toDouble())
+                val xNorm = x.toDouble() / l
+                val yNorm = y.toDouble() / l
+                if (abs(xNorm) > abs(yNorm)){
+                    return currentPos.withRelativeX(if (xNorm > 0) 1 else -1)
+                }else
+                    return currentPos.withRelativeY(if (yNorm > 0) 1 else -1)
+
             }
             val newPosition = when (uiEvent.code) {
                 KeyCode.UP, KeyCode.LEFT, KeyCode.DOWN, KeyCode.RIGHT, KeyCode.SPACE -> handle()
-                else -> {
-                    currentPos
-                }
+                else -> currentPos
+
             }
             entity.executeCommand(MoveTo(context, entity, newPosition))
         }

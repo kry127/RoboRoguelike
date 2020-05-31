@@ -28,7 +28,7 @@ object EntityFactory {
     fun makeCowardlyMob() = newEntityOfType<Player, GameContext>(Player) {
         attributes(EntityPosition(), EntityTile(TileTypes.COWARDLY_MOB))
         behaviors(Cowardly())
-        facets(Movable())
+        facets(Movable(), Attackable())
     }
 
     fun deserializePlayer(inputStream : ObjectInputStream) = newEntityOfType<Player, GameContext>(Player) {

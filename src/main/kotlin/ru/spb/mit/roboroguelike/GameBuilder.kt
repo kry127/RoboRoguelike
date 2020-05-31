@@ -33,7 +33,8 @@ class GameBuilder(val worldSize: Size3D) {
 
         val player = addPlayer()
         (1..200).forEach({
-            addMob()
+            addAggressiveMob()
+            addCowardlyMob()
         })
         return Game.create(
                 world = world,
@@ -64,11 +65,20 @@ class GameBuilder(val worldSize: Size3D) {
         return player
     }
 
-    private fun addMob(): GameEntity<Player> {
+    private fun addAggressiveMob(): GameEntity<Player> {
         var position = world.searchForEmptyRandomPosition().orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)
         val mob = EntityFactory.makeAggressiveMob()
+        world.addEntity(mob, position)
+        return mob
+    }
+
+    private fun addCowardlyMob(): GameEntity<Player> {
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
+        val mob = EntityFactory.makeCowardlyMob()
         world.addEntity(mob, position)
         return mob
     }
