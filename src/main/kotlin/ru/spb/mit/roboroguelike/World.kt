@@ -182,9 +182,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         nodes.add(Pair(from.withRelativeY(-1), from))
         val parents: MutableMap<Position3D, Position3D?> = mutableMapOf()
         parents.put(from, null)
-        var i = 0
         while (nodes.isNotEmpty()) {
-            i++
             val (pos, parent) = nodes.poll()
             if (parents.containsKey(pos)) continue
             parents.put(pos, parent)
@@ -207,7 +205,6 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         var parent: Position3D? = to
         val result: MutableList<Position3D> = ArrayList()
         while (parent != null && parent != from) {
-            println(result.size)
             result.add(parent)
             parent = parents.get(parent)
         }
