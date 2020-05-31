@@ -9,7 +9,7 @@ object GameConfig {
     const val DUNGEON_LEVELS = 2 // 1
 
     // look & feel
-    val TILESET = CP437TilesetResources.bisasam16x16() // 2
+    val TILESET = CP437TilesetResources.guybrush16x16() // 2
     val THEME = ColorThemes.zenburnVanilla() // 3
     const val SIDEBAR_WIDTH = 18
     const val LOG_AREA_HEIGHT = 8 // 4

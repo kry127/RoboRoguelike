@@ -14,9 +14,9 @@ object TileTypes {
             .buildCharacterTile() // 4
 
     val WALL: CharacterTile = Tiles.newBuilder()
-            .withCharacter('#')
+            .withCharacter(Symbols.BLOCK_DENSE)
             .withForegroundColor(GameColors.WALL_FOREGROUND)
-            .withBackgroundColor(GameColors.WALL_BACKGROUND)
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .buildCharacterTile()
 
     val PLAYER = Tiles.newBuilder()
@@ -26,13 +26,13 @@ object TileTypes {
             .buildCharacterTile()
 
     val AGGRESSIVE_MOB = Tiles.newBuilder()
-            .withCharacter('x')
+            .withCharacter(Symbols.FACE_WHITE)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.RED)
             .buildCharacterTile()
 
     val COWARDLY_MOB = Tiles.newBuilder()
-            .withCharacter('x')
+            .withCharacter(Symbols.FACE_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.GREEN)
             .buildCharacterTile()
