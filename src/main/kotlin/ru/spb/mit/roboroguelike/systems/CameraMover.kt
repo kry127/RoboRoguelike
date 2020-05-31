@@ -24,10 +24,18 @@ class CameraMover: BaseFacet<GameContext>() {
             // world.centerCameraAtPosition(entity.position)
             when(getCameraMovementDirection(prevPos,
                                             entity.position)) {
-                CameraMovementDirection.FORWARD -> world.scrollOneForward()
-                CameraMovementDirection.BACKWARD -> world.scrollOneBackward()
-                CameraMovementDirection.LEFT -> world.scrollOneLeft()
-                CameraMovementDirection.RIGHT -> world.scrollOneRight()
+                CameraMovementDirection.FORWARD -> world.scrollForwardBy(
+                        if (entity.position.y > 15) 1 else 0
+                )
+                CameraMovementDirection.BACKWARD -> world.scrollBackwardBy(
+                        if (entity.position.y < world.actualSize().yLength - 15) 1 else 0
+                )
+                CameraMovementDirection.LEFT -> world.scrollLeftBy(
+                        if (entity.position.x < world.actualSize().xLength - 15) 1 else 0
+                )
+                CameraMovementDirection.RIGHT -> world.scrollRightBy(
+                        if (entity.position.x > 30) 1 else 0
+                )
                 CameraMovementDirection.UP -> world.scrollOneUp()
                 CameraMovementDirection.DOWN -> world.scrollOneDown()
             }
