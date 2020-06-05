@@ -31,9 +31,13 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .wrapWithBox()
                 .build()
 
+        sidebar.addFragment(PlayerStatsFragment(
+                width = sidebar.contentSize.width,
+                player = game.player))
+
 
         val saveGameButton = Components.button()
-                .withAlignmentWithin(sidebar, ComponentAlignment.TOP_CENTER)
+                .withAlignmentWithin(sidebar, ComponentAlignment.BOTTOM_CENTER)
                 .withText("Save")
                 .wrapSides(false)
                 .withBoxType(BoxType.SINGLE)
@@ -43,7 +47,7 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
 
 
         val mainMenuButton = Components.button()
-                .withAlignmentAround(saveGameButton, ComponentAlignment.BOTTOM_CENTER)
+                .withAlignmentAround(saveGameButton, ComponentAlignment.TOP_CENTER)
                 .withText("Main menu")
                 .wrapSides(false)
                 .withBoxType(BoxType.SINGLE)
