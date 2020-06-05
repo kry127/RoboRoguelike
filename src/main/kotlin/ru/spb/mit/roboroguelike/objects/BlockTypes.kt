@@ -3,8 +3,8 @@ import ru.spb.mit.roboroguelike.objects.TileTypes
 
 object BlockTypes {
 
-    fun floor() = GameBlock(TileTypes.FLOOR)
+    fun floor() = GameBlock(TileTypes.FLOOR.tile)
 
-    fun wall() = GameBlock(TileTypes.WALL)
+    fun wall() = GameBlock(TileTypes.WALL.tile)
 
 }

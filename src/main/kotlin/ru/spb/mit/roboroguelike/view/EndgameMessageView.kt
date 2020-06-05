@@ -10,12 +10,11 @@ import org.hexworks.zircon.api.uievent.ComponentEventType
 import org.hexworks.zircon.api.uievent.Processed
 
 
-class WinView : BaseView() {
+class EndgameMessageView(val msg : String = "You won!") : BaseView() {
 
     override val theme = ColorThemes.afterglow()
 
     override fun onDock() {
-        val msg = "You won!"
         val header = Components.textBox()
                 .withContentWidth(30)
                 .addHeader(msg)

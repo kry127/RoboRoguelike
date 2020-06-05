@@ -6,55 +6,54 @@ import org.hexworks.zircon.api.data.CharacterTile
 import org.hexworks.zircon.api.graphics.Symbols
 import org.hexworks.zircon.api.resource.TilesetResource
 
-object TileTypes {
-    val EMPTY: CharacterTile = Tiles.empty()
+enum class TileTypes(val tile: CharacterTile) {
+    EMPTY(Tiles.empty()),
+    FLOOR(Tiles.newBuilder()
+            .withCharacter(Symbols.INTERPUNCT)
+            .withForegroundColor(GameColors.FLOOR_FOREGROUND)
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .buildCharacterTile()),
 
-    val FLOOR: CharacterTile = Tiles.newBuilder()
-            .withCharacter(Symbols.INTERPUNCT) // 1
-            .withForegroundColor(GameColors.FLOOR_FOREGROUND) // 2
-            .withBackgroundColor(GameColors.FLOOR_BACKGROUND) // 3
-            .buildCharacterTile() // 4
-
-    val WALL: CharacterTile = Tiles.newBuilder()
+    WALL(Tiles.newBuilder()
             .withCharacter(Symbols.BLOCK_DENSE)
             .withForegroundColor(GameColors.WALL_FOREGROUND)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
-            .buildCharacterTile()
+            .buildCharacterTile()),
 
-    val PLAYER = Tiles.newBuilder()
+    PLAYER(Tiles.newBuilder()
             .withCharacter('@')
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.ACCENT_COLOR)
-            .buildCharacterTile()
+            .buildCharacterTile()),
 
-    val AGGRESSIVE_MOB = Tiles.newBuilder()
+    AGGRESSIVE_MOB(Tiles.newBuilder()
             .withCharacter(Symbols.FACE_WHITE)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.RED)
-            .buildCharacterTile()
+            .buildCharacterTile()),
 
-    val COWARDLY_MOB = Tiles.newBuilder()
+    COWARDLY_MOB(Tiles.newBuilder()
             .withCharacter(Symbols.FACE_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.GREEN)
-            .buildCharacterTile()
+            .buildCharacterTile()),
 
-    val STATIC_MOB = Tiles.newBuilder()
+    STATIC_MOB(Tiles.newBuilder()
             .withTileset(CP437TilesetResources.bisasam16x16())
             .withCharacter(Symbols.OMEGA)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.YELLOW)
-            .buildCharacterTile()
+            .buildCharacterTile()),
 
-    val LADDER_UP = Tiles.newBuilder()
+    LADDER_UP (Tiles.newBuilder()
             .withCharacter(Symbols.TRIANGLE_UP_POINTING_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
-            .buildCharacterTile()
+            .buildCharacterTile()),
 
-    val LADDER_DOWN = Tiles.newBuilder()
+    LADDER_DOWN (Tiles.newBuilder()
             .withCharacter(Symbols.TRIANGLE_DOWN_POINTING_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
-            .buildCharacterTile()
+            .buildCharacterTile())
 }

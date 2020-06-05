@@ -17,28 +17,28 @@ import java.io.ObjectInputStream
 object EntityFactory {
 
     fun makePlayer() = newEntityOfType<Player, GameContext>(Player) {
-        attributes(EntityPosition(), EntityTile(TileTypes.PLAYER),
+        attributes(EntityPosition(), EntityTile(TileTypes.PLAYER.tile),
                 EntityHitpoints(100, 100), EntityPrimaryStats(3, 1))
         behaviors(InputReceiver())
         facets(Movable(), CameraMover(), TeleportableEntity())
     }
 
     fun makeAggressiveMob() = newEntityOfType<AggressiveMob, GameContext>(AggressiveMob) {
-        attributes(EntityPosition(), EntityTile(TileTypes.AGGRESSIVE_MOB),
+        attributes(EntityPosition(), EntityTile(TileTypes.AGGRESSIVE_MOB.tile),
                 EntityHitpoints(5, 5), EntityPrimaryStats(1, 1))
         behaviors(Aggressive())
         facets(Movable(), Attackable())
     }
 
     fun makeCowardlyMob() = newEntityOfType<CowardMob, GameContext>(CowardMob) {
-        attributes(EntityPosition(), EntityTile(TileTypes.COWARDLY_MOB),
+        attributes(EntityPosition(), EntityTile(TileTypes.COWARDLY_MOB.tile),
                 EntityHitpoints(2, 2), EntityPrimaryStats(0, 1))
         behaviors(Cowardly())
         facets(Movable(), Attackable())
     }
 
     fun makeStaticMob() = newEntityOfType<StaticMob, GameContext>(StaticMob) {
-        attributes(EntityPosition(), EntityTile(TileTypes.STATIC_MOB),
+        attributes(EntityPosition(), EntityTile(TileTypes.STATIC_MOB.tile),
                 EntityHitpoints(10, 10), EntityPrimaryStats(2, 5))
         behaviors(Static())
         facets(Attackable())
@@ -46,7 +46,7 @@ object EntityFactory {
 
     fun deserializePlayer(inputStream : ObjectInputStream) = newEntityOfType<Player, GameContext>(Player) {
         val position = Position3D.deserialize(inputStream)
-        attributes(EntityPosition(position), EntityTile(TileTypes.PLAYER), EntityHitpoints(100, 100))
+        attributes(EntityPosition(position), EntityTile(TileTypes.PLAYER.tile), EntityHitpoints(100, 100))
         behaviors(InputReceiver())
         facets(Movable(), CameraMover())
     }
@@ -55,14 +55,14 @@ object EntityFactory {
     fun makeLadderUp(teleportPosition: Position3D = Position3D.unknown()) = newEntityOfType<LadderUp, GameContext>(LadderUp) {
         attributes(
                 EntityPosition(),
-                EntityTile(TileTypes.LADDER_UP),
+                EntityTile(TileTypes.LADDER_UP.tile),
                 TeleportPosition(teleportPosition))
     }
 
     fun makeLadderDown(teleportPosition: Position3D = Position3D.unknown()) = newEntityOfType<LadderDown, GameContext>(LadderDown) {
         attributes(
                 EntityPosition(),
-                EntityTile(TileTypes.LADDER_DOWN),
+                EntityTile(TileTypes.LADDER_DOWN.tile),
                 TeleportPosition(teleportPosition))
     }
 }
