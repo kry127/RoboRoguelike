@@ -6,6 +6,7 @@ import org.hexworks.zircon.api.data.BlockSide
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.base.BlockBase
 import org.hexworks.zircon.api.data.impl.Position3D
+import ru.spb.mit.roboroguelike.attributes.TeleportPosition
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.TileTypes
 import java.io.ObjectInputStream

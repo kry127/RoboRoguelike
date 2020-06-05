@@ -12,12 +12,10 @@ import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.mvc.base.BaseView
 import org.hexworks.zircon.api.uievent.ComponentEventType
 import org.hexworks.zircon.api.uievent.KeyboardEventType
-import org.hexworks.zircon.api.uievent.MouseEventType
 import org.hexworks.zircon.api.uievent.Processed
 import ru.spb.mit.roboroguelike.Game
 import ru.spb.mit.roboroguelike.GameBlock
 import ru.spb.mit.roboroguelike.GameBuilder
-import ru.spb.mit.roboroguelike.WorldBuilder
 import ru.spb.mit.roboroguelike.objects.GameConfig
 
 class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() {
@@ -31,7 +29,7 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .wrapWithBox()
                 .build()
 
-        sidebar.addFragment(PlayerStatsFragment(
+        sidebar.addFragment(PlayerStatusFragment(
                 width = sidebar.contentSize.width,
                 player = game.player))
 

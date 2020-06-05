@@ -4,7 +4,9 @@ import org.hexworks.amethyst.api.Attribute
 import org.hexworks.cobalt.datatypes.extensions.map
 import org.hexworks.cobalt.datatypes.extensions.orElseThrow
 import org.hexworks.zircon.api.data.Tile
-import javax.swing.text.html.parser.Entity
+import ru.spb.mit.roboroguelike.attributes.EntityHitpoints
+import ru.spb.mit.roboroguelike.attributes.EntityPosition
+import ru.spb.mit.roboroguelike.attributes.EntityTile
 import kotlin.reflect.KClass
 
 /**

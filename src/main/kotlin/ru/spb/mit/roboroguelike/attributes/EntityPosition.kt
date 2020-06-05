@@ -1,4 +1,4 @@
-package ru.spb.mit.roboroguelike.entities
+package ru.spb.mit.roboroguelike.attributes
 
 import org.hexworks.amethyst.api.Attribute
 import org.hexworks.cobalt.databinding.api.createPropertyFrom

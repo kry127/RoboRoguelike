@@ -1,7 +1,7 @@
 package ru.spb.mit.roboroguelike.entities
 
 import org.hexworks.amethyst.api.entity.EntityType
-import org.hexworks.zircon.api.data.impl.Position3D
+import ru.spb.mit.roboroguelike.attributes.TeleportPosition
 
 interface Teleport: EntityType
 
