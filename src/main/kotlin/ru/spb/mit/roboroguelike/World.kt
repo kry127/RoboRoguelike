@@ -146,6 +146,14 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
     fun moveIsPossible(oldBlock: Maybe<GameBlock>,
                        newBlock: Maybe<GameBlock>): Boolean {
+        // check if fighting
+        if (!newBlock.isEmpty() && newBlock.get().isMob) {
+            return false;
+        }
+        // check mob moves on player
+        if (!newBlock.isEmpty() && newBlock.get().isPlayer) {
+            return false;
+        }
         return oldBlock.isPresent && newBlock.isPresent && !newBlock.get().isOccupied
     }
 

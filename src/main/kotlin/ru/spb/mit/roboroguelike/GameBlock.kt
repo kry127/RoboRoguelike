@@ -11,6 +11,7 @@ import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.TileTypes
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.rmi.activation.ActivationGroup
 
 class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
                 private val currentEntities: MutableList<GameEntity<EntityType>>
@@ -25,6 +26,18 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR,
 
     val isOccupied: Boolean
         get() = !isFloor //|| currentEntities.size > 0
+
+    val isMob: Boolean
+        get() = currentEntities.find {
+            entity ->
+            entity.type == AggressiveMob || entity.type == StaticMob || entity.type == CowardMob
+        } != null
+
+    val isPlayer: Boolean
+        get() = currentEntities.find {
+            entity ->
+            entity.type == Player
+        } != null
 
    // val isMob: Boolean
    //     get() = defaultTile == TileTypes.MOB
