@@ -5,9 +5,7 @@ import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.zircon.api.data.impl.Position3D
 import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.Remove
-import ru.spb.mit.roboroguelike.entities.GameEntity
-import ru.spb.mit.roboroguelike.entities.Player
-import ru.spb.mit.roboroguelike.entities.position
+import ru.spb.mit.roboroguelike.entities.*
 import kotlin.math.abs
 
 abstract class Mob : BaseBehavior<GameContext>() {
@@ -19,8 +17,15 @@ abstract class Mob : BaseBehavior<GameContext>() {
         if (currentPos.x == playerPos.x && abs(currentPos.y - playerPos.y) < 2 ||
                 currentPos.y == playerPos.y && abs(currentPos.x - playerPos.x) < 2) {
             //TODO fight
-            entity.executeCommand(Remove(context, entity))
-            return true
+            if (entity.type.equals(AggressiveMob)) {
+                player.hp--;
+            }
+            entity.hp--;
+            if (entity.hp == 0) {
+                entity.executeCommand(Remove(context, entity))
+                return true;
+            }
+            return false;
         }
         return false
     }
