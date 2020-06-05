@@ -7,11 +7,8 @@ import org.hexworks.cobalt.datatypes.extensions.orElseGet
 import org.hexworks.zircon.api.Sizes
 import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
-import ru.spb.mit.roboroguelike.entities.EntityFactory
-import ru.spb.mit.roboroguelike.entities.GameEntity
+import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.GameConfig
-import ru.spb.mit.roboroguelike.entities.Player
-import ru.spb.mit.roboroguelike.entities.position
 import java.io.ObjectInputStream
 import java.nio.file.Paths
 
@@ -74,7 +71,7 @@ class GameBuilder(val worldSize: Size3D) {
         }
     }
 
-    private fun addAggressiveMob(): GameEntity<Player> {
+    private fun addAggressiveMob(): GameEntity<AggressiveMob> {
         var position = world.searchForEmptyRandomPosition().orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)
@@ -83,7 +80,7 @@ class GameBuilder(val worldSize: Size3D) {
         return mob
     }
 
-    private fun addCowardlyMob(): GameEntity<Player> {
+    private fun addCowardlyMob(): GameEntity<CowardMob> {
         var position = world.searchForEmptyRandomPosition().orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)
@@ -92,7 +89,7 @@ class GameBuilder(val worldSize: Size3D) {
         return mob
     }
 
-    private fun addStaticMob(): GameEntity<Player> {
+    private fun addStaticMob(): GameEntity<StaticMob> {
         var position = world.searchForEmptyRandomPosition().orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)

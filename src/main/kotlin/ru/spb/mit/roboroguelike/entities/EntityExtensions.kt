@@ -4,7 +4,12 @@ import org.hexworks.amethyst.api.Attribute
 import org.hexworks.cobalt.datatypes.extensions.map
 import org.hexworks.cobalt.datatypes.extensions.orElseThrow
 import org.hexworks.zircon.api.data.Tile
+import javax.swing.text.html.parser.Entity
 import kotlin.reflect.KClass
+
+/**
+ * Здесь происходит проброс атрибутов непосредственно в Property объекта
+ */
 
 var AnyGameEntity.position
     get() = tryToFindAttribute(EntityPosition::class).position
@@ -16,6 +21,19 @@ var AnyGameEntity.position
 
 val AnyGameEntity.tile: Tile
     get() = this.tryToFindAttribute(EntityTile::class).tile
+
+/** add HP properties **/
+var AnyGameEntity.hp : Int
+    get() = this.tryToFindAttribute(EntityHitpoints::class).hp
+    set(value) {
+        findAttribute(EntityHitpoints::class).map {
+            it.hp = value
+        }
+    }
+
+val AnyGameEntity.maxHp : Int
+    get() = this.tryToFindAttribute(EntityHitpoints::class).maxHp
+
 
 
 fun <T : Attribute> AnyGameEntity.tryToFindAttribute(klass: KClass<T>): T = findAttribute(klass).orElseThrow {
