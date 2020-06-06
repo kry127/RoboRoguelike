@@ -11,6 +11,7 @@ import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.MoveCamera
 import ru.spb.mit.roboroguelike.commands.MoveTo
 import ru.spb.mit.roboroguelike.entities.GameCommand
+import ru.spb.mit.roboroguelike.entities.HealthBox
 import ru.spb.mit.roboroguelike.entities.Player
 import ru.spb.mit.roboroguelike.entities.position
 

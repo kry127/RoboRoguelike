@@ -24,3 +24,11 @@ object LadderUp: BaseEntityType (
 object LadderDown: BaseEntityType(
         name = "LadderDown"
 ), Teleport
+
+object RegularHealthBox: BaseEntityType(
+        name = "regular-health-box"
+), HealthBox
+
+object SuperHealthBox: BaseEntityType(
+        name = "super-health-box"
+), HealthBox

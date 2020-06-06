@@ -72,6 +72,12 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .withAlignmentWithin(screen, ComponentAlignment.TOP_RIGHT)
                 .build()
 
+        game.world.onGameOver() {
+            replaceWith(EndgameMessageView("game over"))
+            close()
+            Processed
+        }
+
         screen.addComponent(gameComponent)
         screen.addComponent(logArea)
         screen.addComponent(sidebar)

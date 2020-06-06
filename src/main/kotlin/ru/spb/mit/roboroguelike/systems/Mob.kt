@@ -3,9 +3,11 @@ package ru.spb.mit.roboroguelike.systems
 import org.hexworks.amethyst.api.base.BaseBehavior
 import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.zircon.api.data.impl.Position3D
+import org.hexworks.zircon.api.uievent.Processed
 import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.Remove
 import ru.spb.mit.roboroguelike.entities.*
+import ru.spb.mit.roboroguelike.view.PlayView
 import kotlin.math.abs
 
 abstract class Mob : BaseBehavior<GameContext>() {
@@ -19,6 +21,9 @@ abstract class Mob : BaseBehavior<GameContext>() {
             //TODO fight
             if (entity.type.equals(AggressiveMob)) {
                 player.hp--;
+                if (player.hp <= 0) {
+                    context.world.gameOver()
+                }
             }
             entity.hp--;
             if (entity.hp == 0) {

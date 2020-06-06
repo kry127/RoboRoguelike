@@ -53,8 +53,8 @@ class WorldBuilder(private val worldSize: Size3D) {
         }
         forAllPositions { pos ->
             blocks[pos] = if (maps[pos.z][pos.x][pos.y]) {
-                BlockTypes.wall()
-            } else BlockTypes.floor()
+                GameBlock.wall()
+            } else GameBlock.floor()
         }
         return this
     }

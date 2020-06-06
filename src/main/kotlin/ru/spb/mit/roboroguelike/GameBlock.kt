@@ -51,6 +51,10 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
     }
 
     companion object {
+        fun floor() = GameBlock(TileTypes.FLOOR.tile)
+
+        fun wall() = GameBlock(TileTypes.WALL.tile)
+
         fun deserialize(inputStream: ObjectInputStream) : GameBlock {
             val isFloor = inputStream.readBoolean()
             val isWall = inputStream.readBoolean()

@@ -65,4 +65,30 @@ object EntityFactory {
                 EntityTile(TileTypes.LADDER_DOWN.tile),
                 TeleportPosition(teleportPosition))
     }
+
+    // health boxes
+    fun makeHealthBoxLite(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
+        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_LITE.tile),
+                EntityHitpoints(5, 5))
+        facets(Consumable())
+    }
+
+    fun makeHealthBoxMedium(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
+        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_MEDIUM.tile),
+                EntityHitpoints(25, 25))
+        facets(Consumable())
+    }
+
+    fun makeHealthBoxHeavy(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
+        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_HEAVY.tile),
+                EntityHitpoints(50, 50))
+        facets(Consumable())
+    }
+
+    fun makeHealthBoxMega(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(SuperHealthBox) {
+        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_HEAVY.tile),
+                EntityHitpoints(100, 100))
+        facets(Consumable())
+    }
+    // end health boxes
 }

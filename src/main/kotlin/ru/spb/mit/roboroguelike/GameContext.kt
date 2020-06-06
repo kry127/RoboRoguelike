@@ -11,4 +11,5 @@ import ru.spb.mit.roboroguelike.entities.Player
 data class GameContext(val world: World,
                        val screen: Screen,
                        val uiEvent: UIEvent,
-                       val player: GameEntity<Player>) : Context
+                       val player: GameEntity<Player>
+                        ) : Context
