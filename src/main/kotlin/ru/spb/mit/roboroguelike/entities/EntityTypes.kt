@@ -5,8 +5,14 @@ import org.hexworks.amethyst.api.base.BaseEntityType
 object Player : BaseEntityType(
         name = "player")
 
-object Mob : BaseEntityType(
-        name = "mob")
+object AggressiveMob : BaseEntityType(
+        name = "aggressive-mob")
+
+object CowardMob : BaseEntityType(
+        name = "coward-mob")
+
+object StaticMob : BaseEntityType(
+        name = "static-mob")
 
 object Wall : BaseEntityType(
         name = "wall")
@@ -18,3 +24,11 @@ object LadderUp: BaseEntityType (
 object LadderDown: BaseEntityType(
         name = "LadderDown"
 ), Teleport
+
+object RegularHealthBox: BaseEntityType(
+        name = "regular-health-box"
+), HealthBox
+
+object SuperHealthBox: BaseEntityType(
+        name = "super-health-box"
+), HealthBox

@@ -2,18 +2,17 @@
 package ru.spb.mit.roboroguelike
 
 import World
+import org.hexworks.amethyst.api.entity.Entity
 import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.cobalt.datatypes.extensions.orElseGet
 import org.hexworks.zircon.api.Sizes
 import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
-import ru.spb.mit.roboroguelike.entities.EntityFactory
-import ru.spb.mit.roboroguelike.entities.GameEntity
+import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.GameConfig
-import ru.spb.mit.roboroguelike.entities.Player
-import ru.spb.mit.roboroguelike.entities.position
 import java.io.ObjectInputStream
 import java.nio.file.Paths
+import kotlin.random.Random
 
 class GameBuilder(val worldSize: Size3D) {
 
@@ -36,6 +35,7 @@ class GameBuilder(val worldSize: Size3D) {
             addAggressiveMob()
             addCowardlyMob()
             addStaticMob()
+            addHealthBox()
         }
         return Game.create(
                 world = world,
@@ -74,7 +74,7 @@ class GameBuilder(val worldSize: Size3D) {
         }
     }
 
-    private fun addAggressiveMob(): GameEntity<Player> {
+    private fun addAggressiveMob(): GameEntity<AggressiveMob> {
         var position = world.searchForEmptyRandomPosition().orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)
@@ -83,7 +83,7 @@ class GameBuilder(val worldSize: Size3D) {
         return mob
     }
 
-    private fun addCowardlyMob(): GameEntity<Player> {
+    private fun addCowardlyMob(): GameEntity<CowardMob> {
         var position = world.searchForEmptyRandomPosition().orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)
@@ -92,13 +92,34 @@ class GameBuilder(val worldSize: Size3D) {
         return mob
     }
 
-    private fun addStaticMob(): GameEntity<Player> {
+    private fun addStaticMob(): GameEntity<StaticMob> {
         var position = world.searchForEmptyRandomPosition().orElseGet {
             Position3D.defaultPosition() }
         position = position.withZ(world.currentLevel)
         val mob = EntityFactory.makeStaticMob()
         world.addEntity(mob, position)
         return mob
+    }
+
+
+
+    private fun addHealthBox(): GameEntity<HealthBox> {
+        var position = world.searchForEmptyRandomPosition().orElseGet {
+            Position3D.defaultPosition() }
+        position = position.withZ(world.currentLevel)
+        var hpBox : Entity<HealthBox, GameContext>? = null
+        var rand= Random.nextDouble()
+        if (rand < 0.4) {
+            hpBox = EntityFactory.makeHealthBoxLite(position)
+        } else if (rand < 0.7) {
+            hpBox = EntityFactory.makeHealthBoxMedium(position)
+        } else if (rand < 0.9) {
+            hpBox = EntityFactory.makeHealthBoxHeavy(position)
+        } else {
+            hpBox = EntityFactory.makeHealthBoxMega(position)
+        }
+        world.addEntity(hpBox, position)
+        return hpBox
     }
 
 

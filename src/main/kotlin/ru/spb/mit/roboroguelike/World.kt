@@ -8,15 +8,18 @@ import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import org.hexworks.zircon.api.game.GameArea
 import org.hexworks.zircon.api.screen.Screen
+import org.hexworks.zircon.api.uievent.Processed
 import org.hexworks.zircon.api.uievent.UIEvent
 import ru.spb.mit.roboroguelike.Game
 import ru.spb.mit.roboroguelike.GameBlock
+import ru.spb.mit.roboroguelike.GameBlock.Companion.floor
 import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.entities.AnyGameEntity
 import ru.spb.mit.roboroguelike.entities.EntityFactory
 import ru.spb.mit.roboroguelike.entities.position
 import ru.spb.mit.roboroguelike.objects.GameConfig
 import ru.spb.mit.roboroguelike.serialize
+import ru.spb.mit.roboroguelike.view.PlayView
 import java.io.ObjectOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,22 +30,31 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
             actualSize: Size3D,
             var currentLevel: Int = GameConfig.DUNGEON_LEVELS - 1)
     : GameArea<Tile, GameBlock> by GameAreaBuilder.newBuilder<Tile, GameBlock>()
-        .withVisibleSize(visibleSize) // 3
-        .withActualSize(actualSize) // 4
-        .withDefaultBlock(DEFAULT_BLOCK) // 5
-        .withLayersPerBlock(1) // 6
+        .withVisibleSize(visibleSize)
+        .withActualSize(actualSize)
+        .withDefaultBlock(DEFAULT_BLOCK)
+        .withLayersPerBlock(1)
         .build() {
 
     init {
         startingBlocks.forEach { pos, block ->
-            setBlockAt(pos, block) // 7
+            setBlockAt(pos, block)
         }
+    }
+
+    var onGameOverCallback : () -> Unit = {}
+    fun onGameOver(callback : () -> Unit) {
+        onGameOverCallback = callback
+    }
+
+    fun gameOver() {
+        onGameOverCallback()
     }
 
     private val engine = Engines.newEngine<GameContext>()
 
     companion object {
-        private val DEFAULT_BLOCK = BlockTypes.floor()
+        private val DEFAULT_BLOCK = floor()
     }
 
     fun update(screen: Screen, uiEvent: UIEvent, game: Game) {
@@ -146,6 +158,14 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
     fun moveIsPossible(oldBlock: Maybe<GameBlock>,
                        newBlock: Maybe<GameBlock>): Boolean {
+        // check if fighting
+        if (!newBlock.isEmpty() && newBlock.get().isMob) {
+            return false;
+        }
+        // check mob moves on player
+        if (!newBlock.isEmpty() && newBlock.get().isPlayer) {
+            return false;
+        }
         return oldBlock.isPresent && newBlock.isPresent && !newBlock.get().isOccupied
     }
 

@@ -12,12 +12,10 @@ import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.mvc.base.BaseView
 import org.hexworks.zircon.api.uievent.ComponentEventType
 import org.hexworks.zircon.api.uievent.KeyboardEventType
-import org.hexworks.zircon.api.uievent.MouseEventType
 import org.hexworks.zircon.api.uievent.Processed
 import ru.spb.mit.roboroguelike.Game
 import ru.spb.mit.roboroguelike.GameBlock
 import ru.spb.mit.roboroguelike.GameBuilder
-import ru.spb.mit.roboroguelike.WorldBuilder
 import ru.spb.mit.roboroguelike.objects.GameConfig
 
 class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() {
@@ -31,9 +29,13 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .wrapWithBox()
                 .build()
 
+        sidebar.addFragment(PlayerStatusFragment(
+                width = sidebar.contentSize.width,
+                player = game.player))
+
 
         val saveGameButton = Components.button()
-                .withAlignmentWithin(sidebar, ComponentAlignment.TOP_CENTER)
+                .withAlignmentWithin(sidebar, ComponentAlignment.BOTTOM_CENTER)
                 .withText("Save")
                 .wrapSides(false)
                 .withBoxType(BoxType.SINGLE)
@@ -43,7 +45,7 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
 
 
         val mainMenuButton = Components.button()
-                .withAlignmentAround(saveGameButton, ComponentAlignment.BOTTOM_CENTER)
+                .withAlignmentAround(saveGameButton, ComponentAlignment.TOP_CENTER)
                 .withText("Main menu")
                 .wrapSides(false)
                 .withBoxType(BoxType.SINGLE)
@@ -69,6 +71,12 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .withProjectionMode(ProjectionMode.TOP_DOWN)
                 .withAlignmentWithin(screen, ComponentAlignment.TOP_RIGHT)
                 .build()
+
+        game.world.onGameOver() {
+            replaceWith(EndgameMessageView("game over"))
+            close()
+            Processed
+        }
 
         screen.addComponent(gameComponent)
         screen.addComponent(logArea)

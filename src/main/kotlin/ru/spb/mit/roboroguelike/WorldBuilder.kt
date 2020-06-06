@@ -32,7 +32,6 @@ class WorldBuilder(private val worldSize: Size3D) {
         val currentLevel = inputStream.readInt()
         val count = inputStream.readInt()
         for (k in 0 until count) {
-//            println("Loaded ${k + 1} out of $count")
             val pos = Position3D.deserialize(inputStream)
             val gameBlock = GameBlock.deserialize(inputStream)
             blocks[pos] = gameBlock
@@ -47,20 +46,15 @@ class WorldBuilder(private val worldSize: Size3D) {
     fun build(visibleSize: Size3D): World = World(blocks, visibleSize, worldSize)
 
     private fun generateRooms(): WorldBuilder {
-        val builder = SimpleRoomGenerator.Builder()
-        val roomGenerator = builder
-                .height(height)
-                .width(width)
-                .room_min_size(7)
-                .build()
+        val roomGenerator = SimpleRoomGenerator(height, width, room_min_size = 7)
         val maps : ArrayList<Array<Array<Boolean>>> = arrayListOf();
         for (i in 1..depth) {
             maps.add(roomGenerator.nextMap().container)
         }
         forAllPositions { pos ->
             blocks[pos] = if (maps[pos.z][pos.x][pos.y]) {
-                BlockTypes.wall()
-            } else BlockTypes.floor()
+                GameBlock.wall()
+            } else GameBlock.floor()
         }
         return this
     }
