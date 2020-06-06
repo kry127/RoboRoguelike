@@ -86,7 +86,7 @@ object EntityFactory {
     }
 
     fun makeHealthBoxMega(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(SuperHealthBox) {
-        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_HEAVY.tile),
+        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_MEGA.tile),
                 EntityHitpoints(100, 100))
         facets(Consumable())
     }

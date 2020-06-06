@@ -59,24 +59,24 @@ enum class TileTypes(val tile: CharacterTile) {
 
     // health boxes
     HEALTH_BOX_LITE(Tiles.newBuilder()
-        .withCharacter('+')
-        .withBackgroundColor(GameColors.HEALTH_BOX_BACKGROUND)
+        .withCharacter(Symbols.DOUBLE_LINE_CROSS)
+        .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
         .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_LITE)
         .buildCharacterTile()),
     HEALTH_BOX_MEDIUM(Tiles.newBuilder()
-            .withCharacter('+')
-            .withBackgroundColor(GameColors.HEALTH_BOX_BACKGROUND)
+            .withCharacter(Symbols.DOUBLE_LINE_CROSS)
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_MEDIUM)
             .buildCharacterTile()),
     HEALTH_BOX_HEAVY(Tiles.newBuilder()
-            .withCharacter('+')
-            .withBackgroundColor(GameColors.HEALTH_BOX_BACKGROUND)
+            .withCharacter(Symbols.DOUBLE_LINE_CROSS)
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_HEAVY)
             .buildCharacterTile()),
     HEALTH_BOX_MEGA(Tiles.newBuilder()
-            .withCharacter('+')
-            .withForegroundColor(GameColors.WALL_BACKGROUND)
-            .withBackgroundColor(GameColors.HEALTH_BOX_FOREGROUND_MEGA)
+            .withCharacter(Symbols.HEART)
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_MEGA)
             .buildCharacterTile()),
     // end health boxes
 }

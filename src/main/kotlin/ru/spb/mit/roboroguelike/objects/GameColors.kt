@@ -9,7 +9,7 @@ object GameColors {
     val FLOOR_FOREGROUND = TileColors.fromString("#75715E")
     val FLOOR_BACKGROUND = TileColors.fromString("#1e2320")
 
-    val HEALTH_BOX_BACKGROUND = TileColors.fromString("#0f0f0f")
+    val HEALTH_BOX_BACKGROUND = TileColors.fromString("#DDCCEE")
     val HEALTH_BOX_FOREGROUND_LITE = TileColors.fromString("#005500")
     val HEALTH_BOX_FOREGROUND_MEDIUM = TileColors.fromString("#CC7700")
     val HEALTH_BOX_FOREGROUND_HEAVY = TileColors.fromString("#FF0022")

@@ -10,10 +10,7 @@ import org.hexworks.cobalt.datatypes.extensions.ifPresent
 import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.commands.MoveCamera
 import ru.spb.mit.roboroguelike.commands.MoveTo
-import ru.spb.mit.roboroguelike.entities.GameCommand
-import ru.spb.mit.roboroguelike.entities.HealthBox
-import ru.spb.mit.roboroguelike.entities.Player
-import ru.spb.mit.roboroguelike.entities.position
+import ru.spb.mit.roboroguelike.entities.*
 
 class Movable : BaseFacet<GameContext>() {
     override fun executeCommand(command: GameCommand<out EntityType>): Response {
@@ -23,6 +20,9 @@ class Movable : BaseFacet<GameContext>() {
             var response: Response = Pass;
             if (world.moveEntity(entity, position)) {
                 response = if (entity.type == Player) {
+                    if (context.player.hp > context.player.maxHp) {
+                        context.player.hp--; // remove extra hp every step
+                    }
                     CommandResponse(MoveCamera(
                             context = context,
                             source = entity,
