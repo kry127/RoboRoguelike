@@ -9,6 +9,7 @@ import ru.spb.mit.roboroguelike.commands.Remove
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.view.PlayView
 import kotlin.math.abs
+import kotlin.random.Random
 
 abstract class Mob : BaseBehavior<GameContext>() {
 
@@ -30,9 +31,14 @@ abstract class Mob : BaseBehavior<GameContext>() {
                 entity.executeCommand(Remove(context, entity))
                 return true;
             }
-            return false;
         }
         return false
+    }
+
+    fun cast(player: GameEntity<Player>){
+        if(Random.nextInt(10) < 9){
+
+        }
     }
 
     fun isWithinRangeOf(from: Position3D, other: Position3D, radius: Int): Boolean {
