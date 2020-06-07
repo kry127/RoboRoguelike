@@ -6,7 +6,7 @@ import org.hexworks.zircon.api.ColorThemes
 import org.hexworks.zircon.api.Sizes
 
 object GameConfig {
-    const val DUNGEON_LEVELS = 2 // 1
+    const val DUNGEON_LEVELS = 5 // 1
 
     // look & feel
     val TILESET = CP437TilesetResources.guybrush16x16() // 2
