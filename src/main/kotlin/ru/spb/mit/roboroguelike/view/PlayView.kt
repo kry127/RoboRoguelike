@@ -31,7 +31,7 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
 
         sidebar.addFragment(PlayerStatusFragment(
                 width = sidebar.contentSize.width,
-                player = game.player))
+                game = game))
 
 
         val saveGameButton = Components.button()

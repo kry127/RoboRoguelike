@@ -48,13 +48,14 @@ class CameraMover : BaseFacet<GameContext>() {
                                            newPos: Position3D): CameraMovementDirection {
         val (xPrev, yPrev, zPrev) = prevPos
         val (xNew, yNew, zNew) = newPos
+        val (xDelta, yDelta, zDelta) = prevPos - newPos
         return when {
-            yPrev - yNew == -1 -> CameraMovementDirection.FORWARD
-            yPrev - yNew == 1  -> CameraMovementDirection.BACKWARD
-            xPrev - xNew == -1 -> CameraMovementDirection.RIGHT
-            xPrev - xNew == 1  -> CameraMovementDirection.LEFT
-            zPrev - zNew == -1 -> CameraMovementDirection.UP
-            zPrev - zNew == 1 -> CameraMovementDirection.DOWN
+            xDelta ==  0 && yDelta == -1 && zDelta ==  0 -> CameraMovementDirection.FORWARD
+            xDelta ==  0 && yDelta == +1 && zDelta ==  0 -> CameraMovementDirection.BACKWARD
+            xDelta == -1 && yDelta ==  0 && zDelta ==  0 -> CameraMovementDirection.RIGHT
+            xDelta == +1 && yDelta ==  0 && zDelta ==  0 -> CameraMovementDirection.LEFT
+            xDelta ==  0 && yDelta ==  0 && zDelta == -1 -> CameraMovementDirection.UP
+            xDelta ==  0 && yDelta ==  0 && zDelta == +1 -> CameraMovementDirection.DOWN
             prevPos == newPos -> CameraMovementDirection.STEADY
             else -> CameraMovementDirection.JUMP
         }
