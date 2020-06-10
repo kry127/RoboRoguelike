@@ -67,19 +67,26 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
     fun centerCameraAtPosition(cameraPosition: Position3D) {
         val (xLength, yLength, _) = visibleSize()
-        val (_, _, currZ) = visibleOffset()
+        val (currX, currY, currZ) = visibleOffset()
         val (xCamera, yCamera, zCamera) = cameraPosition
-/*      scrollTo3DPosition(cameraPosition
-                .withX(xCurr - xLength / 2)
-                .withY(yCurr - yLength / 2))*/
-        val xOffset = xCamera - xLength / 2
+/*        scrollTo3DPosition(cameraPosition
+                    .withX(xCamera - xLength / 2)
+                    .withY(yCamera - yLength / 2)
+                    .withZ(zCamera))*/
+
+        val xOffset = xCamera - xLength / 2 - currX
         if (xOffset > 0) {
             scrollRightBy(xOffset)
         }
         else {
-            scrollLeftBy(xOffset)
+            scrollLeftBy(-xOffset)
         }
-        scrollForwardBy(yCamera - yLength / 2)
+        val yOffset = yCamera - yLength / 2 - currY
+        if (yOffset > 0) {
+            scrollForwardBy(yOffset)
+        } else {
+            scrollBackwardBy(-yOffset)
+        }
         if (currZ < zCamera) {
             scrollUpBy(zCamera - currZ)
         } else {

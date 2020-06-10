@@ -22,7 +22,7 @@ class EntityPrimaryStats(attackInitial : Int, defenceInitial : Int) : Displayabl
 
 
     override fun toComponent(width: Int) : Component = Components.panel()
-            .withSize(width, 2)
+            .withSize(width, 3)
             .build().apply {
 
                 val attackLabel = Components.label()

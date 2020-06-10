@@ -31,11 +31,13 @@ class GameBuilder(val worldSize: Size3D) {
         prepareWorld()
         buildLadders()
         val player = addPlayer()
-        (1..200).forEach { _ ->
-            addAggressiveMob()
-            addCowardlyMob()
-            addStaticMob()
-            addHealthBox()
+        (0..GameConfig.DUNGEON_LEVELS).forEach { level ->
+            (1..200).forEach { _ ->
+                addAggressiveMob(level)
+                addCowardlyMob(level)
+                addStaticMob(level)
+                addHealthBox(level)
+            }
         }
         return Game.create(
                 world = world,
@@ -74,28 +76,34 @@ class GameBuilder(val worldSize: Size3D) {
         }
     }
 
-    private fun addAggressiveMob(): GameEntity<AggressiveMob> {
-        var position = world.searchForEmptyRandomPosition().orElseGet {
+    private fun addAggressiveMob(level: Int = world.currentLevel): GameEntity<AggressiveMob> {
+        var position = world.searchForEmptyRandomPosition(
+            fixedZ = Maybe.of(level)
+        ).orElseGet {
             Position3D.defaultPosition() }
-        position = position.withZ(world.currentLevel)
+        position = position.withZ(level)
         val mob = EntityFactory.makeAggressiveMob()
         world.addEntity(mob, position)
         return mob
     }
 
-    private fun addCowardlyMob(): GameEntity<CowardMob> {
-        var position = world.searchForEmptyRandomPosition().orElseGet {
+    private fun addCowardlyMob(level: Int = world.currentLevel): GameEntity<CowardMob> {
+        var position = world.searchForEmptyRandomPosition(
+                fixedZ = Maybe.of(level)
+        ).orElseGet {
             Position3D.defaultPosition() }
-        position = position.withZ(world.currentLevel)
+        position = position.withZ(level)
         val mob = EntityFactory.makeCowardlyMob()
         world.addEntity(mob, position)
         return mob
     }
 
-    private fun addStaticMob(): GameEntity<StaticMob> {
-        var position = world.searchForEmptyRandomPosition().orElseGet {
+    private fun addStaticMob(level: Int = world.currentLevel): GameEntity<StaticMob> {
+        var position = world.searchForEmptyRandomPosition(
+                fixedZ = Maybe.of(level)
+        ).orElseGet {
             Position3D.defaultPosition() }
-        position = position.withZ(world.currentLevel)
+        position = position.withZ(level)
         val mob = EntityFactory.makeStaticMob()
         world.addEntity(mob, position)
         return mob
@@ -103,10 +111,12 @@ class GameBuilder(val worldSize: Size3D) {
 
 
 
-    private fun addHealthBox(): GameEntity<HealthBox> {
-        var position = world.searchForEmptyRandomPosition().orElseGet {
+    private fun addHealthBox(level: Int = world.currentLevel): GameEntity<HealthBox> {
+        var position = world.searchForEmptyRandomPosition(
+                fixedZ = Maybe.of(level)
+        ).orElseGet {
             Position3D.defaultPosition() }
-        position = position.withZ(world.currentLevel)
+        position = position.withZ(level)
         var hpBox : Entity<HealthBox, GameContext>? = null
         var rand= Random.nextDouble()
         if (rand < 0.4) {
