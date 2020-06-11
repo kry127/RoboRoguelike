@@ -29,12 +29,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
             visibleSize: Size3D,
             actualSize: Size3D,
             var currentLevel: Int = GameConfig.DUNGEON_LEVELS - 1)
-    : GameArea<Tile, GameBlock> by GameAreaBuilder.newBuilder<Tile, GameBlock>()
-        .withVisibleSize(visibleSize)
-        .withActualSize(actualSize)
-        .withDefaultBlock(DEFAULT_BLOCK)
-        .withLayersPerBlock(1)
-        .build() {
+    : GameArea<Tile, GameBlock> by buildGameAreaDelegate(visibleSize, actualSize) {
 
     init {
         startingBlocks.forEach { pos, block ->
@@ -55,6 +50,15 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
 
     companion object {
         private val DEFAULT_BLOCK = floor()
+
+        fun buildGameAreaDelegate(visibleSize: Size3D, actualSize: Size3D) : GameArea<Tile, GameBlock> {
+            return GameAreaBuilder.newBuilder<Tile, GameBlock>()
+                    .withVisibleSize(visibleSize)
+                    .withActualSize(actualSize)
+                    .withDefaultBlock(DEFAULT_BLOCK)
+                    .withLayersPerBlock(1)
+                    .build()
+        }
     }
 
     fun update(screen: Screen, uiEvent: UIEvent, game: Game) {
