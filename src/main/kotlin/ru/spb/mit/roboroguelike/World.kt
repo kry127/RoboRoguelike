@@ -31,8 +31,21 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
             var currentLevel: Int = GameConfig.DUNGEON_LEVELS - 1)
     : GameArea<Tile, GameBlock> by buildGameAreaDelegate(visibleSize, actualSize) {
 
+    companion object {
+        private val DEFAULT_BLOCK = floor()
+
+        fun buildGameAreaDelegate(visibleSize: Size3D, actualSize: Size3D) : GameArea<Tile, GameBlock> {
+            return GameAreaBuilder.newBuilder<Tile, GameBlock>()
+                    .withVisibleSize(visibleSize)
+                    .withActualSize(actualSize)
+                    .withDefaultBlock(DEFAULT_BLOCK)
+                    .withLayersPerBlock(1)
+                    .build()
+        }
+    }
+
     init {
-        startingBlocks.forEach { pos, block ->
+        startingBlocks.forEach { (pos, block) ->
             setBlockAt(pos, block)
         }
     }
@@ -47,19 +60,6 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     }
 
     private val engine = Engines.newEngine<GameContext>()
-
-    companion object {
-        private val DEFAULT_BLOCK = floor()
-
-        fun buildGameAreaDelegate(visibleSize: Size3D, actualSize: Size3D) : GameArea<Tile, GameBlock> {
-            return GameAreaBuilder.newBuilder<Tile, GameBlock>()
-                    .withVisibleSize(visibleSize)
-                    .withActualSize(actualSize)
-                    .withDefaultBlock(DEFAULT_BLOCK)
-                    .withLayersPerBlock(1)
-                    .build()
-        }
-    }
 
     fun update(screen: Screen, uiEvent: UIEvent, game: Game) {
         engine.update(GameContext(
@@ -205,14 +205,14 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     }
 
     fun findPathBetween(from: Position3D, to: Position3D): List<Position3D> {
-        println("1: " + from + " --- " + to)
+        println("1: $from --- $to")
         val nodes: Queue<Pair<Position3D, Position3D?>> = LinkedList()
         nodes.add(Pair(from.withRelativeX(1), from))
         nodes.add(Pair(from.withRelativeX(-1), from))
         nodes.add(Pair(from.withRelativeY(1), from))
         nodes.add(Pair(from.withRelativeY(-1), from))
         val parents: MutableMap<Position3D, Position3D?> = mutableMapOf()
-        parents.put(from, null)
+        parents[from] = null
         while (nodes.isNotEmpty()) {
             val (pos, parent) = nodes.poll()
             if (parents.containsKey(pos)) continue

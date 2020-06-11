@@ -1,11 +1,9 @@
 package ru.spb.mit.roboroguelike.attributes
 
-import org.hexworks.cavesofzircon.attributes.DisplayableAttribute
 import org.hexworks.cobalt.databinding.api.converter.Converter
 import org.hexworks.cobalt.databinding.api.createPropertyFrom
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.Component
-import org.hexworks.zircon.api.component.ComponentAlignment
 
 class EntityHitpoints(val maxHp: Int, hpInitial : Int) : DisplayableAttribute {
     private val hpProperty = createPropertyFrom(hpInitial)

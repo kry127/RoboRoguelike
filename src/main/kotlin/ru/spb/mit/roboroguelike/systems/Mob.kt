@@ -9,6 +9,8 @@ import ru.spb.mit.roboroguelike.commands.Remove
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.view.PlayView
 import kotlin.math.abs
+import kotlin.math.min
+import kotlin.random.Random
 
 abstract class Mob : BaseBehavior<GameContext>() {
 
@@ -28,6 +30,18 @@ abstract class Mob : BaseBehavior<GameContext>() {
                 if (player.hp <= 0) {
                     context.world.gameOver()
                 }
+            } else if (entity.type.equals(CowardMob)) {
+                val rand= Random.nextDouble()
+                if (rand < 0.65) {
+                    // nothing
+                } else if (rand < 0.85) {
+                    player.confusionDuration += 5
+                } else if (rand < 0.95) {
+                    player.confusionDuration += 10
+                } else {
+                    player.confusionDuration += 15
+                }
+                player.confusionDuration = min(player.confusionDuration, 45)
             }
             entity.hp--;
             if (entity.hp == 0) {

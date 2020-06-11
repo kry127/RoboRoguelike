@@ -18,7 +18,8 @@ object EntityFactory {
 
     fun makePlayer() = newEntityOfType<Player, GameContext>(Player) {
         attributes(EntityPosition(), EntityTile(TileTypes.PLAYER.tile),
-                EntityHitpoints(100, 100), EntityPrimaryStats(3, 1))
+                EntityHitpoints(100, 100), EntityPrimaryStats(3, 1)
+                , ConfusionSpell(0))
         behaviors(InputReceiver())
         facets(Movable(), CameraMover(), TeleportableEntity())
     }

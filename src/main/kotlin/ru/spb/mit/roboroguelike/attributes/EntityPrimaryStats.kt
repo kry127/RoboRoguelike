@@ -1,14 +1,10 @@
 package ru.spb.mit.roboroguelike.attributes
 
-import org.hexworks.cavesofzircon.attributes.DisplayableAttribute
-import org.hexworks.cobalt.databinding.api.converter.Converter
 import org.hexworks.cobalt.databinding.api.createPropertyFrom
 import org.hexworks.cobalt.databinding.api.event.ChangeEvent
 import org.hexworks.cobalt.databinding.api.event.ChangeListener
-import org.hexworks.cobalt.databinding.api.extensions.onChange
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.Component
-import org.hexworks.zircon.api.component.ComponentAlignment
 
 /**
  * Эти атрибуты отвечают за имеющуюся у героя атаку и защиту. Возможно,

@@ -1,4 +1,4 @@
-package org.hexworks.cavesofzircon.attributes
+package ru.spb.mit.roboroguelike.attributes
 
 import org.hexworks.amethyst.api.Attribute
 import org.hexworks.zircon.api.component.Component

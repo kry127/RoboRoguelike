@@ -118,7 +118,7 @@ class GameBuilder(val worldSize: Size3D) {
             Position3D.defaultPosition() }
         position = position.withZ(level)
         var hpBox : Entity<HealthBox, GameContext>? = null
-        var rand= Random.nextDouble()
+        val rand= Random.nextDouble()
         if (rand < 0.4) {
             hpBox = EntityFactory.makeHealthBoxLite(position)
         } else if (rand < 0.7) {

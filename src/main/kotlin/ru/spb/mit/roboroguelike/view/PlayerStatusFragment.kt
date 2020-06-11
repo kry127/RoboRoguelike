@@ -1,16 +1,12 @@
 package ru.spb.mit.roboroguelike.view
 
-import org.hexworks.cavesofzircon.attributes.DisplayableAttribute
+import ru.spb.mit.roboroguelike.attributes.DisplayableAttribute
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.ComponentAlignment
 import org.hexworks.zircon.api.component.Fragment
-import org.hexworks.zircon.api.component.ListItem
 import ru.spb.mit.roboroguelike.Game
 import ru.spb.mit.roboroguelike.attributes.EntityPosition
-import ru.spb.mit.roboroguelike.attributes.TeleportPosition
-import ru.spb.mit.roboroguelike.entities.GameEntity
 import ru.spb.mit.roboroguelike.entities.LadderDown
-import ru.spb.mit.roboroguelike.entities.Player
 import ru.spb.mit.roboroguelike.entities.tryToFindAttribute
 
 class PlayerStatusFragment(
