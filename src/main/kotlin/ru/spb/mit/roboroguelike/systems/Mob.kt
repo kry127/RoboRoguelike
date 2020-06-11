@@ -16,8 +16,12 @@ abstract class Mob : BaseBehavior<GameContext>() {
         val currentPos = entity.position
         val playerPos = player.position
 
-        if (currentPos.x == playerPos.x && abs(currentPos.y - playerPos.y) < 2 ||
-                currentPos.y == playerPos.y && abs(currentPos.x - playerPos.x) < 2) {
+        val horizontalVicinity = currentPos.x == playerPos.x && abs(currentPos.y - playerPos.y) < 2
+        val verticalVicinity = currentPos.y == playerPos.y && abs(currentPos.x - playerPos.x) < 2
+        val sameDungeonLevel = currentPos.z == playerPos.z
+
+
+        if (sameDungeonLevel && (horizontalVicinity || verticalVicinity)) {
             //TODO fight
             if (entity.type.equals(AggressiveMob)) {
                 player.hp--;
