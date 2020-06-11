@@ -37,6 +37,7 @@ class PlayerStatusFragment(
                             addComponent(component)
                         }
 
+                // find cell with teleport and display it's position
                 val cellWithTeleport = game.world.fetchBlocksAtLevel(game.world.currentLevel)
                         .firstOrNull { cell -> cell.component2().entities.find {
                             entity->entity.type.equals(LadderDown)
@@ -46,11 +47,6 @@ class PlayerStatusFragment(
                         entity -> entity.type.equals(LadderDown)
                     }
                     if (teleportEntity != null) {
-                        val attribute = teleportEntity.tryToFindAttribute(TeleportPosition::class)
-                        val component = attribute.toComponent(width)
-                        component.moveDownBy(offset)
-                        offset += component.height
-                        addComponent(component)
                         val attribute2 = teleportEntity.tryToFindAttribute(EntityPosition::class)
                         val component2 = attribute2.toComponent(width)
                         component2.moveDownBy(offset)
