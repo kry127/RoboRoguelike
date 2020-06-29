@@ -10,12 +10,20 @@ import org.hexworks.zircon.api.component.Component
  * Эти атрибуты отвечают за имеющуюся у героя атаку и защиту. Возможно,
  * стоит продумать, как надеваемые шмотки будут влиять на характеристики игрока
  */
-class EntityPrimaryStats(attackInitial : Int, defenceInitial : Int) : DisplayableAttribute {
+class EntityPrimaryStats(attackInitial : Int, defenceInitial : Int) : DisplayableAttribute, ProgressiveAttribute {
     private val attackProperty = createPropertyFrom(attackInitial)
     private val defenceProperty = createPropertyFrom(defenceInitial)
     var attack : Int by attackProperty.asDelegate()
     var defence : Int by defenceProperty.asDelegate()
 
+
+    override fun onLevelUp(newLvl : Int) {
+        if (newLvl % 2 == 0) {
+            attack++
+        } else {
+            defence++
+        }
+    }
 
     override fun toComponent(width: Int) : Component = Components.panel()
             .withSize(width, 3)

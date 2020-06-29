@@ -9,6 +9,8 @@ import ru.spb.mit.roboroguelike.commands.Remove
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.view.PlayView
 import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.exp
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -25,8 +27,8 @@ abstract class Mob : BaseBehavior<GameContext>() {
 
         if (sameDungeonLevel && (horizontalVicinity || verticalVicinity)) {
             //TODO fight
-            if (entity.type.equals(AggressiveMob)) {
-                player.hp--;
+            if (entity.type.equals(AggressiveMob) || entity.type.equals(StaticMob)) {
+                player.hp -= ceil(entity.attack * (1/(1 + exp(player.defence.toDouble() - 15)))).toInt();
                 if (player.hp <= 0) {
                     context.world.gameOver()
                 }
@@ -43,9 +45,10 @@ abstract class Mob : BaseBehavior<GameContext>() {
                 }
                 player.confusionDuration = min(player.confusionDuration, 45)
             }
-            entity.hp--;
-            if (entity.hp == 0) {
+            entity.hp -= player.attack;
+            if (entity.hp <= 0) {
                 entity.executeCommand(Remove(context, entity))
+                player.xp += entity.maxHp // simple XP gain
                 return true;
             }
             return false;

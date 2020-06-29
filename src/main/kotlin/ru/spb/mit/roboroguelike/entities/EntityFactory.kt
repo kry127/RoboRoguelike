@@ -17,8 +17,17 @@ import java.io.ObjectInputStream
 object EntityFactory {
 
     fun makePlayer() = newEntityOfType<Player, GameContext>(Player) {
+        val hitpoints = EntityHitpoints(100, 100)
+        val stats = EntityPrimaryStats(3, 1)
+        val entityExp = EntityExperience(EntityExperience.levelToXp(1))
+
+        entityExp.setOnLevelUpListener {
+            hitpoints.onLevelUp(it)
+            stats.onLevelUp(it)
+        }
+
         attributes(EntityPosition(), EntityTile(TileTypes.PLAYER.tile),
-                EntityHitpoints(100, 100), EntityPrimaryStats(3, 1)
+                hitpoints, stats, entityExp
                 , ConfusionSpell(0))
         behaviors(InputReceiver())
         facets(Movable(), CameraMover(), TeleportableEntity())

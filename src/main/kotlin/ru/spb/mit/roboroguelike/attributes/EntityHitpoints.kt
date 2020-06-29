@@ -5,10 +5,14 @@ import org.hexworks.cobalt.databinding.api.createPropertyFrom
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.Component
 
-class EntityHitpoints(val maxHp: Int, hpInitial : Int) : DisplayableAttribute {
+class EntityHitpoints(var maxHp: Int, hpInitial : Int) : DisplayableAttribute {
     private val hpProperty = createPropertyFrom(hpInitial)
     var hp : Int by hpProperty.asDelegate()
 
+    fun onLevelUp(newLvl : Int) {
+        maxHp += 5
+        hp = maxHp
+    }
 
     override fun toComponent(width: Int) : Component {
 

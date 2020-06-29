@@ -8,10 +8,7 @@ import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.uievent.KeyCode
 import org.hexworks.zircon.api.uievent.KeyboardEvent
 import ru.spb.mit.roboroguelike.GameContext
-import ru.spb.mit.roboroguelike.attributes.ConfusionSpell
-import ru.spb.mit.roboroguelike.attributes.EntityHitpoints
-import ru.spb.mit.roboroguelike.attributes.EntityPosition
-import ru.spb.mit.roboroguelike.attributes.EntityTile
+import ru.spb.mit.roboroguelike.attributes.*
 import ru.spb.mit.roboroguelike.commands.AttemptTeleportation
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -42,6 +39,32 @@ var AnyGameEntity.hp : Int
 
 val AnyGameEntity.maxHp : Int
     get() = this.tryToFindAttribute(EntityHitpoints::class).maxHp
+
+/** add Exp properties **/
+var AnyGameEntity.xp : Int
+    get() = this.tryToFindAttribute(EntityExperience::class).xp
+    set(value) {
+        findAttribute(EntityExperience::class).map {
+            it.xp = value
+        }
+    }
+
+
+/** add attack and defence properties **/
+var AnyGameEntity.attack : Int
+    get() = this.tryToFindAttribute(EntityPrimaryStats::class).attack
+    set(value) {
+        findAttribute(EntityPrimaryStats::class).map {
+            it.attack = value
+        }
+    }
+var AnyGameEntity.defence : Int
+    get() = this.tryToFindAttribute(EntityPrimaryStats::class).defence
+    set(value) {
+        findAttribute(EntityPrimaryStats::class).map {
+            it.defence = value
+        }
+    }
 
 /** add confusion spell properties **/
 var AnyGameEntity.confusionDuration : Int
