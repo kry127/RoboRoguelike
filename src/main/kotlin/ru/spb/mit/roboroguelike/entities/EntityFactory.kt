@@ -18,7 +18,7 @@ object EntityFactory {
 
     fun makePlayer() = newEntityOfType<Player, GameContext>(Player) {
         val hitpoints = EntityHitpoints(100, 100)
-        val stats = EntityPrimaryStats(3, 1)
+        val stats = EntityPrimaryStats(1, 1)
         val entityExp = EntityExperience(EntityExperience.levelToXp(1))
 
         entityExp.setOnLevelUpListener {
@@ -28,28 +28,37 @@ object EntityFactory {
 
         attributes(EntityPosition(), EntityTile(TileTypes.PLAYER.tile),
                 hitpoints, stats, entityExp
-                , ConfusionSpell(0))
+                , ConfusionSpell(0), EntityArtifacts())
         behaviors(InputReceiver())
-        facets(Movable(), CameraMover(), TeleportableEntity())
+        facets(Movable(), CameraMover(), TeleportableEntity(), ArtifactTaker())
     }
 
     fun makeAggressiveMob() = newEntityOfType<AggressiveMob, GameContext>(AggressiveMob) {
+        val hitpoints = EntityHitpoints(7, 7)
+        val stats = EntityPrimaryStats(1, 1)
+
         attributes(EntityPosition(), EntityTile(TileTypes.AGGRESSIVE_MOB.tile),
-                EntityHitpoints(5, 5), EntityPrimaryStats(1, 1))
+                hitpoints, stats)
         behaviors(Aggressive())
         facets(Movable(), Attackable())
     }
 
     fun makeCowardlyMob() = newEntityOfType<CowardMob, GameContext>(CowardMob) {
+        val hitpoints = EntityHitpoints(2, 2)
+        val stats = EntityPrimaryStats(0, 1)
+
         attributes(EntityPosition(), EntityTile(TileTypes.COWARDLY_MOB.tile),
-                EntityHitpoints(2, 2), EntityPrimaryStats(0, 1))
+                hitpoints, stats)
         behaviors(Cowardly())
         facets(Movable(), Attackable())
     }
 
     fun makeStaticMob() = newEntityOfType<StaticMob, GameContext>(StaticMob) {
+        val hitpoints = EntityHitpoints(10, 10)
+        val stats = EntityPrimaryStats(2, 5)
+
         attributes(EntityPosition(), EntityTile(TileTypes.STATIC_MOB.tile),
-                EntityHitpoints(10, 10), EntityPrimaryStats(2, 5))
+                hitpoints, stats)
         behaviors(Static())
         facets(Attackable())
     }
@@ -101,4 +110,15 @@ object EntityFactory {
         facets(Consumable())
     }
     // end health boxes
+
+    // make artefacts
+    fun makePrimaryStatsArtefact(healthBoxPosition: Position3D = Position3D.unknown(), stats: EntityPrimaryStats) = newEntityOfType<Artifact, GameContext>(StatsArtifact) {
+        attributes(EntityPosition(), EntityTile(TileTypes.ARTIFACT.tile),
+                stats)
+    }
+
+    fun makeHealthArtefact(healthBoxPosition: Position3D = Position3D.unknown(), hp: EntityHitpoints) = newEntityOfType<Artifact, GameContext>(HealthArtifact) {
+        attributes(EntityPosition(), EntityTile(TileTypes.ARTIFACT.tile),
+                hp)
+    }
 }

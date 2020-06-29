@@ -15,6 +15,8 @@ object GameColors {
     val HEALTH_BOX_FOREGROUND_HEAVY = TileColors.fromString("#FF0022")
     val HEALTH_BOX_FOREGROUND_MEGA = TileColors.fromString("#0000FF")
 
+    val ARTEFACT_FOREGROUND_COLOR = TileColors.fromString("#AA7700")
+
     val ACCENT_COLOR = TileColors.fromString("#FFCD22")
     val LADDER_COLOR = TileColors.fromString("#0fdb61")
 

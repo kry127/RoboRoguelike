@@ -79,4 +79,10 @@ enum class TileTypes(val tile: CharacterTile) {
             .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_MEGA)
             .buildCharacterTile()),
     // end health boxes
+    ARTIFACT(Tiles.newBuilder()
+            .withCharacter(Symbols.PI)
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.ARTEFACT_FOREGROUND_COLOR)
+            .buildCharacterTile()
+    )
 }

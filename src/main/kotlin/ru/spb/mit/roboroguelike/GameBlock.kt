@@ -6,6 +6,7 @@ import org.hexworks.zircon.api.data.BlockSide
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.base.BlockBase
 import org.hexworks.zircon.api.data.impl.Position3D
+import ru.spb.mit.roboroguelike.attributes.DisplayableAttribute
 import ru.spb.mit.roboroguelike.attributes.TeleportPosition
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.TileTypes
@@ -100,5 +101,13 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
             }
         }
         return Maybe.ofNullable(result)
+    }
+
+
+    fun getArtifact(atPosition : Position3D): Maybe<GameEntity<Artifact>> {
+        return Maybe.ofNullable(
+                currentEntities.filterIsInstance<GameEntity<Artifact>>()
+                .find {it.position == atPosition }
+        )
     }
 }

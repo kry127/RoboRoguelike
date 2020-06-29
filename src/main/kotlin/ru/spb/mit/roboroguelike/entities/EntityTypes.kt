@@ -32,3 +32,11 @@ object RegularHealthBox: BaseEntityType(
 object SuperHealthBox: BaseEntityType(
         name = "super-health-box"
 ), HealthBox
+
+object StatsArtifact: BaseEntityType(
+        name = "stats-artifact"
+), Artifact
+
+object HealthArtifact: BaseEntityType(
+        name = "stats-artifact"
+), Artifact
