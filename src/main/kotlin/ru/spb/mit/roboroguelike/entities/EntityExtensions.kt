@@ -13,6 +13,7 @@ import ru.spb.mit.roboroguelike.attributes.*
 import ru.spb.mit.roboroguelike.commands.AttemptTeleportation
 import ru.spb.mit.roboroguelike.commands.DropArtifact
 import ru.spb.mit.roboroguelike.commands.TakeArtifact
+import ru.spb.mit.roboroguelike.objects.GameConfig
 import kotlin.math.ceil
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -116,72 +117,12 @@ val GameEntity<Player>.effectiveDefence : Int
 /** add artifacts extensions **/
 fun GameEntity<Player>.freeArtifactSlotsCount() : Int {
     val attr = this.tryToFindAttribute(EntityArtifacts::class)
-    return 4 - attr.artifactCount
-}
-
-private fun GameEntity<Player>.emplaceArtifact(art : GameEntity<Artifact>) : Boolean {
-    val attr = this.tryToFindAttribute(EntityArtifacts::class)
-    if (!attr.slot1.isPresent) {
-        attr.slot1 = Maybe.of(art)
-        attr.artifactCount += 1
-        return true
-    }
-    if (!attr.slot2.isPresent) {
-        attr.slot2 = Maybe.of(art)
-        attr.artifactCount += 1
-        return true
-    }
-    if (!attr.slot3.isPresent) {
-        attr.slot3 = Maybe.of(art)
-        attr.artifactCount += 1
-        return true
-    }
-    if (!attr.slot4.isPresent) {
-        attr.slot4 = Maybe.of(art)
-        attr.artifactCount += 1
-        return true
-    }
-    return false
-}
-
-fun GameEntity<Player>.displaceArtifact(artifactId : Int) : Maybe<GameEntity<Artifact>> {
-    val attr = this.tryToFindAttribute(EntityArtifacts::class)
-    var ret = Maybe.empty<GameEntity<Artifact>>()
-    when (artifactId) {
-        1 -> {
-            if (attr.slot1.isPresent) {
-                ret = attr.slot1
-                attr.slot1 = Maybe.empty()
-                attr.artifactCount--
-            }
-        }
-        2 -> {
-            if (attr.slot2.isPresent) {
-                ret = attr.slot2
-                attr.slot2 = Maybe.empty()
-                attr.artifactCount--
-            }
-        }
-        3 -> {
-            if (attr.slot3.isPresent) {
-                ret = attr.slot3
-                attr.slot3 = Maybe.empty()
-                attr.artifactCount--
-            }
-        }
-        4 -> {
-            if (attr.slot4.isPresent) {
-                ret = attr.slot4
-                attr.slot4 = Maybe.empty()
-                attr.artifactCount--
-            }
-        }
-    }
-    return ret
+    return GameConfig.NUMBER_OF_ARTIFACT_SLOTS - attr.artifactCount
 }
 
 fun GameEntity<Player>.addArtifact(art : GameEntity<Artifact>) {
-    val placed = emplaceArtifact(art)
+    val attr = this.tryToFindAttribute(EntityArtifacts::class)
+    val placed = attr.emplaceArtifact(art)
     if (placed) {
         if (art.findAttribute(EntityHitpoints::class).isPresent) {
             val fraction = this.hp.toDouble() / this.maxHp
@@ -193,7 +134,8 @@ fun GameEntity<Player>.addArtifact(art : GameEntity<Artifact>) {
 }
 
 fun GameEntity<Player>.removeArtifact(artifactId : Int) : Maybe<GameEntity<Artifact>> {
-    var ret = displaceArtifact(artifactId)
+    val attr = this.tryToFindAttribute(EntityArtifacts::class)
+    var ret = attr.displaceArtifact(artifactId)
     if (ret.isPresent) {
         if (ret.get().findAttribute(EntityHitpoints::class).isPresent) {
             val fraction = this.hp.toDouble() / this.maxHp
@@ -203,6 +145,15 @@ fun GameEntity<Player>.removeArtifact(artifactId : Int) : Maybe<GameEntity<Artif
     }
     return ret
 }
+
+/** add teleport properties **/
+var AnyGameEntity.teleportPosition : Position3D
+    get() = this.tryToFindAttribute(TeleportPosition::class).teleportPosition
+    set(value) {
+        findAttribute(TeleportPosition::class).map {
+            it.teleportPosition = value
+        }
+    }
 
 /** add confusion spell properties **/
 var AnyGameEntity.confusionDuration : Int

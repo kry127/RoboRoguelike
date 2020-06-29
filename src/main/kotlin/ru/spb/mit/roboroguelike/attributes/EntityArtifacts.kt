@@ -87,4 +87,63 @@ class EntityArtifacts() : DisplayableAttribute {
                 addComponent(slot3label)
                 addComponent(slot4label)
             }
+
+    fun emplaceArtifact(art : GameEntity<Artifact>) : Boolean {
+        if (!slot1.isPresent) {
+            slot1 = Maybe.of(art)
+            artifactCount += 1
+            return true
+        }
+        if (!slot2.isPresent) {
+            slot2 = Maybe.of(art)
+            artifactCount += 1
+            return true
+        }
+        if (!slot3.isPresent) {
+            slot3 = Maybe.of(art)
+            artifactCount += 1
+            return true
+        }
+        if (!slot4.isPresent) {
+            slot4 = Maybe.of(art)
+            artifactCount += 1
+            return true
+        }
+        return false
+    }
+
+    fun displaceArtifact(artifactId : Int) : Maybe<GameEntity<Artifact>> {
+        var ret = Maybe.empty<GameEntity<Artifact>>()
+        when (artifactId) {
+            1 -> {
+                if (slot1.isPresent) {
+                    ret = slot1
+                    slot1 = Maybe.empty()
+                    artifactCount--
+                }
+            }
+            2 -> {
+                if (slot2.isPresent) {
+                    ret = slot2
+                    slot2 = Maybe.empty()
+                    artifactCount--
+                }
+            }
+            3 -> {
+                if (slot3.isPresent) {
+                    ret = slot3
+                    slot3 = Maybe.empty()
+                    artifactCount--
+                }
+            }
+            4 -> {
+                if (slot4.isPresent) {
+                    ret = slot4
+                    slot4 = Maybe.empty()
+                    artifactCount--
+                }
+            }
+        }
+        return ret
+    }
 }

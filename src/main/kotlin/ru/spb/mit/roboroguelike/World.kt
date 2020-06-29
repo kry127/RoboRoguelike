@@ -8,18 +8,13 @@ import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import org.hexworks.zircon.api.game.GameArea
 import org.hexworks.zircon.api.screen.Screen
-import org.hexworks.zircon.api.uievent.Processed
 import org.hexworks.zircon.api.uievent.UIEvent
-import ru.spb.mit.roboroguelike.Game
-import ru.spb.mit.roboroguelike.GameBlock
+import ru.spb.mit.roboroguelike.*
 import ru.spb.mit.roboroguelike.GameBlock.Companion.floor
-import ru.spb.mit.roboroguelike.GameContext
 import ru.spb.mit.roboroguelike.entities.AnyGameEntity
 import ru.spb.mit.roboroguelike.entities.EntityFactory
 import ru.spb.mit.roboroguelike.entities.position
 import ru.spb.mit.roboroguelike.objects.GameConfig
-import ru.spb.mit.roboroguelike.serialize
-import ru.spb.mit.roboroguelike.view.PlayView
 import java.io.ObjectOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,9 +39,14 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         }
     }
 
+    private val engine = Engines.newEngine<GameContext>()
+
     init {
         startingBlocks.forEach { (pos, block) ->
             setBlockAt(pos, block)
+            block.entities.forEach {
+                engine.addEntity(it)
+            }
         }
     }
 
@@ -58,8 +58,6 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     fun gameOver() {
         onGameOverCallback()
     }
-
-    private val engine = Engines.newEngine<GameContext>()
 
     fun update(screen: Screen, uiEvent: UIEvent, game: Game) {
         engine.update(GameContext(

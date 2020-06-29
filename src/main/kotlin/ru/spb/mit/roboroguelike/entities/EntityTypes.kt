@@ -38,5 +38,9 @@ object StatsArtifact: BaseEntityType(
 ), Artifact
 
 object HealthArtifact: BaseEntityType(
-        name = "stats-artifact"
+        name = "health-artifact"
 ), Artifact
+
+object UselessEntity: BaseEntityType (
+        name = "useless"
+)

@@ -8,6 +8,7 @@ import ru.spb.mit.roboroguelike.attributes.EntityHitpoints
 import ru.spb.mit.roboroguelike.attributes.EntityPrimaryStats
 import ru.spb.mit.roboroguelike.commands.Remove
 import ru.spb.mit.roboroguelike.entities.*
+import ru.spb.mit.roboroguelike.objects.GameConfig
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.exp
@@ -30,20 +31,41 @@ abstract class Mob : BaseBehavior<GameContext>() {
 
 
         if (sameDungeonLevel && (horizontalVicinity || verticalVicinity)) {
-            //TODO fight
-            var dropArtefact = true
-            if (entity.type.equals(AggressiveMob) || entity.type.equals(StaticMob)) {
+            // boolean to indicate we should drop artifact
+            var dropArtefact = false
+            // probability distribution of artifacts for attack|defence|hp|att+def|advancedhp
+            // 0 and 1 ommited on both ends
+            var chanceList : Array<Double> = arrayOf(0.2, 0.4, 0.6, 0.8)
+            player.hp -= reduceAttackByDefence(entity.attack, player.effectiveDefence);
+            if (player.hp <= 0) {
+                context.world.gameOver()
+            }
+            if (entity.type.equals(AggressiveMob)) {
+                val rand = Random.nextDouble()
+                if (rand < GameConfig.AGGRESSIVE_DROP_CHANCE) {
+                    // drop artefact chance
+                    dropArtefact = true
+                }
                 // entities that can fight
-                player.hp -= reduceAttackByDefence(entity.attack, player.effectiveDefence);
-                if (player.hp <= 0) {
-                    context.world.gameOver()
+            } else if (entity.type.equals(StaticMob)) {
+                val rand = Random.nextDouble()
+                if (rand < GameConfig.STATIC_DROP_CHANCE) {
+                    // drop artefact chance
+                    dropArtefact = true
+                    chanceList = arrayOf(0.03, 0.06, 0.1, 0.55)
                 }
             } else if (entity.type.equals(CowardMob)) {
                 // coward is not fighting, but has a chance to confuse an enemy
                 val rand = Random.nextDouble()
-                if (rand < 0.05) {
+                if (rand < GameConfig.COWARD_DROP_CHANCE) {
                     // drop artefact chance
                     dropArtefact = true
+                    chanceList = arrayOf(0.3, 0.6, 0.9, 0.95)
+                }
+
+                // confusion probabilities
+                if (rand < 0.05) {
+                    // nothing
                 } else if (rand < 0.50) {
                     player.confusionDuration += 5
                 } else if (rand < 0.80) {
@@ -59,20 +81,20 @@ abstract class Mob : BaseBehavior<GameContext>() {
                 entity.executeCommand(Remove(context, entity))
                 if (dropArtefact) {
                     val rand = Random.nextDouble()
-                    if (rand < 0.30) {
+                    if (rand < chanceList[0]) {
                         val artefact = EntityFactory.makePrimaryStatsArtefact(entity.position,
                                 EntityPrimaryStats((Random.nextInt(1, 4)), 0))
                         context.world.addEntity(artefact, entity.position)
-                    } else if (rand < 0.60) {
+                    } else if (rand < chanceList[1]) {
                         val artefact = EntityFactory.makePrimaryStatsArtefact(entity.position,
                                 EntityPrimaryStats(0, (Random.nextInt(1, 4))))
                         context.world.addEntity(artefact, entity.position)
-                    } else if (rand < 0.90) {
+                    } else if (rand < chanceList[2]) {
                         val hp = 25*(Random.nextInt(1, 4))
                         val artefact = EntityFactory.makeHealthArtefact(entity.position,
                                 EntityHitpoints(hp, hp))
                         context.world.addEntity(artefact, entity.position)
-                    } else if (rand < 0.95) {
+                    } else if (rand < chanceList[3]) {
                         val artefact = EntityFactory.makePrimaryStatsArtefact(entity.position,
                                 EntityPrimaryStats((Random.nextInt(2, 5)), Random.nextInt(2, 5)))
                         context.world.addEntity(artefact, entity.position)

@@ -10,16 +10,14 @@ import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.GameConfig
+import java.io.IOException
 import java.io.ObjectInputStream
 import java.nio.file.Paths
 import kotlin.random.Random
 
 class GameBuilder(val worldSize: Size3D) {
 
-    private val visibleSize = Sizes.create3DSize(
-            xLength = GameConfig.WINDOW_WIDTH - GameConfig.SIDEBAR_WIDTH,
-            yLength = GameConfig.WINDOW_HEIGHT - GameConfig.LOG_AREA_HEIGHT,
-            zLength = 1)
+    private val visibleSize = GameConfig.VISIBLE_SIZE
 
     lateinit var world : World
 
@@ -33,6 +31,7 @@ class GameBuilder(val worldSize: Size3D) {
         val player = addPlayer()
         (0..GameConfig.DUNGEON_LEVELS).forEach { level ->
             (1..200).forEach { _ ->
+                addAggressiveMob(level)
                 addAggressiveMob(level)
                 addCowardlyMob(level)
                 addStaticMob(level)
@@ -142,11 +141,11 @@ class GameBuilder(val worldSize: Size3D) {
 
 
         fun deserialize(inputStream: ObjectInputStream) : Game {
-            val player = EntityFactory.deserializePlayer(inputStream)
+            val player = EntityFactory.deserialize(inputStream)
             val world = WorldBuilder.deserializeBlocks(inputStream)
             inputStream.close()
 //            world.scrollTo3DPosition(player.position)
-            return GameBuilder(GameConfig.WORLD_SIZE).buildLoadedGame(world, player)
+            return GameBuilder(GameConfig.WORLD_SIZE).buildLoadedGame(world, player as GameEntity<Player>)
         }
     }
 }

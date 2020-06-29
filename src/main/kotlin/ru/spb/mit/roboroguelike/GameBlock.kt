@@ -49,6 +49,12 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
     fun serialize(outputStream : ObjectOutputStream) {
         outputStream.writeBoolean(isFloor)
         outputStream.writeBoolean(isWall)
+        // remember entities
+        val entities = currentEntities.filter {it.name != Player::name.get()}
+        outputStream.writeInt(entities.count())
+        entities.forEach {
+            it.serialize(outputStream)
+        }
     }
 
     companion object {
@@ -59,12 +65,20 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
         fun deserialize(inputStream: ObjectInputStream) : GameBlock {
             val isFloor = inputStream.readBoolean()
             val isWall = inputStream.readBoolean()
+
+            var gameBlock : GameBlock = GameBlock(TileTypes.EMPTY.tile)
             if (isFloor) {
-                return GameBlock()
+                gameBlock =  GameBlock()
             } else if (isWall) {
-                return GameBlock(TileTypes.WALL.tile)
+                gameBlock =  GameBlock(TileTypes.WALL.tile)
             }
-            return GameBlock(TileTypes.EMPTY.tile)
+
+            val entitiesCount = inputStream.readInt()
+            for (k in 0 until entitiesCount) {
+                val entity = EntityFactory.deserialize(inputStream)
+                gameBlock.addEntity(entity)
+            }
+            return gameBlock
         }
     }
 
@@ -107,7 +121,11 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
     fun getArtifact(atPosition : Position3D): Maybe<GameEntity<Artifact>> {
         return Maybe.ofNullable(
                 currentEntities.filterIsInstance<GameEntity<Artifact>>()
-                .find {it.position == atPosition }
+                .find {it.position == atPosition && (
+                        it.type.name == StatsArtifact::name.get()
+                        ||
+                        it.type.name == HealthArtifact::name.get()
+                        )}
         )
     }
 }
