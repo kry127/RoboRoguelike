@@ -1,27 +1,26 @@
 package ru.spb.mit.roboroguelike.attributes
 
 import org.hexworks.cobalt.databinding.api.Properties
-import org.hexworks.cobalt.databinding.api.createPropertyFrom
 import org.hexworks.cobalt.databinding.api.event.ChangeEvent
 import org.hexworks.cobalt.databinding.api.event.ChangeListener
 import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.Component
-import ru.spb.mit.roboroguelike.Game
 import ru.spb.mit.roboroguelike.entities.*
-import java.lang.Math.floor
-import java.lang.Math.sqrt
 
-class EntityArtifacts() : DisplayableAttribute {
-    var slot1 : Maybe<GameEntity<Artifact>> = Maybe.empty()
-    var slot2 : Maybe<GameEntity<Artifact>> = Maybe.empty()
-    var slot3 : Maybe<GameEntity<Artifact>> = Maybe.empty()
-    var slot4 : Maybe<GameEntity<Artifact>> = Maybe.empty()
+/**
+ * This class represents four slots of artifacts of the player
+ */
+class EntityArtifacts : DisplayableAttribute {
+    var slot1: Maybe<GameEntity<Artifact>> = Maybe.empty()
+    var slot2: Maybe<GameEntity<Artifact>> = Maybe.empty()
+    var slot3: Maybe<GameEntity<Artifact>> = Maybe.empty()
+    var slot4: Maybe<GameEntity<Artifact>> = Maybe.empty()
 
-    var artifactCountProp = Properties.propertyFrom(0)
-    var artifactCount : Int by artifactCountProp.asDelegate()
+    private var artifactCountProp = Properties.propertyFrom(0)
+    var artifactCount: Int by artifactCountProp.asDelegate()
 
-    private fun artifactDescription(container : Maybe<GameEntity<Artifact>>) : String {
+    private fun artifactDescription(container: Maybe<GameEntity<Artifact>>): String {
         if (!container.isPresent) {
             return "empty"
         }
@@ -36,7 +35,7 @@ class EntityArtifacts() : DisplayableAttribute {
         return result
     }
 
-    override fun toComponent(width: Int) : Component =Components.panel()
+    override fun toComponent(width: Int): Component = Components.panel()
             .withSize(width, 6)
             .build().apply {
 
@@ -48,32 +47,32 @@ class EntityArtifacts() : DisplayableAttribute {
 
                 val slot1label = Components.label()
                         .withSize(width, 1)
-                        .withPosition(0, 0)
+                        .withPosition(0, 1)
                         .build()
 
                 val slot2label = Components.label()
                         .withSize(width, 1)
-                        .withPosition(0, 1)
+                        .withPosition(0, 2)
                         .build()
 
                 val slot3label = Components.label()
                         .withSize(width, 1)
-                        .withPosition(0, 2)
+                        .withPosition(0, 3)
                         .build()
 
                 val slot4label = Components.label()
                         .withSize(width, 1)
-                        .withPosition(0, 3)
+                        .withPosition(0, 4)
                         .build()
 
                 fun update() {
-                    slot1label.text = "#1:" + artifactDescription(slot1);
-                    slot2label.text = "#2:" + artifactDescription(slot2);
-                    slot3label.text = "#3:" + artifactDescription(slot3);
-                    slot4label.text = "#4:" + artifactDescription(slot4);
+                    slot1label.text = "#1:" + artifactDescription(slot1)
+                    slot2label.text = "#2:" + artifactDescription(slot2)
+                    slot3label.text = "#3:" + artifactDescription(slot3)
+                    slot4label.text = "#4:" + artifactDescription(slot4)
                 }
 
-                val changeEventListener : ChangeListener<Int> = object : ChangeListener<Int> {
+                val changeEventListener: ChangeListener<Int> = object : ChangeListener<Int> {
                     override fun onChange(changeEvent: ChangeEvent<Int>) {
                         update()
                     }
@@ -82,13 +81,17 @@ class EntityArtifacts() : DisplayableAttribute {
                 artifactCountProp.onChange(changeEventListener)
                 update()
 
+                addComponent(title)
                 addComponent(slot1label)
                 addComponent(slot2label)
                 addComponent(slot3label)
                 addComponent(slot4label)
             }
 
-    fun emplaceArtifact(art : GameEntity<Artifact>) : Boolean {
+    /**
+     * This method adds artefact (represented as game entity) to the player's inventory
+     */
+    fun emplaceArtifact(art: GameEntity<Artifact>): Boolean {
         if (!slot1.isPresent) {
             slot1 = Maybe.of(art)
             artifactCount += 1
@@ -112,7 +115,10 @@ class EntityArtifacts() : DisplayableAttribute {
         return false
     }
 
-    fun displaceArtifact(artifactId : Int) : Maybe<GameEntity<Artifact>> {
+    /**
+     * This method removes artefact (represented as game entity) from the player's inventory
+     */
+    fun displaceArtifact(artifactId: Int): Maybe<GameEntity<Artifact>> {
         var ret = Maybe.empty<GameEntity<Artifact>>()
         when (artifactId) {
             1 -> {

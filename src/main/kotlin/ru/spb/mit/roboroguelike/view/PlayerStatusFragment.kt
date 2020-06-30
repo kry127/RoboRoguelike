@@ -1,17 +1,21 @@
 package ru.spb.mit.roboroguelike.view
 
-import ru.spb.mit.roboroguelike.attributes.DisplayableAttribute
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.ComponentAlignment
 import org.hexworks.zircon.api.component.Fragment
 import ru.spb.mit.roboroguelike.Game
+import ru.spb.mit.roboroguelike.attributes.DisplayableAttribute
 import ru.spb.mit.roboroguelike.attributes.EntityPosition
 import ru.spb.mit.roboroguelike.entities.LadderDown
 import ru.spb.mit.roboroguelike.entities.tryToFindAttribute
 
+/**
+ * This class represents vertical panel for describing players attributes. This panel gets
+ * integrated into the whole screen
+ */
 class PlayerStatusFragment(
         width: Int,
-        game : Game) : Fragment {
+        game: Game) : Fragment {
 
     override val root = Components.panel()
             .withSize(width, 30)
@@ -35,12 +39,14 @@ class PlayerStatusFragment(
 
                 // find cell with teleport and display it's position
                 val cellWithTeleport = game.world.fetchBlocksAtLevel(game.world.currentLevel)
-                        .firstOrNull { cell -> cell.component2().entities.find {
-                            entity->entity.type.equals(LadderDown)
-                        } != null }
+                        .firstOrNull { cell ->
+                            cell.component2().entities.find { entity ->
+                                entity.type == LadderDown
+                            } != null
+                        }
                 if (cellWithTeleport != null) {
-                    val teleportEntity = cellWithTeleport.component2().entities.find {
-                        entity -> entity.type.equals(LadderDown)
+                    val teleportEntity = cellWithTeleport.component2().entities.find { entity ->
+                        entity.type == LadderDown
                     }
                     if (teleportEntity != null) {
                         val attribute2 = teleportEntity.tryToFindAttribute(EntityPosition::class)

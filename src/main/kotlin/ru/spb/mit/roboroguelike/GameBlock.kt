@@ -6,51 +6,52 @@ import org.hexworks.zircon.api.data.BlockSide
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.base.BlockBase
 import org.hexworks.zircon.api.data.impl.Position3D
-import ru.spb.mit.roboroguelike.attributes.DisplayableAttribute
 import ru.spb.mit.roboroguelike.attributes.TeleportPosition
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.TileTypes
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.rmi.activation.ActivationGroup
 
+/**
+ * GameBlock -- is a special entity, which has unique coordinates and serves
+ * as a container for entities. Movable entities can transcend game blockes and
+ * move around the ru.spb.mit.roboroguelike.World.
+ */
 class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
                 private val currentEntities: MutableList<GameEntity<EntityType>>
                 = mutableListOf())
     : BlockBase<Tile>() {
 
-    val isFloor: Boolean
+    private val isFloor: Boolean
         get() = defaultTile == TileTypes.FLOOR.tile
 
-    val isWall: Boolean
+    private val isWall: Boolean
         get() = defaultTile == TileTypes.WALL.tile
 
     val isOccupied: Boolean
         get() = !isFloor //|| currentEntities.size > 0
 
     val isMob: Boolean
-        get() = currentEntities.find {
-            entity ->
+        get() = currentEntities.find { entity ->
             entity.type == AggressiveMob || entity.type == StaticMob || entity.type == CowardMob
         } != null
 
     val isPlayer: Boolean
-        get() = currentEntities.find {
-            entity ->
+        get() = currentEntities.find { entity ->
             entity.type == Player
         } != null
 
-   // val isMob: Boolean
-   //     get() = defaultTile == TileTypes.MOB
+    // val isMob: Boolean
+    //     get() = defaultTile == TileTypes.MOB
 
     val entities: List<GameEntity<EntityType>>
         get() = currentEntities.toList()
 
-    fun serialize(outputStream : ObjectOutputStream) {
+    fun serialize(outputStream: ObjectOutputStream) {
         outputStream.writeBoolean(isFloor)
         outputStream.writeBoolean(isWall)
         // remember entities
-        val entities = currentEntities.filter {it.name != Player::name.get()}
+        val entities = currentEntities.filter { it.name != Player::name.get() }
         outputStream.writeInt(entities.count())
         entities.forEach {
             it.serialize(outputStream)
@@ -62,15 +63,15 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
 
         fun wall() = GameBlock(TileTypes.WALL.tile)
 
-        fun deserialize(inputStream: ObjectInputStream) : GameBlock {
+        fun deserialize(inputStream: ObjectInputStream): GameBlock {
             val isFloor = inputStream.readBoolean()
             val isWall = inputStream.readBoolean()
 
-            var gameBlock : GameBlock = GameBlock(TileTypes.EMPTY.tile)
+            var gameBlock = GameBlock(TileTypes.EMPTY.tile)
             if (isFloor) {
-                gameBlock =  GameBlock()
+                gameBlock = GameBlock()
             } else if (isWall) {
-                gameBlock =  GameBlock(TileTypes.WALL.tile)
+                gameBlock = GameBlock(TileTypes.WALL.tile)
             }
 
             val entitiesCount = inputStream.readInt()
@@ -118,14 +119,16 @@ class GameBlock(private var defaultTile: Tile = TileTypes.FLOOR.tile,
     }
 
 
-    fun getArtifact(atPosition : Position3D): Maybe<GameEntity<Artifact>> {
+    fun getArtifact(atPosition: Position3D): Maybe<GameEntity<Artifact>> {
         return Maybe.ofNullable(
                 currentEntities.filterIsInstance<GameEntity<Artifact>>()
-                .find {it.position == atPosition && (
-                        it.type.name == StatsArtifact::name.get()
-                        ||
-                        it.type.name == HealthArtifact::name.get()
-                        )}
+                        .find {
+                            it.position == atPosition && (
+                                    it.type.name == StatsArtifact::name.get()
+                                            ||
+                                            it.type.name == HealthArtifact::name.get()
+                                    )
+                        }
         )
     }
 }

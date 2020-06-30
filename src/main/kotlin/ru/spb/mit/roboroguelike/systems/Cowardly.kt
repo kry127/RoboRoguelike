@@ -9,7 +9,11 @@ import ru.spb.mit.roboroguelike.commands.MoveTo
 import ru.spb.mit.roboroguelike.entities.GameEntity
 import ru.spb.mit.roboroguelike.entities.position
 import kotlin.math.abs
+import kotlin.math.sqrt
 
+/**
+ * This class describes behaviour of a coward mob
+ */
 class Cowardly : Mob() {
 
     override fun update(entity: GameEntity<out EntityType>, context: GameContext): Boolean {
@@ -22,7 +26,7 @@ class Cowardly : Mob() {
             fun handle(): Position3D {
                 val x = currentPos.x - playerPos.x
                 val y = currentPos.y - playerPos.y
-                val l = Math.sqrt(x.toDouble() * x.toDouble() + y.toDouble() * y.toDouble())
+                val l = sqrt(x.toDouble() * x.toDouble() + y.toDouble() * y.toDouble())
                 val xNorm = x.toDouble() / l
                 val yNorm = y.toDouble() / l
                 if (abs(xNorm) > abs(yNorm)) {

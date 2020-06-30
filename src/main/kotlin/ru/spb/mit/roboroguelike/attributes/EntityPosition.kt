@@ -8,23 +8,18 @@ import org.hexworks.zircon.api.Tiles
 import org.hexworks.zircon.api.component.Component
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.impl.Position3D
-import org.hexworks.zircon.api.uievent.KeyCode
-import org.hexworks.zircon.api.uievent.KeyboardEvent
-import org.hexworks.zircon.api.uievent.UIEvent
-import ru.spb.mit.roboroguelike.GameContext
-import ru.spb.mit.roboroguelike.entities.GameEntity
-import ru.spb.mit.roboroguelike.entities.Player
-import ru.spb.mit.roboroguelike.entities.position
-import ru.spb.mit.roboroguelike.entities.tryTeleportation
 
 data class EntityTile(val tile: Tile = Tiles.empty()) : Attribute
 
+/**
+ * An essential attribute to describe position of every entity in the game
+ */
 class EntityPosition(initialPosition: Position3D = Position3D.unknown()) : DisplayableAttribute {
     private val positionProperty = createPropertyFrom(initialPosition)
 
     var position: Position3D by positionProperty.asDelegate()
 
-    override fun toComponent(width: Int) : Component = Components.panel()
+    override fun toComponent(width: Int): Component = Components.panel()
             .withSize(width, 4)
             .build().apply {
 
@@ -48,21 +43,21 @@ class EntityPosition(initialPosition: Position3D = Position3D.unknown()) : Displ
 
                 positionLabelX.textProperty.bind(positionProperty, object : Converter<Position3D, String> {
                     override fun convert(source: Position3D): String {
-                        return "Pos: x=" + source.x;
+                        return "Pos: x=" + source.x
                     }
 
                 })
 
                 positionLabelY.textProperty.bind(positionProperty, object : Converter<Position3D, String> {
                     override fun convert(source: Position3D): String {
-                        return "     y=" + source.y;
+                        return "     y=" + source.y
                     }
 
                 })
 
                 positionLabelZ.textProperty.bind(positionProperty, object : Converter<Position3D, String> {
                     override fun convert(source: Position3D): String {
-                        return "     z=" + source.z;
+                        return "     z=" + source.z
                     }
 
                 })

@@ -1,6 +1,18 @@
+/**
+ * This file describes key entity types in the game world.
+ * The 'name' attribute should be unique, it is identifier of the type
+ * of the entity during serialization/deserialization procedure.
+ */
+
 package ru.spb.mit.roboroguelike.entities
 
 import org.hexworks.amethyst.api.base.BaseEntityType
+import org.hexworks.amethyst.api.entity.EntityType
+
+
+interface Artifact : EntityType
+interface HealthBox : EntityType
+interface Teleport : EntityType
 
 object Player : BaseEntityType(
         name = "player")
@@ -14,33 +26,26 @@ object CowardMob : BaseEntityType(
 object StaticMob : BaseEntityType(
         name = "static-mob")
 
-object Wall : BaseEntityType(
-        name = "wall")
-
-object LadderUp: BaseEntityType (
+object LadderUp : BaseEntityType(
         name = "LadderUp"
 ), Teleport
 
-object LadderDown: BaseEntityType(
+object LadderDown : BaseEntityType(
         name = "LadderDown"
 ), Teleport
 
-object RegularHealthBox: BaseEntityType(
+object RegularHealthBox : BaseEntityType(
         name = "regular-health-box"
 ), HealthBox
 
-object SuperHealthBox: BaseEntityType(
+object SuperHealthBox : BaseEntityType(
         name = "super-health-box"
 ), HealthBox
 
-object StatsArtifact: BaseEntityType(
+object StatsArtifact : BaseEntityType(
         name = "stats-artifact"
 ), Artifact
 
-object HealthArtifact: BaseEntityType(
+object HealthArtifact : BaseEntityType(
         name = "health-artifact"
 ), Artifact
-
-object UselessEntity: BaseEntityType (
-        name = "useless"
-)

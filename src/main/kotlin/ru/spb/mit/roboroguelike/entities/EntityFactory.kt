@@ -8,15 +8,14 @@ import ru.spb.mit.roboroguelike.attributes.*
 import ru.spb.mit.roboroguelike.deserialize
 import ru.spb.mit.roboroguelike.deserializeSlot
 import ru.spb.mit.roboroguelike.objects.TileTypes
-import ru.spb.mit.roboroguelike.systems.CameraMover
-import ru.spb.mit.roboroguelike.systems.InputReceiver
-import ru.spb.mit.roboroguelike.systems.Movable
-import ru.spb.mit.roboroguelike.systems.TeleportableEntity
 import ru.spb.mit.roboroguelike.systems.*
+import java.io.IOException
 import java.io.ObjectInputStream
-import java.lang.RuntimeException
 
-
+/**
+ * This is an entity factory. It is responsible for typical object creation with or without parameters,
+ * plus object deserialization from the object stream.
+ */
 object EntityFactory {
 
     fun makePlayer() = newEntityOfType<Player, GameContext>(Player) {
@@ -82,47 +81,47 @@ object EntityFactory {
     }
 
     // health boxes
-    fun makeHealthBoxLite(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
-        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_LITE.tile),
+    fun makeHealthBoxLite(position: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
+        attributes(EntityPosition(position), EntityTile(TileTypes.HEALTH_BOX_LITE.tile),
                 EntityHitpoints(5, 5))
         facets(Consumable())
     }
 
-    fun makeHealthBoxMedium(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
-        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_MEDIUM.tile),
+    fun makeHealthBoxMedium(position: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
+        attributes(EntityPosition(position), EntityTile(TileTypes.HEALTH_BOX_MEDIUM.tile),
                 EntityHitpoints(25, 25))
         facets(Consumable())
     }
 
-    fun makeHealthBoxHeavy(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
-        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_HEAVY.tile),
+    fun makeHealthBoxHeavy(position: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(RegularHealthBox) {
+        attributes(EntityPosition(position), EntityTile(TileTypes.HEALTH_BOX_HEAVY.tile),
                 EntityHitpoints(50, 50))
         facets(Consumable())
     }
 
-    fun makeHealthBoxMega(healthBoxPosition: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(SuperHealthBox) {
-        attributes(EntityPosition(), EntityTile(TileTypes.HEALTH_BOX_MEGA.tile),
+    fun makeHealthBoxMega(position: Position3D = Position3D.unknown()) = newEntityOfType<HealthBox, GameContext>(SuperHealthBox) {
+        attributes(EntityPosition(position), EntityTile(TileTypes.HEALTH_BOX_MEGA.tile),
                 EntityHitpoints(100, 100))
         facets(Consumable())
     }
     // end health boxes
 
     // make artefacts
-    fun makePrimaryStatsArtefact(healthBoxPosition: Position3D = Position3D.unknown(), stats: EntityPrimaryStats) = newEntityOfType<Artifact, GameContext>(StatsArtifact) {
-        attributes(EntityPosition(), EntityTile(TileTypes.ARTIFACT.tile),
+    fun makePrimaryStatsArtefact(position: Position3D = Position3D.unknown(), stats: EntityPrimaryStats) = newEntityOfType<Artifact, GameContext>(StatsArtifact) {
+        attributes(EntityPosition(position), EntityTile(TileTypes.ARTIFACT.tile),
                 stats)
     }
 
-    fun makeHealthArtefact(healthBoxPosition: Position3D = Position3D.unknown(), hp: EntityHitpoints) = newEntityOfType<Artifact, GameContext>(HealthArtifact) {
-        attributes(EntityPosition(), EntityTile(TileTypes.ARTIFACT.tile),
+    fun makeHealthArtefact(position: Position3D = Position3D.unknown(), hp: EntityHitpoints) = newEntityOfType<Artifact, GameContext>(HealthArtifact) {
+        attributes(EntityPosition(position), EntityTile(TileTypes.ARTIFACT.tile),
                 hp)
     }
 
-    fun deserialize(inputStream : ObjectInputStream) : AnyGameEntity {
+    fun deserialize(inputStream: ObjectInputStream): AnyGameEntity {
         val name = inputStream.readUTF()
         val position = Position3D.deserialize(inputStream)
         return when (name) {
-            Player::name.get() -> newEntityOfType<Player, GameContext>(Player) {
+            Player::name.get() -> newEntityOfType(Player) {
                 val maxHp = inputStream.readInt()
                 val hp = inputStream.readInt()
                 val attack = inputStream.readInt()
@@ -140,10 +139,10 @@ object EntityFactory {
                 }
 
                 val artifacts = EntityArtifacts()
-                deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
-                deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
-                deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
-                deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
+                deserializeSlot(inputStream).map { artifacts.emplaceArtifact(it) }
+                deserializeSlot(inputStream).map { artifacts.emplaceArtifact(it) }
+                deserializeSlot(inputStream).map { artifacts.emplaceArtifact(it) }
+                deserializeSlot(inputStream).map { artifacts.emplaceArtifact(it) }
 
                 attributes(EntityPosition(position), EntityTile(TileTypes.PLAYER.tile),
                         hitpoints, stats, entityExp
@@ -151,7 +150,7 @@ object EntityFactory {
                 behaviors(InputReceiver())
                 facets(Movable(), CameraMover(), TeleportableEntity(), ArtifactTaker())
             }
-            AggressiveMob::name.get() -> newEntityOfType<AggressiveMob, GameContext>(AggressiveMob) {
+            AggressiveMob::name.get() -> newEntityOfType(AggressiveMob) {
                 val maxHp = inputStream.readInt()
                 val hp = inputStream.readInt()
                 val attack = inputStream.readInt()
@@ -165,7 +164,7 @@ object EntityFactory {
                 behaviors(Aggressive())
                 facets(Movable(), Attackable())
             }
-            CowardMob::name.get() -> newEntityOfType<CowardMob, GameContext>(CowardMob) {
+            CowardMob::name.get() -> newEntityOfType(CowardMob) {
                 val maxHp = inputStream.readInt()
                 val hp = inputStream.readInt()
                 val attack = inputStream.readInt()
@@ -179,7 +178,7 @@ object EntityFactory {
                 behaviors(Cowardly())
                 facets(Movable(), Attackable())
             }
-            StaticMob::name.get() -> newEntityOfType<StaticMob, GameContext>(StaticMob) {
+            StaticMob::name.get() -> newEntityOfType(StaticMob) {
                 val maxHp = inputStream.readInt()
                 val hp = inputStream.readInt()
                 val attack = inputStream.readInt()
@@ -193,7 +192,7 @@ object EntityFactory {
                 behaviors(Static())
                 facets(Movable(), Attackable())
             }
-            LadderUp::name.get() -> newEntityOfType<LadderUp, GameContext>(LadderUp) {
+            LadderUp::name.get() -> newEntityOfType(LadderUp) {
                 val teleportPosition = Position3D.deserialize(inputStream)
 
                 attributes(
@@ -201,7 +200,7 @@ object EntityFactory {
                         EntityTile(TileTypes.LADDER_UP.tile),
                         TeleportPosition(teleportPosition))
             }
-            LadderDown::name.get() -> newEntityOfType<LadderDown, GameContext>(LadderDown) {
+            LadderDown::name.get() -> newEntityOfType(LadderDown) {
                 val teleportPosition = Position3D.deserialize(inputStream)
 
                 attributes(
@@ -225,7 +224,7 @@ object EntityFactory {
                 facets(Consumable())
             }
             SuperHealthBox::name.get() -> newEntityOfType<HealthBox, GameContext>(SuperHealthBox) {
-                val tileType = inputStream.readInt()
+                inputStream.readInt()
                 val hp = inputStream.readInt()
 
                 attributes(EntityPosition(position), EntityTile(TileTypes.HEALTH_BOX_MEGA.tile),
@@ -245,43 +244,9 @@ object EntityFactory {
                 attributes(EntityPosition(position), EntityTile(TileTypes.ARTIFACT.tile),
                         EntityPrimaryStats(attack, defence))
             }
-            else -> newEntityOfType<UselessEntity, GameContext>(UselessEntity) {
-                attributes(EntityPosition(position))
-            }
+            else -> throw IOException("Unknown entity type to deserialize")
 
         }
 
-    }
-
-
-    fun deserializePlayer(inputStream : ObjectInputStream) = newEntityOfType<Player, GameContext>(Player) {
-        val position = Position3D.deserialize(inputStream)
-        val maxHp = inputStream.readInt()
-        val hp = inputStream.readInt()
-        val attack = inputStream.readInt()
-        val defence = inputStream.readInt()
-        val experience = inputStream.readInt()
-        val confusion = inputStream.readInt()
-
-        val hitpoints = EntityHitpoints(maxHp, hp)
-        val stats = EntityPrimaryStats(attack, defence)
-        val entityExp = EntityExperience(experience)
-
-        entityExp.setOnLevelUpListener {
-            hitpoints.onLevelUp(it)
-            stats.onLevelUp(it)
-        }
-
-        val artifacts = EntityArtifacts()
-        deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
-        deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
-        deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
-        deserializeSlot(inputStream).map {artifacts.emplaceArtifact(it)}
-
-        attributes(EntityPosition(position), EntityTile(TileTypes.PLAYER.tile),
-                hitpoints, stats, entityExp
-                , ConfusionSpell(confusion), artifacts)
-        behaviors(InputReceiver())
-        facets(Movable(), CameraMover(), TeleportableEntity(), ArtifactTaker())
     }
 }

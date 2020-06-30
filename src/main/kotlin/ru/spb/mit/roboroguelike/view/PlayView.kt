@@ -18,6 +18,9 @@ import ru.spb.mit.roboroguelike.GameBlock
 import ru.spb.mit.roboroguelike.GameBuilder
 import ru.spb.mit.roboroguelike.objects.GameConfig
 
+/**
+ * This is the main composition of the screen during game.
+ */
 class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() {
 
     override val theme = ColorThemes.afterglow()
@@ -72,7 +75,7 @@ class PlayView(private val game: Game = GameBuilder.defaultGame()) : BaseView() 
                 .withAlignmentWithin(screen, ComponentAlignment.TOP_RIGHT)
                 .build()
 
-        game.world.onGameOver() {
+        game.world.onGameOver {
             replaceWith(EndgameMessageView("game over"))
             close()
             Processed

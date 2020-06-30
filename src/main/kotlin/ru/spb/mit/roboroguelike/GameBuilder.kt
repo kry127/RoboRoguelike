@@ -1,27 +1,26 @@
-
 package ru.spb.mit.roboroguelike
 
-import World
 import org.hexworks.amethyst.api.entity.Entity
 import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.cobalt.datatypes.extensions.orElseGet
-import org.hexworks.zircon.api.Sizes
 import org.hexworks.zircon.api.data.impl.Position3D
 import org.hexworks.zircon.api.data.impl.Size3D
 import ru.spb.mit.roboroguelike.entities.*
 import ru.spb.mit.roboroguelike.objects.GameConfig
-import java.io.IOException
 import java.io.ObjectInputStream
 import java.nio.file.Paths
 import kotlin.random.Random
 
+/**
+ * This is a factory class for building `Game` class
+ **/
 class GameBuilder(val worldSize: Size3D) {
 
     private val visibleSize = GameConfig.VISIBLE_SIZE
 
-    lateinit var world : World
+    lateinit var world: World
 
-    fun buildGeneratedGame() : Game {
+    fun buildGeneratedGame(): Game {
         world = WorldBuilder(worldSize)
                 .makeRooms()
                 .build(visibleSize = visibleSize)
@@ -43,7 +42,7 @@ class GameBuilder(val worldSize: Size3D) {
                 player = player)
     }
 
-    fun buildLoadedGame(world : World, player : GameEntity<Player>): Game {
+    fun buildLoadedGame(world: World, player: GameEntity<Player>): Game {
         this.world = world
         prepareWorld()
         world.addEntity(player, player.position)
@@ -61,7 +60,8 @@ class GameBuilder(val worldSize: Size3D) {
         var position = world.searchForEmptyRandomPosition(
                 fixedZ = Maybe.of(world.currentLevel)
         ).orElseGet {
-            Position3D.defaultPosition() }
+            Position3D.defaultPosition()
+        }
         position = position.withZ(world.currentLevel)
         val player = EntityFactory.makePlayer()
         world.addEntity(player, position)
@@ -77,9 +77,10 @@ class GameBuilder(val worldSize: Size3D) {
 
     private fun addAggressiveMob(level: Int = world.currentLevel): GameEntity<AggressiveMob> {
         var position = world.searchForEmptyRandomPosition(
-            fixedZ = Maybe.of(level)
+                fixedZ = Maybe.of(level)
         ).orElseGet {
-            Position3D.defaultPosition() }
+            Position3D.defaultPosition()
+        }
         position = position.withZ(level)
         val mob = EntityFactory.makeAggressiveMob()
         world.addEntity(mob, position)
@@ -90,7 +91,8 @@ class GameBuilder(val worldSize: Size3D) {
         var position = world.searchForEmptyRandomPosition(
                 fixedZ = Maybe.of(level)
         ).orElseGet {
-            Position3D.defaultPosition() }
+            Position3D.defaultPosition()
+        }
         position = position.withZ(level)
         val mob = EntityFactory.makeCowardlyMob()
         world.addEntity(mob, position)
@@ -101,7 +103,8 @@ class GameBuilder(val worldSize: Size3D) {
         var position = world.searchForEmptyRandomPosition(
                 fixedZ = Maybe.of(level)
         ).orElseGet {
-            Position3D.defaultPosition() }
+            Position3D.defaultPosition()
+        }
         position = position.withZ(level)
         val mob = EntityFactory.makeStaticMob()
         world.addEntity(mob, position)
@@ -109,15 +112,15 @@ class GameBuilder(val worldSize: Size3D) {
     }
 
 
-
     private fun addHealthBox(level: Int = world.currentLevel): GameEntity<HealthBox> {
         var position = world.searchForEmptyRandomPosition(
                 fixedZ = Maybe.of(level)
         ).orElseGet {
-            Position3D.defaultPosition() }
+            Position3D.defaultPosition()
+        }
         position = position.withZ(level)
-        var hpBox : Entity<HealthBox, GameContext>? = null
-        val rand= Random.nextDouble()
+        val hpBox: Entity<HealthBox, GameContext>?
+        val rand = Random.nextDouble()
         if (rand < 0.4) {
             hpBox = EntityFactory.makeHealthBoxLite(position)
         } else if (rand < 0.7) {
@@ -140,7 +143,7 @@ class GameBuilder(val worldSize: Size3D) {
         fun loadGame() = deserialize(ObjectInputStream(Paths.get(GameConfig.SAVE_FILE_PATH).toFile().inputStream()))
 
 
-        fun deserialize(inputStream: ObjectInputStream) : Game {
+        fun deserialize(inputStream: ObjectInputStream): Game {
             val player = EntityFactory.deserialize(inputStream)
             val world = WorldBuilder.deserializeBlocks(inputStream)
             inputStream.close()

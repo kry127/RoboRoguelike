@@ -1,3 +1,8 @@
+/**
+ * This file mostly contains entity extension, which enables you to
+ * access different properties of attributes as explicit field of the entity
+ */
+
 package ru.spb.mit.roboroguelike.entities
 
 import org.hexworks.amethyst.api.Attribute
@@ -18,9 +23,7 @@ import kotlin.math.ceil
 import kotlin.random.Random
 import kotlin.reflect.KClass
 
-/**
- * Здесь происходит проброс атрибутов непосредственно в Property объекта
- */
+/** add position properties**/
 
 var AnyGameEntity.position
     get() = tryToFindAttribute(EntityPosition::class).position
@@ -34,7 +37,7 @@ val AnyGameEntity.tile: Tile
     get() = this.tryToFindAttribute(EntityTile::class).tile
 
 /** add HP properties **/
-var AnyGameEntity.hp : Int
+var AnyGameEntity.hp: Int
     get() = this.tryToFindAttribute(EntityHitpoints::class).hp
     set(value) {
         findAttribute(EntityHitpoints::class).map {
@@ -42,7 +45,7 @@ var AnyGameEntity.hp : Int
         }
     }
 
-var AnyGameEntity.maxHp : Int
+var AnyGameEntity.maxHp: Int
     get() = this.tryToFindAttribute(EntityHitpoints::class).maxHp
     set(value) {
         findAttribute(EntityHitpoints::class).map {
@@ -51,7 +54,7 @@ var AnyGameEntity.maxHp : Int
     }
 
 /** add Exp properties **/
-var AnyGameEntity.xp : Int
+var AnyGameEntity.xp: Int
     get() = this.tryToFindAttribute(EntityExperience::class).xp
     set(value) {
         findAttribute(EntityExperience::class).map {
@@ -61,14 +64,14 @@ var AnyGameEntity.xp : Int
 
 
 /** add attack and defence properties **/
-var AnyGameEntity.attack : Int
+var AnyGameEntity.attack: Int
     get() = this.tryToFindAttribute(EntityPrimaryStats::class).attack
     set(value) {
         findAttribute(EntityPrimaryStats::class).map {
             it.attack = value
         }
     }
-var AnyGameEntity.defence : Int
+var AnyGameEntity.defence: Int
     get() = this.tryToFindAttribute(EntityPrimaryStats::class).defence
     set(value) {
         findAttribute(EntityPrimaryStats::class).map {
@@ -76,11 +79,11 @@ var AnyGameEntity.defence : Int
         }
     }
 
-val GameEntity<Player>.artifactAttack : Int
+val GameEntity<Player>.artifactAttack: Int
     get() {
         var ret = 0
         val attr = this.tryToFindAttribute(EntityArtifacts::class)
-        fun slotAccumulate(slot : Maybe<GameEntity<Artifact>>) {
+        fun slotAccumulate(slot: Maybe<GameEntity<Artifact>>) {
             if (slot.isPresent && slot.get().findAttribute(EntityPrimaryStats::class).isPresent) {
                 ret += slot.get().attack
             }
@@ -92,11 +95,11 @@ val GameEntity<Player>.artifactAttack : Int
         return ret
     }
 
-val GameEntity<Player>.artifactDefence : Int
+val GameEntity<Player>.artifactDefence: Int
     get() {
         var ret = 0
         val attr = this.tryToFindAttribute(EntityArtifacts::class)
-        fun slotAccumulate(slot : Maybe<GameEntity<Artifact>>) {
+        fun slotAccumulate(slot: Maybe<GameEntity<Artifact>>) {
             if (slot.isPresent && slot.get().findAttribute(EntityPrimaryStats::class).isPresent) {
                 ret += slot.get().defence
             }
@@ -108,19 +111,19 @@ val GameEntity<Player>.artifactDefence : Int
         return ret
     }
 
-val GameEntity<Player>.effectiveAttack : Int
+val GameEntity<Player>.effectiveAttack: Int
     get() = this.attack + this.artifactAttack
 
-val GameEntity<Player>.effectiveDefence : Int
+val GameEntity<Player>.effectiveDefence: Int
     get() = this.defence + this.artifactDefence
 
 /** add artifacts extensions **/
-fun GameEntity<Player>.freeArtifactSlotsCount() : Int {
+fun GameEntity<Player>.freeArtifactSlotsCount(): Int {
     val attr = this.tryToFindAttribute(EntityArtifacts::class)
     return GameConfig.NUMBER_OF_ARTIFACT_SLOTS - attr.artifactCount
 }
 
-fun GameEntity<Player>.addArtifact(art : GameEntity<Artifact>) {
+fun GameEntity<Player>.addArtifact(art: GameEntity<Artifact>) {
     val attr = this.tryToFindAttribute(EntityArtifacts::class)
     val placed = attr.emplaceArtifact(art)
     if (placed) {
@@ -133,9 +136,9 @@ fun GameEntity<Player>.addArtifact(art : GameEntity<Artifact>) {
     }
 }
 
-fun GameEntity<Player>.removeArtifact(artifactId : Int) : Maybe<GameEntity<Artifact>> {
+fun GameEntity<Player>.removeArtifact(artifactId: Int): Maybe<GameEntity<Artifact>> {
     val attr = this.tryToFindAttribute(EntityArtifacts::class)
-    var ret = attr.displaceArtifact(artifactId)
+    val ret = attr.displaceArtifact(artifactId)
     if (ret.isPresent) {
         if (ret.get().findAttribute(EntityHitpoints::class).isPresent) {
             val fraction = this.hp.toDouble() / this.maxHp
@@ -147,7 +150,7 @@ fun GameEntity<Player>.removeArtifact(artifactId : Int) : Maybe<GameEntity<Artif
 }
 
 /** add teleport properties **/
-var AnyGameEntity.teleportPosition : Position3D
+var AnyGameEntity.teleportPosition: Position3D
     get() = this.tryToFindAttribute(TeleportPosition::class).teleportPosition
     set(value) {
         findAttribute(TeleportPosition::class).map {
@@ -156,18 +159,18 @@ var AnyGameEntity.teleportPosition : Position3D
     }
 
 /** add confusion spell properties **/
-var AnyGameEntity.confusionDuration : Int
-get() = this.tryToFindAttribute(ConfusionSpell::class).confusionDuration
-set(value) {
-    findAttribute(ConfusionSpell::class).map {
-        it.confusionDuration = value
+var AnyGameEntity.confusionDuration: Int
+    get() = this.tryToFindAttribute(ConfusionSpell::class).confusionDuration
+    set(value) {
+        findAttribute(ConfusionSpell::class).map {
+            it.confusionDuration = value
+        }
     }
-}
 
 /** add decoration of player movement decision affected by confusion spell **/
-fun GameEntity<Player>.getNextPositionFromUIEvent(uie : KeyboardEvent, context: GameContext) : Position3D {
+fun GameEntity<Player>.getNextPositionFromUIEvent(uie: KeyboardEvent, context: GameContext): Position3D {
     val code = if (this.confusionDuration > 0) {
-        this.confusionDuration--;
+        this.confusionDuration--
         confuse(uie.code)// reduce confusion duration
     } else {
         uie.code
@@ -191,9 +194,9 @@ fun GameEntity<Player>.getNextPositionFromUIEvent(uie : KeyboardEvent, context: 
     }
 }
 
-private fun confuse(kk : KeyCode) : KeyCode {
+private fun confuse(kk: KeyCode): KeyCode {
     val cycle = listOf(KeyCode.UP, KeyCode.RIGHT, KeyCode.DOWN, KeyCode.LEFT, KeyCode.UP, KeyCode.RIGHT)
-    val initCode = when(kk) {
+    val initCode = when (kk) {
         KeyCode.UP -> 4
         KeyCode.LEFT -> 3
         KeyCode.DOWN -> 2
@@ -202,7 +205,6 @@ private fun confuse(kk : KeyCode) : KeyCode {
     }
     return cycle[initCode + Random.nextInt(-1, 2)]
 }
-
 
 
 fun <T : Attribute> AnyGameEntity.tryToFindAttribute(klass: KClass<T>): T = findAttribute(klass).orElseThrow {
@@ -226,7 +228,7 @@ fun AnyGameEntity.tryTakeArtefact(context: GameContext): Position3D {
 }
 
 
-fun AnyGameEntity.dropArtifact(context: GameContext, artifactId : Int): Position3D {
+fun AnyGameEntity.dropArtifact(context: GameContext, artifactId: Int): Position3D {
     executeCommand(DropArtifact(
             context = context,
             source = this,

@@ -4,8 +4,10 @@ import org.hexworks.zircon.api.CP437TilesetResources
 import org.hexworks.zircon.api.Tiles
 import org.hexworks.zircon.api.data.CharacterTile
 import org.hexworks.zircon.api.graphics.Symbols
-import org.hexworks.zircon.api.resource.TilesetResource
 
+/**
+ * This enum defines constant-type tiles that used as a display of world's entities.
+ */
 enum class TileTypes(val tile: CharacterTile) {
     EMPTY(Tiles.empty()),
     FLOOR(Tiles.newBuilder()
@@ -45,13 +47,13 @@ enum class TileTypes(val tile: CharacterTile) {
             .withForegroundColor(GameColors.YELLOW)
             .buildCharacterTile()),
 
-    LADDER_UP (Tiles.newBuilder()
+    LADDER_UP(Tiles.newBuilder()
             .withCharacter(Symbols.TRIANGLE_UP_POINTING_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
             .buildCharacterTile()),
 
-    LADDER_DOWN (Tiles.newBuilder()
+    LADDER_DOWN(Tiles.newBuilder()
             .withCharacter(Symbols.TRIANGLE_DOWN_POINTING_BLACK)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.LADDER_COLOR)
@@ -59,10 +61,10 @@ enum class TileTypes(val tile: CharacterTile) {
 
     // health boxes
     HEALTH_BOX_LITE(Tiles.newBuilder()
-        .withCharacter(Symbols.DOUBLE_LINE_CROSS)
-        .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
-        .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_LITE)
-        .buildCharacterTile()),
+            .withCharacter(Symbols.DOUBLE_LINE_CROSS)
+            .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
+            .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_LITE)
+            .buildCharacterTile()),
     HEALTH_BOX_MEDIUM(Tiles.newBuilder()
             .withCharacter(Symbols.DOUBLE_LINE_CROSS)
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
@@ -78,6 +80,7 @@ enum class TileTypes(val tile: CharacterTile) {
             .withBackgroundColor(GameColors.FLOOR_BACKGROUND)
             .withForegroundColor(GameColors.HEALTH_BOX_FOREGROUND_MEGA)
             .buildCharacterTile()),
+
     // end health boxes
     ARTIFACT(Tiles.newBuilder()
             .withCharacter(Symbols.PI)

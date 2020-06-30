@@ -2,6 +2,9 @@ package ru.spb.mit.roboroguelike.objects
 
 import org.hexworks.zircon.api.TileColors
 
+/**
+ * Singleton object that specifies game colors (constants)
+ */
 object GameColors {
     val WALL_FOREGROUND = TileColors.fromString("#75715E")
     val WALL_BACKGROUND = TileColors.fromString("#3E3D32")
@@ -22,5 +25,5 @@ object GameColors {
 
     val RED = TileColors.fromString("#FF0000")
     val GREEN = TileColors.fromString("#71FF33")
-    val YELLOW =TileColors.fromString("#fff70a")
+    val YELLOW = TileColors.fromString("#fff70a")
 }

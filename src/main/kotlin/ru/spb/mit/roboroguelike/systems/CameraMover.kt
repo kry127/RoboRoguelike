@@ -12,8 +12,14 @@ import ru.spb.mit.roboroguelike.entities.position
 import ru.spb.mit.roboroguelike.objects.GameConfig
 
 
+/**
+ * This class defines entity that can affect the camera (can be followed)
+ */
 class CameraMover : BaseFacet<GameContext>() {
 
+    /**
+     * This enum defines direction of the camera movement after the input
+     */
     enum class CameraMovementDirection {
         FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, JUMP, STEADY
     }
@@ -22,9 +28,9 @@ class CameraMover : BaseFacet<GameContext>() {
         return command.responseWhenCommandIs(MoveCamera::class) { (context, entity, prevPos) ->
             val world = context.world
             // Alternative:
-            when(getCameraMovementDirection(prevPos,
-                                            entity.position)) {
-                CameraMovementDirection.JUMP ->  world.centerCameraAtPosition(entity.position)
+            when (getCameraMovementDirection(prevPos,
+                    entity.position)) {
+                CameraMovementDirection.JUMP -> world.centerCameraAtPosition(entity.position)
                 CameraMovementDirection.FORWARD -> world.scrollForwardBy(
                         if (entity.position.y > GameConfig.VERTICAL_LUFT) 1 else 0
                 )
@@ -46,16 +52,14 @@ class CameraMover : BaseFacet<GameContext>() {
 
     private fun getCameraMovementDirection(prevPos: Position3D,
                                            newPos: Position3D): CameraMovementDirection {
-        val (xPrev, yPrev, zPrev) = prevPos
-        val (xNew, yNew, zNew) = newPos
         val (xDelta, yDelta, zDelta) = prevPos - newPos
         return when {
-            xDelta ==  0 && yDelta == -1 && zDelta ==  0 -> CameraMovementDirection.FORWARD
-            xDelta ==  0 && yDelta == +1 && zDelta ==  0 -> CameraMovementDirection.BACKWARD
-            xDelta == -1 && yDelta ==  0 && zDelta ==  0 -> CameraMovementDirection.RIGHT
-            xDelta == +1 && yDelta ==  0 && zDelta ==  0 -> CameraMovementDirection.LEFT
-            xDelta ==  0 && yDelta ==  0 && zDelta == -1 -> CameraMovementDirection.UP
-            xDelta ==  0 && yDelta ==  0 && zDelta == +1 -> CameraMovementDirection.DOWN
+            xDelta == 0 && yDelta == -1 && zDelta == 0 -> CameraMovementDirection.FORWARD
+            xDelta == 0 && yDelta == +1 && zDelta == 0 -> CameraMovementDirection.BACKWARD
+            xDelta == -1 && yDelta == 0 && zDelta == 0 -> CameraMovementDirection.RIGHT
+            xDelta == +1 && yDelta == 0 && zDelta == 0 -> CameraMovementDirection.LEFT
+            xDelta == 0 && yDelta == 0 && zDelta == -1 -> CameraMovementDirection.UP
+            xDelta == 0 && yDelta == 0 && zDelta == +1 -> CameraMovementDirection.DOWN
             prevPos == newPos -> CameraMovementDirection.STEADY
             else -> CameraMovementDirection.JUMP
         }

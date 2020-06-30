@@ -7,17 +7,17 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.component.Component
 
 /**
- * Эти атрибуты отвечают за имеющуюся у героя атаку и защиту. Возможно,
- * стоит продумать, как надеваемые шмотки будут влиять на характеристики игрока
+ * This attribute describes primary stats, essentially, attack and defence skills.
+ * Applicable for player and for mobs. Influences the damage deal (attack) and damage absorbtion (defence)
  */
-class EntityPrimaryStats(attackInitial : Int, defenceInitial : Int) : DisplayableAttribute, ProgressiveAttribute {
+class EntityPrimaryStats(attackInitial: Int, defenceInitial: Int) : DisplayableAttribute, ProgressiveAttribute {
     private val attackProperty = createPropertyFrom(attackInitial)
     private val defenceProperty = createPropertyFrom(defenceInitial)
-    var attack : Int by attackProperty.asDelegate()
-    var defence : Int by defenceProperty.asDelegate()
+    var attack: Int by attackProperty.asDelegate()
+    var defence: Int by defenceProperty.asDelegate()
 
 
-    override fun onLevelUp(newLvl : Int) {
+    override fun onLevelUp(newLvl: Int) {
         if (newLvl % 2 == 0) {
             attack++
         } else {
@@ -25,7 +25,7 @@ class EntityPrimaryStats(attackInitial : Int, defenceInitial : Int) : Displayabl
         }
     }
 
-    override fun toComponent(width: Int) : Component = Components.panel()
+    override fun toComponent(width: Int): Component = Components.panel()
             .withSize(width, 3)
             .build().apply {
 
@@ -40,11 +40,11 @@ class EntityPrimaryStats(attackInitial : Int, defenceInitial : Int) : Displayabl
                         .build()
 
                 fun update() {
-                    attackLabel.text = "Attack:" + attack.toString();
-                    defenceLabel.text = "Defence:" + defence.toString();
+                    attackLabel.text = "Attack:$attack"
+                    defenceLabel.text = "Defence:$defence"
                 }
 
-                val changeEventListener : ChangeListener<Int> = object : ChangeListener<Int> {
+                val changeEventListener: ChangeListener<Int> = object : ChangeListener<Int> {
                     override fun onChange(changeEvent: ChangeEvent<Int>) {
                         update()
                     }

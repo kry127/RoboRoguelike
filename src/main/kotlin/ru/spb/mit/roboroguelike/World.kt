@@ -1,3 +1,5 @@
+package ru.spb.mit.roboroguelike
+
 import org.hexworks.amethyst.api.Engines
 import org.hexworks.cobalt.datatypes.Maybe
 import org.hexworks.cobalt.datatypes.extensions.map
@@ -9,7 +11,6 @@ import org.hexworks.zircon.api.data.impl.Size3D
 import org.hexworks.zircon.api.game.GameArea
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.UIEvent
-import ru.spb.mit.roboroguelike.*
 import ru.spb.mit.roboroguelike.GameBlock.Companion.floor
 import ru.spb.mit.roboroguelike.entities.AnyGameEntity
 import ru.spb.mit.roboroguelike.entities.EntityFactory
@@ -20,6 +21,15 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
+/**
+ * This class, literally, represents the world of the game,
+ * consisting of:
+ *  - the map of the GameBlocks identified by their coordinates
+ *  - game engine that handles events and dispatches commands
+ *  - handles game over events
+ *  - searches the way of centering camera (due to delegation to GameArea implementation)
+ *  - responsible for moving objects around the world and pathfinding
+ */
 class World(startingBlocks: Map<Position3D, GameBlock>,
             visibleSize: Size3D,
             actualSize: Size3D,
@@ -29,7 +39,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     companion object {
         private val DEFAULT_BLOCK = floor()
 
-        fun buildGameAreaDelegate(visibleSize: Size3D, actualSize: Size3D) : GameArea<Tile, GameBlock> {
+        fun buildGameAreaDelegate(visibleSize: Size3D, actualSize: Size3D): GameArea<Tile, GameBlock> {
             return GameAreaBuilder.newBuilder<Tile, GameBlock>()
                     .withVisibleSize(visibleSize)
                     .withActualSize(actualSize)
@@ -50,8 +60,8 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         }
     }
 
-    var onGameOverCallback : () -> Unit = {}
-    fun onGameOver(callback : () -> Unit) {
+    var onGameOverCallback: () -> Unit = {}
+    fun onGameOver(callback: () -> Unit) {
         onGameOverCallback = callback
     }
 
@@ -79,8 +89,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         val xOffset = xCamera - xLength / 2 - currX
         if (xOffset > 0) {
             scrollRightBy(xOffset)
-        }
-        else {
+        } else {
             scrollLeftBy(-xOffset)
         }
         val yOffset = yCamera - yLength / 2 - currY
@@ -96,21 +105,13 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         }
     }
 
-    fun getCameraCenter(): Position3D {
-        val (xLength, yLength, _) = visibleSize()
-        val (xOffset, yOffset, zOffset) = visibleOffset()
-        return Position3D.create(
-                x = xOffset + xLength / 2,
-                y = yOffset + yLength / 2,
-                z = zOffset)
-    }
-
     fun removeEntity(entity: AnyGameEntity) {
         engine.removeEntity(entity)
         fetchBlockAt(entity.position).map {
             it.removeEntity(entity)
         }
     }
+
     fun addEntity(entity: AnyGameEntity, position: Position3D) {
         engine.addEntity(entity)
         entity.position = position
@@ -122,17 +123,17 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
     fun searchForEmptyRandomPosition(offset: Position3D = Positions.default3DPosition(),
                                      searchSpace: Size3D = actualSize(),
                                      n_tries: Int = 20,
-                                     fixedX: Maybe<Int> = Maybe.empty<Int>(),
-                                     fixedY: Maybe<Int> = Maybe.empty<Int>(),
-                                     fixedZ: Maybe<Int> = Maybe.empty<Int>()): Maybe<Position3D> {
+                                     fixedX: Maybe<Int> = Maybe.empty(),
+                                     fixedY: Maybe<Int> = Maybe.empty(),
+                                     fixedZ: Maybe<Int> = Maybe.empty()): Maybe<Position3D> {
         val (xLength, yLength, zLength) = searchSpace
         var result = Maybe.empty<Position3D>()
         var j = 0
         while (result.isEmpty() && j < n_tries) {
             val currPos = Positions.create3DPosition(
-                x = fixedX.orElse(Random.nextInt(offset.x, offset.x + xLength)),
-                y = fixedY.orElse(Random.nextInt(offset.y, offset.y + yLength)),
-                z = fixedZ.orElse(Random.nextInt(offset.z, offset.z + zLength))
+                    x = fixedX.orElse(Random.nextInt(offset.x, offset.x + xLength)),
+                    y = fixedY.orElse(Random.nextInt(offset.y, offset.y + yLength)),
+                    z = fixedZ.orElse(Random.nextInt(offset.z, offset.z + zLength))
             )
             fetchBlockAt(currPos).map {
                 if (!it.isOccupied) {
@@ -144,20 +145,11 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         return result
     }
 
-    fun addAtEmptyRandomPosition(entity: AnyGameEntity): Boolean {
-        val pos = searchForEmptyRandomPosition()
-        if (pos.isEmpty()) {
-            return false
-        }
-        addEntity(entity, pos.get())
-        return true
-    }
-
     fun moveEntity(entity: AnyGameEntity, newPosition3D: Position3D): Boolean {
         val oldBlock = fetchBlockAt(entity.position)
         val newBlock = fetchBlockAt(newPosition3D)
         if (!moveIsPossible(oldBlock, newBlock)) {
-            return false;
+            return false
         }
         oldBlock.get().removeEntity(entity)
         newBlock.get().addEntity(entity)
@@ -165,15 +157,15 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         return true
     }
 
-    fun moveIsPossible(oldBlock: Maybe<GameBlock>,
-                       newBlock: Maybe<GameBlock>): Boolean {
+    private fun moveIsPossible(oldBlock: Maybe<GameBlock>,
+                               newBlock: Maybe<GameBlock>): Boolean {
         // check if fighting
         if (!newBlock.isEmpty() && newBlock.get().isMob) {
-            return false;
+            return false
         }
         // check mob moves on player
         if (!newBlock.isEmpty() && newBlock.get().isPlayer) {
-            return false;
+            return false
         }
         return oldBlock.isPresent && newBlock.isPresent && !newBlock.get().isOccupied
     }
@@ -214,7 +206,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         while (nodes.isNotEmpty()) {
             val (pos, parent) = nodes.poll()
             if (parents.containsKey(pos)) continue
-            parents.put(pos, parent)
+            parents[pos] = parent
             if (pos == to) break
             val blockMaybe = fetchBlockAt(pos)
             if (blockMaybe.isPresent) {
@@ -235,7 +227,7 @@ class World(startingBlocks: Map<Position3D, GameBlock>,
         val result: MutableList<Position3D> = ArrayList()
         while (parent != null && parent != from) {
             result.add(parent)
-            parent = parents.get(parent)
+            parent = parents[parent]
         }
         result.reverse()
         return result

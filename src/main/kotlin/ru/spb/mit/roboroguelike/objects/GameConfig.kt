@@ -5,6 +5,10 @@ import org.hexworks.zircon.api.CP437TilesetResources
 import org.hexworks.zircon.api.ColorThemes
 import org.hexworks.zircon.api.Sizes
 
+/**
+ * GameConfig is a singleton object that specifies important game constants.
+ * This is a form of configuration.
+ */
 object GameConfig {
     const val DUNGEON_LEVELS = 5 // 1
 
@@ -31,12 +35,13 @@ object GameConfig {
     const val COWARD_DROP_CHANCE = 0.85
     const val AGGRESSIVE_DROP_CHANCE = 0.0
 
-//    val WORLD_SIZE = Sizes.create3DSize(200, 200, DUNGEON_LEVELS)
+    //    val WORLD_SIZE = Sizes.create3DSize(200, 200, DUNGEON_LEVELS)
     val WORLD_SIZE = Sizes.create3DSize(600, 800, DUNGEON_LEVELS)
+
     //val VISIBLE_SIZE = Sizes.create3DSize(600, 800, DUNGEON_LEVELS)
     val VISIBLE_SIZE = Sizes.create3DSize(
-            xLength = GameConfig.WINDOW_WIDTH - GameConfig.SIDEBAR_WIDTH,
-            yLength = GameConfig.WINDOW_HEIGHT - GameConfig.LOG_AREA_HEIGHT,
+            xLength = WINDOW_WIDTH - SIDEBAR_WIDTH,
+            yLength = WINDOW_HEIGHT - LOG_AREA_HEIGHT,
             zLength = 1)
 
     fun buildAppConfig() = AppConfigs.newConfig() // 5

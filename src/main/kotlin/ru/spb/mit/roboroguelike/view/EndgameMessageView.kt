@@ -8,9 +8,12 @@ import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.mvc.base.BaseView
 import org.hexworks.zircon.api.uievent.ComponentEventType
 import org.hexworks.zircon.api.uievent.Processed
+import kotlin.system.exitProcess
 
-
-class EndgameMessageView(val msg : String = "You won!") : BaseView() {
+/**
+ * This class represents GUI view of displaying win or lose message at the end of the game
+ */
+class EndgameMessageView(val msg: String = "You won!") : BaseView() {
 
     override val theme = ColorThemes.afterglow()
 
@@ -42,8 +45,7 @@ class EndgameMessageView(val msg : String = "You won!") : BaseView() {
         }
 
         exitButton.onComponentEvent(ComponentEventType.ACTIVATED) {
-            System.exit(0)
-            Processed
+            exitProcess(0)
         }
 
         screen.addComponent(header)

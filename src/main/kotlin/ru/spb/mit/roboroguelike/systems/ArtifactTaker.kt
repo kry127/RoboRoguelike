@@ -1,19 +1,21 @@
 package ru.spb.mit.roboroguelike.systems
 
 import org.hexworks.amethyst.api.Command
-import org.hexworks.amethyst.api.Consumed
 import org.hexworks.amethyst.api.Pass
 import org.hexworks.amethyst.api.Response
 import org.hexworks.amethyst.api.base.BaseFacet
 import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.cobalt.datatypes.Maybe
-import org.hexworks.cobalt.datatypes.extensions.map
-import org.hexworks.zircon.api.data.impl.Position3D
 import ru.spb.mit.roboroguelike.GameContext
-import ru.spb.mit.roboroguelike.commands.*
+import ru.spb.mit.roboroguelike.commands.DropArtifact
+import ru.spb.mit.roboroguelike.commands.Remove
+import ru.spb.mit.roboroguelike.commands.TakeArtifact
 import ru.spb.mit.roboroguelike.entities.*
 
-class ArtifactTaker: BaseFacet<GameContext>() {
+/**
+ * This class defines entity that is able to grab or drop artifacts
+ */
+class ArtifactTaker : BaseFacet<GameContext>() {
     override fun executeCommand(command: Command<out EntityType, GameContext>): Response {
         if (TakeArtifact::class.isInstance(command)) {
             return command.responseWhenCommandIs(TakeArtifact::class) { (context, entity) ->
@@ -38,7 +40,6 @@ class ArtifactTaker: BaseFacet<GameContext>() {
         } else {
             return command.responseWhenCommandIs(DropArtifact::class) { (context, entity, artifactId) ->
                 val world = context.world
-                val position = entity.position
                 val player = context.player
                 val artifactEntity = player.removeArtifact(artifactId)
                 if (artifactEntity.isPresent) {

@@ -1,7 +1,6 @@
 package ru.spb.mit.roboroguelike.map.generator
 
 import ru.spb.mit.roboroguelike.map.BooleanWorldMap
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 /**
@@ -64,11 +63,11 @@ class SimpleRoomGenerator(
 
         // returns "already perforated" and "perforation successfull" statuses
         private fun perforateHoleLeft(arr: Array<Array<Boolean>>): Pair<Boolean, Boolean> {
-            if (x0 == 0) return Pair(false, false);
+            if (x0 == 0) return Pair(false, false)
 
             var blocked = true
-            var availablePerfCenters = mutableListOf<Int>()
-            for (k in y0 + 1..y1 - 1) {
+            val availablePerfCenters = mutableListOf<Int>()
+            for (k in y0 + 1 until y1) {
                 if (!arr[x0][k]) {
                     blocked = false
                 } else {
@@ -91,11 +90,11 @@ class SimpleRoomGenerator(
         }
 
         private fun perforateHoleRight(arr: Array<Array<Boolean>>): Pair<Boolean, Boolean> {
-            if (x1 == width - 1) return Pair(false, false);
+            if (x1 == width - 1) return Pair(false, false)
 
             var blocked = true
-            var availablePerfCenters = mutableListOf<Int>()
-            for (k in y0 + 1..y1 - 1) {
+            val availablePerfCenters = mutableListOf<Int>()
+            for (k in y0 + 1 until y1) {
                 if (!arr[x1][k]) {
                     blocked = false
                 } else {
@@ -118,11 +117,11 @@ class SimpleRoomGenerator(
         }
 
         private fun perforateHoleTop(arr: Array<Array<Boolean>>): Pair<Boolean, Boolean> {
-            if (y1 == height - 1) return Pair(false, false);
+            if (y1 == height - 1) return Pair(false, false)
 
             var blocked = true
-            var availablePerfCenters = mutableListOf<Int>()
-            for (k in x0 + 1..x1 - 1) {
+            val availablePerfCenters = mutableListOf<Int>()
+            for (k in x0 + 1 until x1) {
                 if (!arr[k][y1]) {
                     blocked = false
                 } else {
@@ -145,11 +144,11 @@ class SimpleRoomGenerator(
         }
 
         private fun perforateHoleBottom(arr: Array<Array<Boolean>>): Pair<Boolean, Boolean> {
-            if (y0 == 0) return Pair(false, false);
+            if (y0 == 0) return Pair(false, false)
 
             var blocked = true
-            var availablePerfCenters = mutableListOf<Int>()
-            for (k in x0 + 1..x1 - 1) {
+            val availablePerfCenters = mutableListOf<Int>()
+            for (k in x0 + 1 until x1) {
                 if (!arr[k][y0]) {
                     blocked = false
                 } else {
@@ -194,7 +193,7 @@ class SimpleRoomGenerator(
         }
     }
 
-    private fun build_room_graph() {
+    private fun buildRoomGraph() {
         rooms.clear()
         rooms.add(Room(0, 0, width - 1, height - 1))
         for (i in 1..number_of_splits) {
@@ -212,7 +211,7 @@ class SimpleRoomGenerator(
 
     private fun makeMapWithConfig(): BooleanWorldMap {
         var arr: Array<Array<Boolean>> = Array(width) {
-            Array<Boolean>(height) { false }
+            Array(height) { false }
         }
         for (r in rooms) {
             r.draw(arr)
@@ -222,7 +221,7 @@ class SimpleRoomGenerator(
     }
 
     fun nextMap(): BooleanWorldMap {
-        build_room_graph()
+        buildRoomGraph()
         return makeMapWithConfig()
     }
 }

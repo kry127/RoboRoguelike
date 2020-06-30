@@ -9,10 +9,13 @@ import ru.spb.mit.roboroguelike.commands.MoveTo
 import ru.spb.mit.roboroguelike.entities.GameEntity
 import ru.spb.mit.roboroguelike.entities.position
 
+/**
+ * This class defines aggressive behaviour of the mob
+ */
 class Aggressive : Mob() {
 
     override fun update(entity: GameEntity<out EntityType>, context: GameContext): Boolean {
-        val (world, screen, uiEvent, player) = context
+        val (world, _, uiEvent, player) = context
         val currentPos = entity.position
         val playerPos = player.position
 

@@ -9,8 +9,10 @@ import org.hexworks.zircon.api.mvc.base.BaseView
 import org.hexworks.zircon.api.uievent.ComponentEventType
 import org.hexworks.zircon.api.uievent.Processed
 import ru.spb.mit.roboroguelike.GameBuilder
-import ru.spb.mit.roboroguelike.WorldBuilder
 
+/**
+ * This is a class that describes GUT greeting screen with two buttons available: start and load the game.
+ */
 class StartView : BaseView() {
 
     override val theme = ColorThemes.afterglow()
