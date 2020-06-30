@@ -8,12 +8,15 @@
 
 package ru.spb.mit.roboroguelike.commands
 
+import org.hexworks.amethyst.api.Command
 import org.hexworks.amethyst.api.entity.EntityType
 import ru.spb.mit.roboroguelike.GameContext
-import ru.spb.mit.roboroguelike.entities.GameCommand
 import ru.spb.mit.roboroguelike.entities.GameEntity
 import org.hexworks.zircon.api.data.impl.Position3D
 import ru.spb.mit.roboroguelike.entities.HealthBox
+
+
+typealias GameCommand<T> = Command<T, GameContext>
 
 data class AttemptTeleportation(override val context: GameContext,
                                 override val source: GameEntity<EntityType>): GameCommand<EntityType>
